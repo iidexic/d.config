@@ -19,7 +19,8 @@ return {
       } --> start of my additions
       vim.keymap.set('n', '<leader>af', '<cmd>lua MiniFiles.open()<cr>')
 
-      require('mini.icons').setup() -- for mini.files specifically
+      -- what happens without this guy
+      --require('mini.icons').setup() -- for mini.files specifically
       require('mini.surround').setup()
       require('mini.jump2d').setup {
         -- function 4 producing jump spots. (:help MiniJump2d.start)

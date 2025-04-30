@@ -12,6 +12,35 @@ local function map_toggleterm()
   -- if you only want these mappings for toggle term use term://*toggleterm#* instead
   vim.cmd 'autocmd! TermOpen term://* lua ttmap()'
 end
+local function cmd(s)
+  return '<cmd>' .. s .. '<CR>'
+end
+local function dsc(s)
+  return { desc = s }
+end
+local maptables = {
+  go = {
+    { '<leader>gr', cmd 'GoRun', dsc 'Go Run' },
+    { '<leader>gd', cmd 'GoDoc', dsc 'GoDoc lookup' },
+    { '<leader>ga', cmd 'GoAlt', dsc 'GoAlt toggle to tests' },
+    { '<leader>gf', cmd 'GoRun -F', dsc 'Go Run Floating window' },
+    { '<leader>gb', cmd 'GoBuild', dsc 'Go Build to cwd' },
+    { '<leader>gt', cmd 'GoTest -n', dsc 'Go Test selected' },
+  },
+  other = {},
+}
+local function mapFromTable(mtable)
+  for _, value in pairs(mtable) do
+    for _, m in ipairs(value) do
+      if #m <= 3 then
+        vim.keymap.set('n', m[1], m[2], m[3])
+      elseif #m == 4 then
+        vim.keymap.set(m[1], m[2], m[3], m[4])
+      end
+    end
+  end
+end
+
 local Map = {
   assign = function()
     vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>') --  See `:help hlsearch`
@@ -23,6 +52,7 @@ local Map = {
     vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
     map_toggleterm()
+    mapFromTable(maptables)
   end,
 }
 return Map
