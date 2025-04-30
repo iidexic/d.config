@@ -1,5 +1,61 @@
 return {
   {
+    --==| GOLANG |==--
+    'ray-x/go.nvim',
+    dependencies = { -- optional packages
+      'ray-x/guihua.lua',
+      'neovim/nvim-lspconfig',
+      'nvim-treesitter/nvim-treesitter',
+      'rcarriga/nvim-dap-ui',
+    },
+    config = function()
+      require('go').setup()
+    end,
+    event = { 'CmdlineEnter' },
+    ft = { 'go', 'gomod' },
+    build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
+  },
+
+  --TODO: Need to choose between goplements and gosigns? one is gutter.
+  -- could probably use both. not sure if gosigns is going to be actually useful
+
+  { -- visual display of interface implementation next to struct declaration
+    'maxandron/goplements.nvim',
+    enabled = true,
+    ft = 'go',
+    opts = {},
+  },
+  { -- visualize interface+struct+method implementation, and //go: comments. Very customizable
+    'Yu-Leo/gosigns.nvim',
+    enabled = false,
+    ft = 'go',
+    cmd = { 'GosignsEnable', 'GosignsDisable', 'GosignsToggle' },
+    opts = {}, -- for default options. Refer to the configuration section for custom setup.
+  },
+  { -- run impl to generate interface method stubs, uses telescope
+    -- <leader>gi has been assigned to run impl for now
+    'edolphin-ydf/goimpl.nvim',
+    requires = {
+      { 'nvim-lua/plenary.nvim' },
+      { 'nvim-lua/popup.nvim' },
+      { 'nvim-telescope/telescope.nvim' },
+      { 'nvim-treesitter/nvim-treesitter' },
+    },
+    -- NOTE: if having issues re-include this config function and remove from telescope side
+    config = true, --function() require('telescope').load_extension 'goimpl' end,
+  },
+  {
+    'crusj/structrue-go.nvim',
+    branch = 'main',
+    --requires gotags: `go get -u github.com/jstemmer/gotags`
+  },
+  -- godoc.nvim removed for now
+  --==| GOLANG |==--
+  { -- lua scratchpad, interactive repl type deal
+    'rafcamlet/nvim-luapad',
+    requires = 'antoinemadec/FixCursorHold.nvim',
+  },
+  { -- hot reloader for any plugin language, probably requires config
     'sachinsenal0x64/hot.nvim',
     config = function()
       local opts = require('hot.params').opts

@@ -17,21 +17,12 @@ return {
       { '<leader>p', '<cmd>Grapple cycle_tags prev<cr>', desc = 'Grapple cycle previous tag' },
     },
   },
-
-  --{ 'SalOrak/whaler.nvim', },
-  --[[ whaler should be enough
-  {
-    'cljoly/telescope-repo.nvim',
-    dependencies = { { 'nvim-lua/plenary.nvim' }, { 'nvim-telescope/telescope.nvim' } },
-  },
-  --]]
-  --==================================================================--
+  { 'desdic/agrolens.nvim' }, -- telescope extension. not sure if putting them all as dependencies for telescope is way 2 go
   --=======================[ Telescope Config ]=======================--
   --==================================================================--
   {
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
-    branch = '0.1.x',
     dependencies = {
       { 'nvim-lua/plenary.nvim' },
       { 'SalOrak/whaler.nvim' },
@@ -55,6 +46,10 @@ return {
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
+          },
+          agrolens = { -- Defaults:
+            --debug = false, same_type = true, include_hidden_buffers = false,
+            --disable_indentation = false, aliases = {},
           },
           whaler = {
             auto_file_explorer = false,
@@ -85,6 +80,8 @@ return {
       pcall(telescope.load_extension, 'whaler')
       pcall(telescope.load_extension, 'zoxide')
       pcall(telescope.load_extension, 'auto-session') -- most likely no worky
+      pcall(telescope.load_extension, 'agrolens')
+      pcall(telescope.load_extension, 'goimpl')
 
       local builtin = require 'telescope.builtin' -- See `:help telescope.builtin`
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
@@ -101,17 +98,16 @@ return {
       vim.keymap.set('n', '<leader>sm', telescope.extensions.grapple.tags, { desc = '[S]earch Gr[m]apple tags' })
       vim.keymap.set('n', '<leader>sw', telescope.extensions.whaler.whaler, { desc = '[S]earch [w]haler paths' })
 
-      vim.keymap.set(
-        'n',
-        '<leader>/',
-        function() -- Slightly advanced example of overriding default behavior and theme You can pass additional configuration to Telescope to change the theme, layout, etc.
-          builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-            winblend = 10,
-            previewer = false,
-          })
-        end,
-        { desc = '[/] Fuzzily search in current buffer' }
-      )
+      vim.keymap.set('n', '<leader>gi', telescope.extensions.goimpl.goimpl, { desc = '[G]o[I]mpl' })
+
+      vim.keymap.set('n', '<leader>/', function()
+        -- Slightly advanced example of overriding default behavior and theme
+        -- You can pass additional configuration to Telescope to change the theme, layout, etc.
+        builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+          winblend = 10,
+          previewer = false,
+        })
+      end, { desc = '[/] Fuzzily search in current buffer' })
       -- It's also possible to pass additional configuration options. See `:help telescope.builtin.live_grep()` for information about particular keys
       vim.keymap.set('n', '<leader>s/', function()
         builtin.live_grep {
@@ -149,7 +145,7 @@ return {
           copy_session = { 'i', '<C-Y>' },
         },
       },
-      suppressed_dirs = { '~/', '~/Projects', '~/Downloads', '/', 'd:\\coding\\github', 'c:\\dev' },
+      suppressed_dirs = { '~/', '~/Projects', '~/Downloads', '~\\appdata\\local\nvim', 'd:\\coding\\github', 'c:\\dev' },
     },
   },
 }

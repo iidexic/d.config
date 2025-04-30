@@ -1,4 +1,13 @@
 return {
+  --==(ENABLED:)==--
+  --> |mini.ai| [ check if covered by another workflow plugin ]
+  --> |mini.files|
+  --> |mini.icons| (exclusively for mini.files)
+  --> |mini.surround| [ check if  covered by another workflow plugin ]
+  --> |mini.jump2d| [ may be replaced by leap+extensions ]
+  --> |mini.bufremove|
+  --> |mini.tabline|
+  --> |mini.statusline|
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
     config = function()
@@ -9,6 +18,7 @@ return {
         --keys = { { '<leader>af', '<cmd>lua MiniFiles.open()<cr>', desc = '[A]pp: Mini[F]iles' } },
       } --> start of my additions
       vim.keymap.set('n', '<leader>af', '<cmd>lua MiniFiles.open()<cr>')
+
       require('mini.icons').setup() -- for mini.files specifically
       require('mini.surround').setup()
       require('mini.jump2d').setup {
@@ -29,7 +39,7 @@ return {
 
         silent = false, -- toggle non-error feedback. also affects idle helper messages when user input required.
       }
-      require('mini.bufremove').setup()
+      require('mini.bufremove').setup {}
 
       local tabline = require 'mini.tabline'
       tabline.setup { use_icons = vim.g.have_nerd_font }

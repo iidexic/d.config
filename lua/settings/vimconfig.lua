@@ -7,18 +7,10 @@ local O = {
     vim.opt.relativenumber = true -- Make line numbers default
     vim.opt.number = true
     vim.opt.mouse = 'a' -- Enable mouse mode, can be useful for resizing splits for example!
-    vim.opt.showmode = true -- Don't show the mode, since it's already in the status line
+    vim.opt.showmode = false -- Don't show the mode, since it's already in the status line
     vim.schedule(function()
       vim.opt.clipboard = 'unnamedplus'
     end)
-
-    --* indent
-    vim.opt.tabstop = 8 -- sets how nvim actually writes tabs in files. default is 8 (help says not to change?)
-    vim.opt.softtabstop = 8 -- this sets what tabs appear as in nvim, regardless of file contents
-    vim.opt.shiftwidth = 8
-    vim.opt.expandtab = true
-    vim.opt.breakindent = true -- Enable break indent (basically wraps visually I think??)
-    --*
 
     vim.opt.undofile = true -- Save undo history
     vim.opt.ignorecase = true -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
@@ -33,6 +25,17 @@ local O = {
     vim.opt.inccommand = 'split' -- Preview substitutions live, as you type!
     vim.opt.cursorline = true -- Show which line your cursor is on
     vim.opt.scrolloff = 10 -- Minimal number of screen lines to keep above and below the cursor.
+
+    ---* additional settings *---
+    vim.opt.termguicolors = true
+    vim.opt.pumheight = 16
+    --* indent/tab
+    vim.opt.tabstop = 8 -- sets how nvim actually writes tabs in files. default is 8 (help says not to change?)
+    vim.opt.softtabstop = 4 -- this sets what tabs appear as in nvim, regardless of file contents
+    vim.opt.shiftwidth = 4
+    vim.opt.expandtab = true
+    vim.opt.breakindent = true -- Enable break indent (basically wraps visually I think??)
+    ---*
   end,
   ---@param opts table | nil
   last = function(opts)

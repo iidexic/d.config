@@ -1,14 +1,21 @@
 --- Main Kickstart Plugin list
 -- make this a function if desired
-return { --* NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
-  { --[gitsigns] - Adds git related signs to the gutter, as well as utilities for managing changes
+return {
+  --* NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
+
+  { --> plugins_tools
+    -- Detect tabstop and shiftwidth automatically
+    'tpope/vim-sleuth',
+  },
+  { --> plugins_git
+    --[gitsigns] - Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
       signs = { add = { text = '+' }, change = { text = '~' }, delete = { text = '_' }, topdelete = { text = '‾' }, changedelete = { text = '~' } },
     },
   },
-  { --[which-key] - Show pending keybinds/motion completions
+  { --> plugins_keys
+    --[which-key] - Show pending keybinds/motion completions
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
@@ -55,27 +62,29 @@ return { --* NOTE: Plugins can be added with a link (or for a github repo: 'owne
         { '<leader>w', group = '[W]orkspace' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { [[<C-\>]], group = 'ToggleTerm' },
       },
     },
   },
-  { -- LSP Plugins
+  { --> plugins_lsp
     'folke/lazydev.nvim', -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins. used for completion, annotations and signatures of Neovim apis
     ft = 'lua',
     opts = {
       library = {
         -- Load luvit types when the `vim.uv` word is found
         { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+        { 'nvim-dap-ui' },
       },
     },
   },
-  { -- [nvim-lspconfig] - Main LSP Configuration
+  { --> plugins_lsp
+    -- [nvim-lspconfig] - Main LSP Configuration
     'neovim/nvim-lspconfig',
     dependencies = {
       { 'williamboman/mason.nvim', opts = {} }, -- Automatically install LSPs and related tools to stdpath for Neovim
       -- Mason must be loaded before its dependents so we need to set it up here. * NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
-
       { 'j-hui/fidget.nvim', opts = {} }, -- Useful status updates for LSP.
       'hrsh7th/cmp-nvim-lsp', -- Allows extra capabilities provided by nvim-cmp
     },
@@ -145,6 +154,7 @@ return { --* NOTE: Plugins can be added with a link (or for a github repo: 'owne
             [vim.diagnostic.severity.HINT] = '󰌶 ',
           },
         } or {},
+
         virtual_text = {
           source = 'if_many',
           spacing = 2,
@@ -196,7 +206,8 @@ return { --* NOTE: Plugins can be added with a link (or for a github repo: 'owne
       }
     end,
   },
-  { -- Autoformat (conform.nvim)
+  { --> plugins_auto
+    -- Autoformat (conform.nvim)
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
     cmd = { 'ConformInfo' },
@@ -228,12 +239,15 @@ return { --* NOTE: Plugins can be added with a link (or for a github repo: 'owne
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        go = { 'gopls' },
+        python = { 'ruff' },
         -- python = { "isort", "black", stop_after_first = true }, stop_after_first(optional) = load first available
       },
     },
   },
 
-  { -- Autocompletion
+  { --> plugins_auto
+    -- Autocompletion
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
     dependencies = {
@@ -255,6 +269,7 @@ return { --* NOTE: Plugins can be added with a link (or for a github repo: 'owne
           },
         },
       },
+      'lukas-reineke/cmp-under-comparator', -- personal one, intended to make completions a bit better when underscores are involved
       'saadparwaiz1/cmp_luasnip',
       'hrsh7th/cmp-nvim-lsp', -- adds other completion capabilities. next 2 lines are included with this
       'hrsh7th/cmp-path',
@@ -272,17 +287,13 @@ return { --* NOTE: Plugins can be added with a link (or for a github repo: 'owne
         },
         completion = { completeopt = 'menu,menuone,noinsert' },
         mapping = cmp.mapping.preset.insert { --`:help ins-completion` for info on why these mappings chosen
-          --['<c-n>'] = cmp.mapping.select_next_item(), -- select the [n]ext item
-          --['<c-p>'] = cmp.mapping.select_prev_item(), -- select the [p]revious item
+          ['<c-n>'] = cmp.mapping.select_next_item(), -- select the [n]ext item
+          ['<c-p>'] = cmp.mapping.select_prev_item(), -- select the [p]revious item
           ['<C-b>'] = cmp.mapping.scroll_docs(-4), -- scroll the documentation window [b]ack / [f]orward
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
           --['<C-y>'] = cmp.mapping.confirm { select = true }, -- accept[y] the completion (will expand snippets from lsp). this auto-imports if lsp supports it.
-
-          --['<C-b>'] = cmp.mapping.select_prev_item()
-          --['<C-r>'] = cmp.mapping.scroll_docs(-4)
-
-          ['<C-,>'] = cmp.mapping.select_prev_item(),
-          ['<C-.>'] = cmp.mapping.select_next_item(),
+          --['<C-,>'] = cmp.mapping.select_prev_item(),
+          --['<C-.>'] = cmp.mapping.select_next_item(),
           ['<C-CR>'] = cmp.mapping.confirm { select = true },
           --========[ If you prefer more traditional completion keymaps: ]========--
           --['<CR>'] = cmp.mapping.confirm { select = true },
@@ -314,12 +325,19 @@ return { --* NOTE: Plugins can be added with a link (or for a github repo: 'owne
           { name = 'path' },
           { name = 'nvim_lsp_signature_help' },
         },
+        -- defaults
+        -- performance = { debounce = 60, throttle = 30, fetching_timeout = 500, filtering_context_budget = 3, confirm_resolve_timeout = 80, async_budget = 1, max_view_entries = 200, },
+        --formatting = {} -- second try to adjust
+        --Third try. Also doesn't work?? idk man. the option certainly exists though
+        --window = { completion = { scrolloff = 6 } },
       }
     end,
   },
+  --> plugins_comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } }, -- Highlight todo, notes, etc in comments
 
-  { -- Highlight, edit, and navigate code
+  { --> treesitters
+    -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
@@ -346,5 +364,5 @@ return { --* NOTE: Plugins can be added with a link (or for a github repo: 'owne
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   --* NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-  { import = 'custom.plugins' }, --  add your plugins to `lua/custom/plugins/*.lua` to get going.
+  --{ import = 'custom.plugins' }, --  add your plugins to `lua/custom/plugins/*.lua` to get going.
 }

@@ -61,8 +61,48 @@ local themelist = {
     end,
   },
 }
+local themesPineapple = {
+  oxocarbon = { 'nyoom-engineering/oxocarbon.nvim', enabled = false },
+  srcery = { 'srcery-colors/srcery-vim', enabled = false },
+  lucario = { 'raphamorim/lucario', enabled = false },
+  zephyr = { 'nvimdev/zephyr-nvim', enabled = false },
+  anderson = { 'tlhr/anderson.vim', enabled = false },
+  Sierra = { 'AlessandroYorba/Sierra', enabled = false },
+  everblush = { 'Everblush/everblush.vim', enabled = false },
+  oceanic = { 'nvimdev/oceanic-material', enabled = false },
+  miramare = { 'franbach/miramare', enabled = false },
+  toast = { 'jsit/toast.vim', enabled = false },
+  tender = { 'jacoborus/tender.vim', enabled = false },
+  tundra = { 'sam4llis/nvim-tundra', enabled = false },
+  kanagawa = { 'rebelot/kanagawa.nvim', enabled = false },
+  witch = { 'sontungexpt/witch', enabled = false },
+  quantum = { 'tyrannicaltoucan/vim-quantum', enabled = false },
+  monet = { 'fynnfluegge/monet.nvim', enabled = false },
+  bogster = { 'vv9k/bogster', enabled = false },
+  bluewery = { 'relastle/bluewery.vim', enabled = false },
+  ghostbuster = { 'MvanDiemen/ghostbuster', enabled = false },
+  typewriter = { 'logico/typewriter', enabled = false },
+  vesper = { 'datsfilipe/vesper.nvim', enabled = false },
+  allomancer = { 'Nequo/vim-allomancer', enabled = false },
+  plastic = { 'flrnd/plastic.vim', enabled = false },
+  flatlandia = { 'jordwalke/flatlandia', enabled = false },
+  wal = { 'dylanaraps/wal.vim', enabled = false },
+  darkvoid = { 'darkvoid-theme/darkvoid.nvim', enabled = false },
+  hydrangea = { 'yuttie/hydrangea-vim', enabled = false },
+}
 
-function Maker.getlist()
+---@param enabledthemes table | nil list of theme moniker to enable
+function Maker.getlist(enabledthemes)
+  if enabledthemes then
+    for _, v in ipairs(enabledthemes) do
+      if themesPineapple[v] then
+        themesPineapple[v].enabled = true
+      end
+    end
+  end
+  for _, theme in pairs(themesPineapple) do
+    table.insert(themelist, theme)
+  end
   return themelist
 end
 return Maker

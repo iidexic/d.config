@@ -1,18 +1,21 @@
 local D = { plugins = {} }
 D.dplugins = {
-  {
+  { --> plugins_tools
     'willothy/flatten.nvim',
     config = true, -- or pass configuration with opts = {  }
     lazy = false,
     priority = 1001, -- Ensure that it runs first to minimize delay when opening file from terminal
   },
-  {
+  { 'ray-x/navigator.lua', dependencies = { 'neovim/nvim-lspconfig', { 'ray-x/guihua.lua' } } },
+  { --> codeplugins
     'ray-x/go.nvim',
     dependencies = { -- optional packages
       'ray-x/guihua.lua',
       'neovim/nvim-lspconfig',
       'nvim-treesitter/nvim-treesitter',
+      'rcarriga/nvim-dap-ui',
     },
+    opts = { remap_commands = { GoDoc = false } },
     config = function()
       require('go').setup()
     end,
@@ -20,35 +23,109 @@ D.dplugins = {
     ft = { 'go', 'gomod' },
     build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
   },
+  { --> codeplugins
+    'maxandron/goplements.nvim',
+    ft = 'go',
+    opts = {},
+  },
+  { -->plugins_tools
+    'LintaoAmons/scratch.nvim',
+    event = 'VeryLazy',
+  },
+  { -->codeplugins
+    -- run impl to generate interface method stubs, uses telescope
+    -- <leader>gi has been assigned to run impl for now
+    'edolphin-ydf/goimpl.nvim',
+    requires = {
+      { 'nvim-lua/plenary.nvim' },
+      { 'nvim-lua/popup.nvim' },
+      { 'nvim-telescope/telescope.nvim' },
+      { 'nvim-treesitter/nvim-treesitter' },
+    },
+    -- NOTE: if having issues re-include this config function and remove from telescope side
+    config = true, --function() require('telescope').load_extension 'goimpl' end,
+  },
+  { -->codeplugins
+    'crusj/structrue-go.nvim',
+    branch = 'main',
+    --requires gotags: `go get -u github.com/jstemmer/gotags`
+    opts = {
+      keymap = {
+        toggle = '<leader>gs', -- toggle structure-go window
+        show_others_method_toggle = 'H', -- show or hidden the methods of struct whose not in current file
+        symbol_jump = '<CR>', -- jump to then symbol file under cursor
+        center_symbol = '\\f', -- Center the highlighted symbol
+        fold_toggle = '\\z',
+        refresh = 'R', -- refresh symbols
+        preview_open = 'P', -- preview  symbol context open
+        preview_close = '\\p', -- preview  symbol context close
+      },
+    },
+  },
+  --[[ Disabled. godoc.nvim is not really working, neorg is kinda messy
+  { -- Search godocs using telescope, also doesn't really work
+    --NOTE: `GoDoc` is a ray-x/go.nvim command. Changing here doesn't do much
+    'fredrikaverpil/godoc.nvim',
+    dependencies = {
+      { 'nvim-telescope/telescope.nvim' },
+      { 'nvim-treesitter/nvim-treesitter', opts = { ensure_installed = { 'go' } } },
+    },
+    build = 'go install github.com/lotusirous/gostdsym/stdsym@latest', -- optional
+    keys = { '<leader>gd', '<cmd>GoDoc<cr>', desc = 'Search Go Documentation' },
+  },
+  
   {
+    'nvim-neorg/neorg',
+    lazy = false, -- Disable lazy loading as some `lazy.nvim` distributions set `lazy = true` by default
+    version = '*', -- Pin Neorg to the latest stable release
+    config = true,
+  },
+  --]]
+  { --> conditionals
     'willothy/wezterm.nvim',
     config = true,
+    enabled = false,
     opts = {
       create_commands = true,
     },
     lazy = true,
   },
-  --{ 'lmantw/themify.nvim', lazy = false, priority = 999, config = {}, },
-  {
-    'CWood-sdf/pineapple',
-    dependencies = require 'theme.pineapple',
-    opts = {
-      installedRegistry = 'theme.pineapple',
-      colorschemeFile = 'after/plugin/themedata.lua',
+  { --> plugins_git
+    'NeogitOrg/neogit',
+    dependencies = {
+      'nvim-lua/plenary.nvim', -- required
+      'sindrets/diffview.nvim', -- optional - Diff integration
+      'nvim-telescope/telescope.nvim', -- optional
     },
-    cmd = 'Pineapple',
-    lazy = true,
-    keys = { { '<leader>ap', '<cmd>Pineapple<cr>', desc = '[A]pp: [P]ineapple' } },
   },
-  {
+  { --> plugins_tools
     'akinsho/toggleterm.nvim',
     version = '*',
     opts = {
       open_mapping = [[<C-\>]],
+      persist_size = false,
     },
     config = true,
+    lazy = false,
+    keys = { { '<leader>at', '<cmd>ToggleTerm<cr>', desc = '[A]pp: [t]erminal' } },
+  },
+  { --> conditionals.
+    --[[ Pineapple Disabled
+    Pineapple has a problem where it causes big stinky errors when disabled
+    This stems from the file placed in after/plugins folder.
+    I am wondering if we can get away with not even having this.
+    All it does is trigger using a specific colorscheme, but I am controlling that manually regardless
+
+    That does give me the thought: I can also put shit in there that is my own
+    --]]
+    'CWood-sdf/pineapple',
+    enabled = false,
+    dependencies = require 'theme.pineapple',
+    --! PINEAPPLE DISABLED. uncomment opts when it is re-enabled
+    --opts = { installedRegistry = 'theme.pineapple', colorschemeFile = 'after/plugin/themedata.lua' },
+    cmd = 'Pineapple',
     lazy = true,
-    --keys = { { '<leader>at', '<cmd>ToggleTerm<cr>', desc = '[A]pp: [t]erminal' }, },
+    keys = { { '<leader>ap', '<cmd>Pineapple<cr>', desc = '[A]pp: [P]ineapple' } },
   },
   --[[ removing unneeded:
 1. neaterm - dont want fzf have tellyscope

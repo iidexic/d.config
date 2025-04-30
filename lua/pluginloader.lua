@@ -2,51 +2,42 @@
 local function dirtycheckplug(plugin)
   return type(plugin[1]) == 'string' and string.find(plugin[1], '../..')
 end
-local P = {}
-P.plugins = {}
-P.pnames = {}
-function P.join(tbl1, tbl2)
-  for _, val in ipairs(tbl2) do
-    table.insert(tbl1, val)
-  end
-  return tbl1
-end
 
-function P.adds(plugins)
+---@class P plugin list builder
+---@field allplugins table of multiple plugins
+---@field add function add a table of plugins to P.allplugins
+---@field loadfiles function given table of module/file names, load all plugins in return table of each file
+---@field getconditionals function load conditional plugins, enabling only those named in enableplugins table
+local P = { allplugins = {}, pnames = {} }
+function P.add(plugins)
   for _, plug in ipairs(plugins) do
     if dirtycheckplug(plug) then
-      table.insert(P.plugins, plug)
+      table.insert(P.allplugins, plug)
     end
   end
 end
----@param plugin table single-plugin, not nested
-function P.add(plugin)
-  if dirtycheckplug(plugin) then
-    table.insert(P.plugins, plugin)
-  end
-end
 
----directly load files in filetbl to plugins table
----@param filetbl table table with files to require and merge
-function P.loadfiles(filetbl)
-  for _, f in ipairs(filetbl) do
+function P.loadfiles(filetable)
+  ---@ directly load files in filetbl to plugins table
+  for _, f in ipairs(filetable) do
     local mod = require(f)
     if mod and type(mod[1]) == 'table' then
-      P.adds(mod)
-    -- Just in case, make an attempt
-    elseif mod and type(mod[1]) == 'string' then
       P.add(mod)
+
+      -- Just in case, make an attempt
+      -- Probably just delete this
+    elseif mod and type(mod[1]) == 'string' then
+      P.add { mod }
     end
   end
 end
---[[
---#How to do conditional plugs
-Currently looking at 2 methods of loading conditionals:
-1. send list of plugin names, P.loadconditionals adds them to list
-2. add enabled = cond[i] or something to each conditional plugin
 
-Option 2 seems better because they will not be marked for cleanup by Lazy every single time
-need to figure out how to do that
+---@param enableplugins table list of plugin in conditional table to enable
+function P.getconditionals(enableplugins)
+  local cond = require 'conditional.loadconditional'
+  cond.set(enableplugins)
+  local cplugs = cond.getplugins()
+  P.add(cplugs)
+end
 
---]]
 return P
