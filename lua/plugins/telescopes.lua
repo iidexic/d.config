@@ -17,7 +17,9 @@ return {
       { '<leader>p', '<cmd>Grapple cycle_tags prev<cr>', desc = 'Grapple cycle previous tag' },
     },
   },
-  { 'desdic/agrolens.nvim' }, -- telescope extension. not sure if putting them all as dependencies for telescope is way 2 go
+  { 'catgoose/telescope-helpgrep.nvim', lazy = true },
+
+  -- telescope extension. not sure if putting them all as dependencies for telescope is way 2 go
   --=======================[ Telescope Config ]=======================--
   --==================================================================--
   {
@@ -46,10 +48,6 @@ return {
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
-          },
-          agrolens = { -- Defaults:
-            --debug = false, same_type = true, include_hidden_buffers = false,
-            --disable_indentation = false, aliases = {},
           },
           whaler = {
             auto_file_explorer = false,
@@ -80,8 +78,8 @@ return {
       pcall(telescope.load_extension, 'whaler')
       pcall(telescope.load_extension, 'zoxide')
       pcall(telescope.load_extension, 'auto-session') -- most likely no worky
-      pcall(telescope.load_extension, 'agrolens')
       pcall(telescope.load_extension, 'goimpl')
+      pcall(telescope.load_extension, 'telescope-helpgrep')
 
       local builtin = require 'telescope.builtin' -- See `:help telescope.builtin`
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
@@ -95,8 +93,9 @@ return {
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
       vim.keymap.set('n', '<leader>sz', telescope.extensions.zoxide.list, { desc = '[S]earch [z]oxide list' })
-      vim.keymap.set('n', '<leader>sm', telescope.extensions.grapple.tags, { desc = '[S]earch Gr[m]apple tags' })
+      vim.keymap.set('n', '<leader>sm', telescope.extensions.grapple.tags, { desc = '[S]earch [M]arks->grapple' })
       vim.keymap.set('n', '<leader>sw', telescope.extensions.whaler.whaler, { desc = '[S]earch [w]haler paths' })
+      vim.keymap.set('n', '<leader>sH', telescope.extensions.helpgrep.helpgrep, { desc = '[S]earch [H]elp with grep' })
 
       vim.keymap.set('n', '<leader>gi', telescope.extensions.goimpl.goimpl, { desc = '[G]o[I]mpl' })
 

@@ -27,5 +27,6 @@ function Cfg.postlazy(opts)
     vim.cmd.colorscheme(Cfg.themeName)
   end
   -- if opts then
+  -- nested map via whichkey
 end
 return Cfg

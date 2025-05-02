@@ -1,6 +1,6 @@
 return {
   { 'tpope/vim-sleuth' }, -- Detect tabstop/shiftwidth automatically
-  {
+  { -- terminal
     'akinsho/toggleterm.nvim',
     version = '*',
     opts = {
@@ -9,7 +9,8 @@ return {
     },
     config = true,
     lazy = true,
-    keys = { { '<leader>at', '<cmd>ToggleTerm<cr>', desc = '[A]pp: [t]erminal' } },
+    -- trying to disable this to see if it makes the above mapping work from the start
+    -- keys = { { '<leader>at', '<cmd>ToggleTerm<cr>', desc = '[A]pp: [t]erminal' } },
   },
   {
     'willothy/flatten.nvim',
@@ -20,5 +21,12 @@ return {
   {
     'LintaoAmons/scratch.nvim',
     event = 'VeryLazy',
+  },
+  { -- Add indentation guides even on blank lines
+    'lukas-reineke/indent-blankline.nvim',
+    -- Enable `lukas-reineke/indent-blankline.nvim`
+    -- See `:help ibl`
+    main = 'ibl',
+    opts = {},
   },
 }

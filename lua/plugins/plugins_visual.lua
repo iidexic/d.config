@@ -7,6 +7,11 @@ return {
     opts = { signs = false },
   },
   {
+    'danymat/neogen',
+    config = true,
+    -- version = "*" -- Uncomment for only stable versions
+  },
+  {
     'soemre/commentless.nvim',
     cmd = 'Commentless',
     keys = {
@@ -35,5 +40,7 @@ return {
   },
 
   --# Colors
-  { 'HiPhish/rainbow-delimiters.nvim' },
+  -- Trying to update this just crashed my nvim.
+  -- check back in later if having it seems helpful
+  --{ 'HiPhish/rainbow-delimiters.nvim' },
 }

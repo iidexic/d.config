@@ -12,13 +12,15 @@ return {
     'echasnovski/mini.nvim',
     config = function()
       require('mini.ai').setup { n_lines = 500 }
+      require('mini.align').setup()
+      --[[
       require('mini.files').setup {
         opts = {},
         --using keys here doesn't work for some reason
         --keys = { { '<leader>af', '<cmd>lua MiniFiles.open()<cr>', desc = '[A]pp: Mini[F]iles' } },
       } --> start of my additions
       vim.keymap.set('n', '<leader>af', '<cmd>lua MiniFiles.open()<cr>')
-
+--]]
       -- what happens without this guy
       --require('mini.icons').setup() -- for mini.files specifically
       require('mini.surround').setup()
@@ -40,11 +42,16 @@ return {
 
         silent = false, -- toggle non-error feedback. also affects idle helper messages when user input required.
       }
-      require('mini.bufremove').setup {}
-
+      --     require('mini.bufremove').setup {}
+      --[[
       local tabline = require 'mini.tabline'
-      tabline.setup { use_icons = vim.g.have_nerd_font }
-
+      tabline.setup {
+        use_icons = vim.g.have_nerd_font,
+        format = function(buf_id, label)
+          return MiniTabline.default_format(buf_id, label)
+        end,
+      }
+--]]
       local statusline = require 'mini.statusline' -- Simple and easy statusline.
       statusline.setup { use_icons = vim.g.have_nerd_font } -- set use_icons to true if you have a Nerd Font
       -- default behavior.

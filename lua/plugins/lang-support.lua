@@ -1,4 +1,5 @@
 return {
+  { 'ray-x/navigator.lua', dependencies = { 'neovim/nvim-lspconfig', { 'ray-x/guihua.lua' } } },
   {
     --==| GOLANG |==--
     'ray-x/go.nvim',
@@ -103,7 +104,9 @@ return {
         ext = { '.zig' },
       }
       -- Thot Health Check
-      vim.api.nvim_set_keymap('n', 'ho', '<Cmd>lua require("thot").check()<CR>', { noremap = true, silent = true })
+      --- the only thing this is useful for is making my h key slower to respond
+      --- it literally just pulls up the list of the opts.set.languages above
+      --vim.api.nvim_set_keymap('n', 'ho', '<Cmd>lua require("thot").check()<CR>', { noremap = true, silent = true })
 
       -- Keybinds
 

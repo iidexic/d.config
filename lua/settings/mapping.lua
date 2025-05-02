@@ -18,7 +18,9 @@ end
 local function dsc(s)
   return { desc = s }
 end
+
 local maptables = {
+  -- Trying whichkey-style above
   go = {
     { '<leader>gr', cmd 'GoRun', dsc 'Go Run' },
     { '<leader>gd', cmd 'GoDoc', dsc 'GoDoc lookup' },
@@ -40,7 +42,34 @@ local function mapFromTable(mtable)
     end
   end
 end
+--[[
+Example of using which-key to generate maps
+which-key docs state that wk.add should be used
+so I replaced wk.register with wk.add here.
+no guarantees at all that it actually works
 
+EDIT: this does not work, so fuck you I'll do it myself
+--wk.add({
+      ["<Leader>"] = {
+        c = {
+          name = " □  Boxes",
+          b = { "<Cmd>CBccbox<CR>", "Box Title" },
+          t = { "<Cmd>CBllline<CR>", "Titled Line" },
+          l = { "<Cmd>CBline<CR>", "Simple Line" },
+          m = { "<Cmd>CBllbox14<CR>", "Marked" },
+          -- d = { "<Cmd>CBd<CR>", "Remove a box" },
+        },
+      },
+    })
+--
+--
+--]]
+local function makenested()
+  local keynest = require 'settings.nested-map'
+  local nkGo = { key_leader = { g = {
+    { 'r', '{c}' },
+  } } }
+end
 local Map = {
   assign = function()
     vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>') --  See `:help hlsearch`
@@ -53,6 +82,11 @@ local Map = {
 
     map_toggleterm()
     mapFromTable(maptables)
+  end,
+  wkMapNested = function(nestedmap)
+    local wk = require 'which-key'
+    for k, val in pairs(nestedmap) do
+    end
   end,
 }
 return Map
