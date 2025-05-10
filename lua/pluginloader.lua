@@ -4,7 +4,7 @@ local function dirtycheckplug(plugin)
 end
 
 ---@class P plugin list builder
----@field allplugins table of multiple plugins
+---@field allplugins table table of all plugins to load
 ---@field add function add a table of plugins to P.allplugins
 ---@field loadfiles function given table of module/file names, load all plugins in return table of each file
 ---@field getconditionals function load conditional plugins, enabling only those named in enableplugins table

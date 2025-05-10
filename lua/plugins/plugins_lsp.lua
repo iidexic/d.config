@@ -14,7 +14,8 @@ return {
     'neovim/nvim-lspconfig',
     dependencies = {
       { 'williamboman/mason.nvim', opts = {} }, -- Automatically install LSPs and related tools to stdpath for Neovim
-      -- Mason must be loaded before its dependents so we need to set it up here. * NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
+      -- Mason must be loaded before its dependents so we need to set it up here.
+      -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
@@ -29,16 +30,15 @@ return {
             mode = mode or 'n'
             vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
-
-          map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition') -- gd - Jump to definition of word under cursor. To jump back, press <C-t>.
-          map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences') -- gr - Find references for the word under your cursor.
-          map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation') -- gI - Jump to the implementation of the word under your cursor.
-          map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition') --* `[L]D` - Jump to the type of the word under your cursor.
-          map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols') -- `[L]ds` - Fuzzy find all the symbols in your current document.
-          map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols') -- `[L]ws` - Fuzzy find all the symbols in your current workspace.
-          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame') -- `[L]rn` - Rename the variable under your cursor. Most LSP support renaming across files, etc.
-          map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' }) -- `[L]ca` - Execute a code action, usually need cursor on top of an error or suggestion from your LSP for this to activate.
-          map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration') -- gD - WARN: Goto Declaration (not Definition)
+          --#TODO: Improve the leader keys for these lsp functions
+          map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition') -- Jump to definition of word under cursor. To jump back, press <C-t>.
+          map('grf', require('telescope.builtin').lsp_references, '[G]oto [R]eferences') -- Find references for the word under your cursor.
+          map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition', { 'n', 'x' }) -- Jump to the type of the word under your cursor.
+          map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' }) -- usually need cursor on lsp message
+          map('<leader>csb', require('telescope.builtin').lsp_document_symbols, '[S]ymbols in [b]uffer', { 'n', 'x' }) -- Fuzzy find all the symbols in your current document.
+          map('<leader>csw', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[S]ymbols in [W]orkspace') -- Fuzzy find all the symbols in your current workspace.
+          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame') -- Rename the variable under your cursor
+          map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
           --- Removed client_supports_method, intended to bridge a gap between nvim 0.10 and 0.11; see notes.fake.lua, lines 515 to 527 for original function
 
@@ -106,7 +106,9 @@ return {
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
       local servers = { -- Enable the following language servers
-        -- clangd = {}, gopls = {}, pyright = {}, rust_analyzer = {}, -- `:help lspconfig-all` to see all preconfigured LSP
+        -- clangd = {},  pyright = {}, rust_analyzer = {}, -- `:help lspconfig-all` to see all preconfigured LSP
+        ruff = {},
+        gopls = {},
         lua_ls = {
           -- cmd = { ... }, -- filetypes = { ... }, -- capabilities = {},
           settings = {
@@ -114,6 +116,7 @@ return {
               completion = {
                 callSnippet = 'Replace',
               },
+              diagnostics = {}, --disable = { 'trailing-space' }
               -- diagnostics = { disable = { 'missing-fields' } }, -- toggle to ignore Lua_LS `missing-fields` warnings
             },
           },

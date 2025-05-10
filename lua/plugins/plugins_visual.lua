@@ -11,6 +11,18 @@ return {
     config = true,
     -- version = "*" -- Uncomment for only stable versions
   },
+
+  {
+    'rachartier/tiny-devicons-auto-colors.nvim',
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+    },
+    event = 'VeryLazy',
+    config = function()
+      require('tiny-devicons-auto-colors').setup()
+    end,
+  },
+
   {
     'soemre/commentless.nvim',
     cmd = 'Commentless',
@@ -31,7 +43,9 @@ return {
     },
   },
   -- Fancy Comment Formatting - boxes, separators, all that good stuff
-  { 'LudoPinelli/comment-box.nvim' },
+  {
+    'LudoPinelli/comment-box.nvim',
+  },
   { -- Commenting Plugin: Comment Toggling, regex ignore, other useful stuff
     'numToStr/Comment.nvim',
     opts = {

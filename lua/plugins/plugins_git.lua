@@ -1,4 +1,27 @@
 return {
+  { -- LazyGit because I just really prefer it to Neovim
+    'kdheepak/lazygit.nvim',
+    lazy = true,
+    cmd = {
+      'LazyGit',
+      'LazyGitConfig',
+      'LazyGitCurrentFile',
+      'LazyGitFilter',
+      'LazyGitFilterCurrentFile',
+    },
+    -- optional for floating window border decoration
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+    keys = {
+      { '<leader>gl', '<cmd>LazyGit<cr>', desc = 'LazyGit' },
+    },
+  },
+  { -- and why not slap tinygit in here to round it out
+    'chrisgrieser/nvim-tinygit',
+    dependencies = 'nvim-telescope/telescope.nvim',
+  },
+  --[[ can live without it I think
   {
     'NeogitOrg/neogit',
     dependencies = {
@@ -7,6 +30,7 @@ return {
       'nvim-telescope/telescope.nvim', -- optional
     },
   },
+  --]]
   { --#NOTE: this is the more detailed config provided in kickstart that adds keybinds
     'lewis6991/gitsigns.nvim',
     opts = {

@@ -11,7 +11,7 @@ end
 
 function Cfg.prelazy()
   Cfg.vimconfig.first()
-  Cfg.map.assign()
+  --  Cfg.map.assign()
   --[[ if opts then
     if opts.keys then
       for i, bind in opts.keys do
@@ -26,7 +26,9 @@ function Cfg.postlazy(opts)
   if Cfg.themeName then
     vim.cmd.colorscheme(Cfg.themeName)
   end
-  -- if opts then
-  -- nested map via whichkey
+
+  Cfg.map.assign()
+  Cfg.map.plugins()
+  require('settings.autocommands').post_autocmd()
 end
 return Cfg

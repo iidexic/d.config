@@ -56,7 +56,7 @@ return {
               'd:\\Coding',
               { path = 'd:\\Coding\\github', alias = 'projects (github)' },
               { path = 'c:\\dev\\zig', alias = 'zig' },
-              'c:\\dev\\lua',
+              { path = 'c:\\dev\\luaprojects', alias = 'lua projects' },
               'c:\\dev\\python',
               { path = 'c:\\dev\\.config', alias = '.config - backups' },
             },
@@ -78,7 +78,6 @@ return {
       pcall(telescope.load_extension, 'whaler')
       pcall(telescope.load_extension, 'zoxide')
       pcall(telescope.load_extension, 'auto-session') -- most likely no worky
-      pcall(telescope.load_extension, 'goimpl')
       pcall(telescope.load_extension, 'telescope-helpgrep')
 
       local builtin = require 'telescope.builtin' -- See `:help telescope.builtin`
@@ -96,8 +95,7 @@ return {
       vim.keymap.set('n', '<leader>sm', telescope.extensions.grapple.tags, { desc = '[S]earch [M]arks->grapple' })
       vim.keymap.set('n', '<leader>sw', telescope.extensions.whaler.whaler, { desc = '[S]earch [w]haler paths' })
       vim.keymap.set('n', '<leader>sH', telescope.extensions.helpgrep.helpgrep, { desc = '[S]earch [H]elp with grep' })
-
-      vim.keymap.set('n', '<leader>gi', telescope.extensions.goimpl.goimpl, { desc = '[G]o[I]mpl' })
+      vim.keymap.set('n', '<leader>sc', builtin.colorscheme, { desc = '[S]earch [C]olorschemes' })
 
       vim.keymap.set('n', '<leader>/', function()
         -- Slightly advanced example of overriding default behavior and theme
@@ -119,33 +117,6 @@ return {
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
     end,
-  },
-  {
-    'rmagatti/auto-session',
-    lazy = false,
-    keys = { -- Will use Telescope if installed or a vim.ui.select picker otherwise
-      { '<leader>wl', '<cmd>SessionSearch<CR>', desc = 'Session [l]ens' },
-      { '<leader>wr', '<cmd>SessionSave<CR>', desc = 'Save session' },
-      { '<leader>wa', '<cmd>SessionToggleAutoSave<CR>', desc = 'Toggle [a]utosave' },
-    },
-    dependencies = { { 'nvim-telescope/telescope.nvim' } },
-
-    ---enables autocomplete for opts
-    ---@module "auto-session"
-    ---@type AutoSession.Config
-    opts = {
-      session_lens = {
-        load_on_setup = true,
-        previewer = false,
-        mappings = {
-          -- Mode can be a string or a table, e.g. {"i", "n"} for both insert and normal mode
-          delete_session = { 'i', '<C-D>' },
-          alternate_session = { 'i', '<C-S>' },
-          copy_session = { 'i', '<C-Y>' },
-        },
-      },
-      suppressed_dirs = { '~/', '~/Projects', '~/Downloads', '~\\appdata\\local\nvim', 'd:\\coding\\github', 'c:\\dev' },
-    },
   },
 }
 

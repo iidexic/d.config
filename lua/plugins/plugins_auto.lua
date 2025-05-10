@@ -1,4 +1,7 @@
 return {
+  {
+    'https://github.com/saifulapm/commasemi.nvim',
+  },
   { -- Autoformat (conform.nvim)
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },

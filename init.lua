@@ -1,8 +1,8 @@
 --# Pre-Lazy Config
 local configure = require 'settings.apply'
 configure.prelazy()
-configure.theme 'evergarden' --Nordic
-
+configure.theme 'evergarden' --Nordic, evergarden, nighthfox (+), miasma, oh-lucy, oh-lucy-evening*,
+-- 'wal','everblush', 'miramare', 'zephyr', 'toast', 'flatlandia', 'monet','srcery','vesper'
 --# Autocmd
 vim.api.nvim_create_autocmd('TextYankPost', { -- Try it with `yap` in normal mode
   desc = 'Highlight when yanking (copying) text', --See`:help vim.highlight.on_yank()`
@@ -23,7 +23,7 @@ Other plugins/plugin types to try:
 --------------------------------------------
 --- autopairs - active now. works good. just gonna keep it
 --- Trailblazer (plugins/trailblazer.lua)
------ Marks - alternative to Grapple, It's technically installed right now, but I have not used it.
+----- Marks - alternative to Grapple, It's technically itstalled right now, but I have not used it.
 ----- from what I can tell it is similar to grapple's recommended use style
 ----- marks can be "popped" off the buffer so you are navigating to where you need to go and then jumping back
 ----- The help docs are not great though. I would need to put some time into it to sort it out

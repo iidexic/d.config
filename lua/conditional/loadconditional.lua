@@ -8,7 +8,6 @@ local Cond = {
   plugins = {
     {
       'CWood-sdf/pineapple',
-      name = 'pineapple',
       dependencies = require 'theme.pineapple',
       opts = {
         installedRegistry = 'theme.pineapple',
@@ -51,7 +50,5 @@ end
 function Cond.getplugins()
   return Cond.plugins
 end
-
-print(Cond.plugins[1].name)
 
 return Cond

@@ -3,31 +3,51 @@ local D = {
     local plugload = require 'pluginloader'
     --# Main Plugins
     local files = {
+      'plugins.plugins_debug',
       'plugins.lang-support',
+      'plugins.plugins_lsp',
       'plugins.mini',
-      'plugins.neo-tree',
+      'plugins.layout',
+      'plugins.persistence',
+      'plugins.filemanager',
       'plugins.plugins_auto',
       'plugins.plugins_debug',
       'plugins.plugins_git',
       'plugins.plugins_keys',
-      'plugins.plugins_lsp',
       'plugins.plugins_tools',
       'plugins.plugins_visual',
       'plugins.plugins_workflow',
+      'plugins.bufferline',
       'plugins.telescopes',
       'plugins.treesitters',
       'plugins.trouble',
-      -- 'plugins.buffon', -- clashes with way too many keys. Setting up grapple like this tho
-      --'plugins.trailblazer', -- moving to 'trials' folder
+      'plugins._devplugins',
     }
+
     plugload.loadfiles(files)
+    --# Trial Plugins
+    local trials = {
+      --'trials.buffon',
+      --'trials.hawtkeys',
+      --'trials.better-escape',
+      'trials.houdini', -- same as better-esc, so switching to it
+      'trials.precognition', --technically enabled but lazy, would need to be manually command-triggered as is
+      --'trials.nest',
+      --'trials.racer-nvim',
+      --'trials.split',
+      --'trials.trailblazer',
+    }
+
+    --local trialLeap = require 'trials.leap_plus'(true, true, true, false)
+    --plugload.add(trialLeap)
+    plugload.loadfiles(trials)
 
     --# Conditional Plugins
-    ---Dont need any right now
+    ----- dont need any right now
     plugload.getconditionals()
 
     --# Themes
-    plugload.add(require('theme.themes').getlist())
+    plugload.add(require('theme.themes').getlist { 'sierra', 'anderson', 'tender', 'ghostbuster', 'lucario', 'bogster', 'zephyr' })
 
     ------------------------------------------------------------------------------
     --# Lazy definitions
@@ -44,23 +64,7 @@ local D = {
 
     --# Lazy setup
     require('lazy').setup(plugload.allplugins, {
-      ui = { -- If using a Nerd Font: set icons to an empty table , otherwise define a unicode icons table:
-        icons = vim.g.have_nerd_font and {} or {
-          cmd = '⌘',
-          config = '🛠',
-          event = '📅',
-          ft = '📂',
-          init = '⚙',
-          keys = '🗝',
-          plugin = '🔌',
-          runtime = '💻',
-          require = '🌙',
-          source = '📄',
-          start = '🚀',
-          task = '📌',
-          lazy = '💤 ',
-        },
-      },
+      ui = { icons = vim.g.have_nerd_font and {} or require('plugins//storage').lazyicons },
     })
   end,
 }

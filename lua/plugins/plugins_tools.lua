@@ -6,11 +6,18 @@ return {
     opts = {
       open_mapping = [[<C-\>]],
       persist_size = false,
+      shell = 'nu',
+      size = function(term)
+        if term.direction == 'horizontal' then
+          return 14
+        elseif term.direction == 'vertical' then
+          return vim.o.columns * 0.3
+        end
+      end,
     },
     config = true,
-    lazy = true,
+    lazy = false,
     -- trying to disable this to see if it makes the above mapping work from the start
-    -- keys = { { '<leader>at', '<cmd>ToggleTerm<cr>', desc = '[A]pp: [t]erminal' } },
   },
   {
     'willothy/flatten.nvim',
@@ -22,10 +29,41 @@ return {
     'LintaoAmons/scratch.nvim',
     event = 'VeryLazy',
   },
+  {
+    'OXY2DEV/markview.nvim',
+    lazy = false,
+    opts = { preview = { icon_provider = 'devicons' } },
+    -- For blink.cmp's completion
+    -- source
+    -- dependencies = {
+    --     "saghen/blink.cmp"
+    -- },
+  },
+  {
+    'uga-rosa/ccc.nvim',
+    opts = {},
+  },
+  {
+    'famiu/bufdelete.nvim',
+    keys = {
+      {
+        '<leader><BS>',
+        function()
+          require('bufdelete').bufwipeout(0)
+        end,
+        desc = 'Bufdelete',
+      },
+      {
+        '<C-Backspace>',
+        function()
+          require('bufdelete').bufdelete(0, true)
+        end,
+        desc = 'Bufdelete Forcibly',
+      },
+    },
+  },
   { -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
-    -- Enable `lukas-reineke/indent-blankline.nvim`
-    -- See `:help ibl`
     main = 'ibl',
     opts = {},
   },

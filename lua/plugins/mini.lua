@@ -13,17 +13,20 @@ return {
     config = function()
       require('mini.ai').setup { n_lines = 500 }
       require('mini.align').setup()
-      --[[
       require('mini.files').setup {
-        opts = {},
-        --using keys here doesn't work for some reason
-        --keys = { { '<leader>af', '<cmd>lua MiniFiles.open()<cr>', desc = '[A]pp: Mini[F]iles' } },
-      } --> start of my additions
-      vim.keymap.set('n', '<leader>af', '<cmd>lua MiniFiles.open()<cr>')
---]]
-      -- what happens without this guy
+        options = {},
+        windows = {
+          max_number = math.huge, -- Maximum number of windows to show side by side
+          preview = false, -- Whether to show preview of file/directory under cursor
+          width_focus = 50, -- Width of focused window
+          width_nofocus = 15, -- Width of non-focused window
+          width_preview = 25, -- Width of preview window
+        },
+      }
       --require('mini.icons').setup() -- for mini.files specifically
       require('mini.surround').setup()
+      --require('mini.hues').setup() --generate colorschemes
+      --[[
       require('mini.jump2d').setup {
         -- function 4 producing jump spots. (:help MiniJump2d.start)
         spotter = nil, -- nil = MiniJump2d.default_spotter
@@ -42,16 +45,7 @@ return {
 
         silent = false, -- toggle non-error feedback. also affects idle helper messages when user input required.
       }
-      --     require('mini.bufremove').setup {}
-      --[[
-      local tabline = require 'mini.tabline'
-      tabline.setup {
-        use_icons = vim.g.have_nerd_font,
-        format = function(buf_id, label)
-          return MiniTabline.default_format(buf_id, label)
-        end,
-      }
---]]
+      --]]
       local statusline = require 'mini.statusline' -- Simple and easy statusline.
       statusline.setup { use_icons = vim.g.have_nerd_font } -- set use_icons to true if you have a Nerd Font
       -- default behavior.
