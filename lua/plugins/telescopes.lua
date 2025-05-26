@@ -1,36 +1,21 @@
 -- [Telescope] - Fuzzy Finder
 -- setup for telescope, currently direct table return
--- before that, check insert functionality
-
 return {
-  {
-    'cbochs/grapple.nvim',
-    opts = {
-      scope = 'git', -- also try out "git_branch"
-    },
-    event = { 'BufReadPost', 'BufNewFile' },
-    cmd = 'Grapple',
-    keys = {
-      { '<leader>m', '<cmd>Grapple toggle<cr>', desc = 'Grapple toggle tag' },
-      { '<leader>M', '<cmd>Grapple toggle_tags<cr>', desc = 'Grapple open tags window' },
-      { '<leader>n', '<cmd>Grapple cycle_tags next<cr>', desc = 'Grapple cycle next tag' },
-      { '<leader>p', '<cmd>Grapple cycle_tags prev<cr>', desc = 'Grapple cycle previous tag' },
-    },
-  },
   { 'catgoose/telescope-helpgrep.nvim', lazy = true },
-
   -- telescope extension. not sure if putting them all as dependencies for telescope is way 2 go
-  --=======================[ Telescope Config ]=======================--
-  --==================================================================--
+
+  -- ╭─────────────────────────────────────────────────────────╮
+  -- │                                        Telescope Config │
+  -- ╰─────────────────────────────────────────────────────────╯
   {
     'nvim-telescope/telescope.nvim',
-    event = 'VimEnter',
+    event = 'vimenter',
     dependencies = {
       { 'nvim-lua/plenary.nvim' },
-      { 'SalOrak/whaler.nvim' },
+      { 'salorak/whaler.nvim' },
       { 'cbochs/grapple.nvim' },
       { 'jvgrootveld/telescope-zoxide' },
-      { -- If get errors, see telescope-fzf-native README for installation instructions
+      { -- if get errors, see telescope-fzf-native readme for installation instructions
         'nvim-telescope/telescope-fzf-native.nvim',
         build = 'make', -- only run on update/install
         cond = function() -- `cond` = condition; determine if plugin should be installed/loaded.
@@ -40,9 +25,9 @@ return {
       { 'nvim-telescope/telescope-ui-select.nvim' },
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
-    config = function() -- [[ Configure Telescope ]] See `:help telescope` and `:help telescope.setup()`
+    config = function() -- [[ configure telescope ]] see `:help telescope` and `:help telescope.setup()`
       local telescope = require 'telescope'
-      telescope.setup { -- All the info you're looking for is in `:help telescope.setup()`
+      telescope.setup { -- all the info you're looking for is in `:help telescope.setup()`
         -- defaults = { mappings = { i = { ['<c-enter>'] = 'to_fuzzy_refine' }}},
         -- pickers = {} -- what are pickers
         extensions = {
@@ -53,18 +38,18 @@ return {
             auto_file_explorer = false,
             directories = {
               'c:\\dev',
-              'd:\\Coding',
-              { path = 'd:\\Coding\\github', alias = 'projects (github)' },
+              'd:\\coding',
+              { path = 'd:\\coding\\github', alias = 'projects (github)' },
               { path = 'c:\\dev\\zig', alias = 'zig' },
               { path = 'c:\\dev\\luaprojects', alias = 'lua projects' },
               'c:\\dev\\python',
               { path = 'c:\\dev\\.config', alias = '.config - backups' },
             },
             oneoff_directories = {
-              { path = 'c:\\dev\\zig\\raylib-zig\\inteRLacer', alias = 'zig-rl interlacer' },
-              { path = '~\\appdata\\Local\\nvim', alias = 'nvim' },
+              { path = 'c:\\dev\\zig\\raylib-zig\\interlacer', alias = 'zig-rl interlacer' },
+              { path = '~\\appdata\\local\\nvim', alias = 'nvim' },
               { path = '~\\appdata\\roaming\\neovide', alias = 'neovide config' },
-              { path = 'd:\\Coding\\github\\go-CA-experiments', alias = 'go CA' },
+              { path = 'd:\\coding\\github\\go-ca-experiments', alias = 'go ca' },
             },
           },
           --* removing file_browser; superfluous
@@ -72,7 +57,7 @@ return {
         },
       }
 
-      pcall(telescope.load_extension, 'fzf') -- Enable Telescope extensions if they are installed
+      pcall(telescope.load_extension, 'fzf') -- enable telescope extensions if they are installed
       pcall(telescope.load_extension, 'ui-select')
       pcall(telescope.load_extension, 'grapple')
       pcall(telescope.load_extension, 'whaler')
@@ -90,6 +75,8 @@ return {
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
+      vim.keymap.set('n', '<leader>st', builtin.tags, { desc = '[S]earch [T]ags' })
+      vim.keymap.set('n', '<leader>sz', telescope.extensions.zoxide.list, { desc = '[S]earch [z]oxide list' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
       vim.keymap.set('n', '<leader>sz', telescope.extensions.zoxide.list, { desc = '[S]earch [z]oxide list' })
       vim.keymap.set('n', '<leader>sm', telescope.extensions.grapple.tags, { desc = '[S]earch [M]arks->grapple' })
@@ -97,6 +84,15 @@ return {
       vim.keymap.set('n', '<leader>sH', telescope.extensions.helpgrep.helpgrep, { desc = '[S]earch [H]elp with grep' })
       vim.keymap.set('n', '<leader>sc', builtin.colorscheme, { desc = '[S]earch [C]olorschemes' })
 
+      --unicode_picker. not a telescope extension directly but is a telescope command
+      vim.keymap.set('n', '<leader>uu', '<cmd>Telescope unicode_picker<CR>', { desc = 'Unicode Picker' })
+
+      local globaltags = function()
+        local t = require 'telescope'
+        local g = require 'grapple'
+        vim.print(t.extensions.grapple.tags())
+        t.extension.grapple.tags()
+      end
       vim.keymap.set('n', '<leader>/', function()
         -- Slightly advanced example of overriding default behavior and theme
         -- You can pass additional configuration to Telescope to change the theme, layout, etc.
@@ -119,25 +115,3 @@ return {
     end,
   },
 }
-
---[[#buffer close function; implement this later
-local m = {}
-m.my_buffer = function(opts)
-  opts = opts or {}
-  opts.attach_mappings = function(prompt_bufnr, map)
-    local delete_buf = function()
-      local selection = action_state.get_selected_entry()
-      actions.close(prompt_bufnr)
-      vim.api.nvim_buf_delete(selection.bufnr, { force = true })
-    end
-    map('i', '<c-u>', delete_buf)
-    return true
-  end
-  opts.previewer = false
-  -- define more opts here
-  -- opts.show_all_buffers = true
-  -- opts.sort_lastused = true
-  -- opts.shorten_path = false
-  require('telescope.builtin').buffers(require('telescope.themes').get_dropdown(opts))
-end
---]]

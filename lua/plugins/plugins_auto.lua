@@ -34,7 +34,7 @@ return {
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        go = { 'gopls' },
+        go = { 'gofmt', 'gopls', 'goimports', 'gotests' },
         python = { 'ruff' },
         -- python = { "isort", "black", stop_after_first = true }, stop_after_first(optional) = load first available
       },
@@ -68,6 +68,7 @@ return {
       'hrsh7th/cmp-nvim-lsp', -- adds other completion capabilities. next 2 lines are included with this
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-nvim-lsp-signature-help',
+      'Snikimonkd/cmp-go-pkgs',
     },
     config = function()
       local cmp = require 'cmp' -- see `:help cmp`
@@ -85,7 +86,7 @@ return {
           ['<c-p>'] = cmp.mapping.select_prev_item(), -- select the [p]revious item
           ['<C-b>'] = cmp.mapping.scroll_docs(-4), -- scroll the documentation window [b]ack / [f]orward
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
-          --['<C-y>'] = cmp.mapping.confirm { select = true }, -- accept[y] the completion (will expand snippets from lsp). this auto-imports if lsp supports it.
+          ['<C-y>'] = cmp.mapping.confirm { select = true }, -- accept[y] the completion (will expand snippets from lsp). this auto-imports if lsp supports it.
           --['<C-,>'] = cmp.mapping.select_prev_item(),
           --['<C-.>'] = cmp.mapping.select_next_item(),
           ['<C-CR>'] = cmp.mapping.confirm { select = true },
@@ -118,8 +119,11 @@ return {
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
+          { name = 'gopls' },
           { name = 'nvim_lsp_signature_help' },
+          { name = 'go_pkgs' },
         },
+        matching = { disallow_symbol_nonprefix_matching = false }, --for go_pkgs, to use . and / in urls
         -- defaults: performance = { debounce = 60, throttle = 30, fetching_timeout = 500, filtering_context_budget = 3, confirm_resolve_timeout = 80, async_budget = 1, max_view_entries = 200, },
       }
     end,

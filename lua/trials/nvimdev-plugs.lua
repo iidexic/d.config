@@ -12,13 +12,14 @@ M.plugins = {
     },
   },
   -- nerdicons: a search window for nerd font icons
-  {
+  -- no longer necessary. Using icon picker
+  --[[ {
     'glepnir/nerdicons.nvim',
     cmd = 'NerdIcons',
     config = function()
       require('nerdicons').setup {}
     end,
-  },
+  },]]
 
   { -- a nice neovim dashboard
     'nvimdev/dashboard-nvim',
@@ -32,4 +33,4 @@ M.plugins = {
   },
 }
 
-return M
+return M.plugins

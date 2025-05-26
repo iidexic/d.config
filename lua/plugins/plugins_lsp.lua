@@ -124,12 +124,16 @@ return {
       }
 
       local ensure_installed = vim.tbl_keys(servers or {}) -- Ensure the servers and tools above are installed
+      --- Trying to make sure ruff is set up?
+      --- Is this necessary?
+      vim.lsp.config('ruff', { init_options = { settings = {} } })
 
       vim.list_extend(ensure_installed, { 'stylua' }) -- Used to format Lua code. add more LSPs here, check w mason
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
       require('mason-lspconfig').setup {
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
         automatic_installation = false,
+        automatic_enable = true,
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}

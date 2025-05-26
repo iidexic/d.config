@@ -3,14 +3,6 @@ local configure = require 'settings.apply'
 configure.prelazy()
 configure.theme 'evergarden' --Nordic, evergarden, nighthfox (+), miasma, oh-lucy, oh-lucy-evening*,
 -- 'wal','everblush', 'miramare', 'zephyr', 'toast', 'flatlandia', 'monet','srcery','vesper'
---# Autocmd
-vim.api.nvim_create_autocmd('TextYankPost', { -- Try it with `yap` in normal mode
-  desc = 'Highlight when yanking (copying) text', --See`:help vim.highlight.on_yank()`
-  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
-  callback = function()
-    vim.highlight.on_yank()
-  end,
-})
 
 --# Lazy + Plugins:
 require('dlazyinit').LazyPluginSetup()

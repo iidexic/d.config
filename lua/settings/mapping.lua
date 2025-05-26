@@ -25,7 +25,7 @@ local function map_toggleterm()
     local opts = { buffer = 0 }
     vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
     --vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts) I think this making lazygit shit work bad
-    vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
+    vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts) --{ '<Esc><Esc>', '<C-\\><C-n>' }--wtf is this
     vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
     vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
     vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
@@ -36,26 +36,10 @@ local function map_toggleterm()
   -- if you only want these mappings for toggle term use term://*toggleterm#* instead
   vim.cmd 'autocmd! TermOpen term://* lua ttmap()'
 end
-local maptables = {
-  -- Trying whichkey-style above
-  vismode = {
-    --{ 'v', '<C-l>', vim.cmd },
-  },
-  go = { -- changed first key after leader to 'l'
-    { '<leader>lr', cmd 'GoRun', dsc 'Go Run' },
-    { '<leader>ld', cmd 'GoDoc', dsc 'GoDoc lookup' },
-    { '<leader>la', cmd 'GoAlt', dsc 'Toggle to test file' },
-    { '<leader>lf', cmd 'GoRun -F', dsc 'Go Run Floating window' },
-    { '<leader>lb', cmd 'GoBuild', dsc 'Go Build to cwd' },
-    { '<leader>lt', cmd 'GoTest -n', dsc 'Go Test selected' },
-    { '<leader>lm', cmd 'GoModTidy', dsc 'Go Mod Tidy' },
-    { '<leader>ln', cmd 'GoRename', dsc 'Go Rename symbol' },
-    { '<leader>li', cmd 'GoImpl', dsc 'GoImpl' },
-  },
-}
 
 local pluginmappings = {}
 
+--- Which-key add all tables of mappings in mtable
 local function wkMapFromTable(mtable)
   local wk = require 'which-key'
   for _, mappings in pairs(mtable) do
@@ -80,61 +64,164 @@ local function tabpage_goto(n)
     vim.api.nvim_set_current_tabpage(n)
   end
 end
+local maptables = {
+  -- Trying whichkey-style above
+  vismode = {
+    --{ 'v', '<C-l>', vim.cmd },
+  },
+  assigns = {
+    { '<leader>q', vim.diagnostic.setloclist },
+    { '<Esc>', '<cmd>nohlsearch<CR>' },
+    { '<C-h>', '<C-w><C-h>', dsc 'Move focus to the left window' },
+    { '<C-k>', '<C-w><C-k>', dsc 'Move focus to the upper window' },
+    { '<C-l>', '<C-w><C-l>', dsc 'Move focus to the right window' },
+    { '<C-j>', '<C-w><C-j>', dsc 'Move focus to the lower window' },
+    { '|', cmd 'lua MiniFiles.open()', dsc 'MiniFiles open' },
+    { '<M-\\>', toggletermFlip, dsc 'ToggleTerm Flip' },
+    { '<M-h>', tabpage_prev, dsc 'previous tabpage' },
+    { '<M-l>', tabpage_next, dsc 'next tabpage' },
+    -- -- this is going to be set in autocommands,
+    --[[ { 'gh', function() vim.lsp.buf.signature_help { max_width = 86, max_height = 30 } end, dsc 'show signature help. (hover="KK")', }, ]]
+  },
 
+  go = { -- changed first key after leader to 'l'
+    { '<leader>lr', cmd 'GoRun', dsc 'Go Run' },
+    { '<leader>ld', cmd 'GoDoc', dsc 'GoDoc lookup' },
+    { '<leader>la', cmd 'GoAlt', dsc 'Toggle to test file' },
+    { '<leader>lf', cmd 'GoRun -F', dsc 'Go Run Floating window' },
+    { '<leader>lb', cmd 'GoBuild', dsc 'Go Build to cwd' },
+    { '<leader>lt', cmd 'GoTest -n', dsc 'Go Test selected' },
+    { '<leader>lm', cmd 'GoModTidy', dsc 'Go Mod Tidy' },
+    { '<leader>ln', cmd 'GoRename', dsc 'Go Rename symbol' },
+    { '<leader>lI', cmd 'GoImpl', dsc 'GoImpl' },
+  },
+  lsp_learning = {
+    { '<A-l>i', vim.lsp.buf.incoming_calls(), dsc 'show incoming calls' },
+    { '<A-l>h', vim.lsp.buf.hover(), dsc 'show hover info' },
+  },
+}
 local Map = {
-
   assign = function()
-    vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>') --  See `:help hlsearch`
-    vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
-    vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
-    vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-    vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-    vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-    vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
-    vim.keymap.set('n', '|', cmd 'lua MiniFiles.open()', dsc 'MiniFiles open')
-    vim.keymap.set('n', '<M-\\>', toggletermFlip, dsc 'ToggleTerm Flip')
-    vim.keymap.set('n', '<M-h>', tabpage_prev, dsc 'previous tabpage')
-    vim.keymap.set('n', '<M-l>', tabpage_next, dsc 'next tabpage')
-
-    -- make life a bit easier in insert mode
+    vim.keymap.set('v', '<A-r>', ':lua<CR>', { desc = 'run selected lua code' })
     map_toggleterm()
-    --mapFromTable(maptables)
+
+    --# Apply Mappings
     wkMapFromTable(maptables)
     wkMapFromTable(pluginmappings)
   end,
 }
-function Map.p_commentbox()
-  local cb = require 'comment-box'
-  local km = {}
+function Map.configReloads()
+  local cmap = {
+    { '<leader>Ra', require('settings.autocommands').post_autocmd(), desc = '[R]eload [a]utocommands' },
+    {
+      '<leader>Rm',
+      function()
+        Map.assign()
+        Map.plugins()
+      end,
+      desc = '[R]erun [m]appings file',
+    },
+  }
+  return cmap
 end
 function Map.plugins()
+  local mappings = {}
   Map.wk = require 'which-key'
   local pr = require 'persistence'
-  wk = Map.wk -- laziness
-  wk.add {
+  Map.wk.add {
     mode = 'n',
     {
-      { ld 'Ps', pr.load, desc = 'Load cwd session' },
-      { ld 'PS', pr.select, desc = 'Select session' },
+      { ld 'ps', pr.load, desc = 'Load cwd session' },
+      { ld 'pS', pr.select, desc = 'Select session' },
       {
-        ld 'Pl',
+        ld 'pl',
         function()
           pr.load { last = true }
         end,
         desc = 'Load last session',
       },
-      { ld 'Pd', pr.stop, desc = 'Disable session save' },
+      { ld 'pd', pr.stop, desc = 'Disable session save' },
     },
   }
-  vim.keymap.set('n', '<leader>ga', function()
-    require('tinygit').interactiveStaging()
-  end, { desc = 'git add' })
-  vim.keymap.set('n', '<leader>gc', function()
-    require('tinygit').smartCommit()
-  end, { desc = 'git commit' })
-  vim.keymap.set('n', '<leader>gp', function()
-    require('tinygit').push()
-  end, { desc = 'git push' })
+  Map.wk.add(Map.tinygit())
+  Map.wk.add(Map.other_plugins())
+  Map.wk.add(Map.leap())
+  Map.wk.add(Map.commentbox())
+  Map.wk.add(Map.configReloads())
 end
 
+function Map.tinygit()
+  local tinygit = require 'tinygit'
+  return {
+    { '<leader>ga', tinygit.interactiveStaging, desc = 'git add' },
+    { '<leader>gc', tinygit.smartCommit, desc = 'git commit' },
+    { '<leader>gp', tinygit.push, desc = 'git push' },
+  }
+  -- vim.keymap.set('n', '<leader>ga', tinygit.interactiveStaging, { desc = 'git add' })
+  -- vim.keymap.set('n', '<leader>gc', tinygit.smartCommit, { desc = 'git commit' })
+  -- vim.keymap.set('n', '<leader>gp',tinygit.push , { desc = 'git push' })
+end
+
+function Map.commentbox()
+  --write bool choice tbl
+  local CB = { b = 1, l = 1 }
+  local fcbs = function(write, choice)
+    if write then
+      --vim.tbl.extend or something
+    end
+  end
+  local km = {
+    --b 1,2,3 = rounded, square, heavy, 4 dashed, 7 double
+    --b 12 = quote 13 = double lnquote, 18 vert enclose (L/R), 20 horiz enclose (top/btm)
+    --l (2,3) rounded dwn/up, (4,5) square dwn/up,  (6,7,8) enclosed {[,(,<)]},
+    --l 9 heavy ln , 12 weighted, 13 double
+    --box: b-1, s-2 (square), q-12/13, ev-18,eh-20, h-9
+    --[[ Ideally: set-up to toggle options (like box style # and alignment), but to also stay in a custom mode with custom keymap until command done ]]
+
+    { 'gCb', cmd('CBlcbox ' .. 1) },
+    { 'gCl', cmd 'CBllline ' .. 1 },
+    { 'gCs', cmd 'CBlcbox ' .. 2 },
+    { 'gCq', cmd('CBlcline ' .. 2) },
+  }
+  return km
+end
+function Map.other_plugins()
+  local precog = require 'precognition'
+  --local neoclip = require('neo')
+  local aerial = require 'aerial'
+  local m = {
+    { ld 'up', precog.toggle, desc = '[U]til: [p]recognition toggle' },
+    { ld 'ua', aerial.open, desc = '[U]til: [a]erial' },
+    { '<A-j>', require('trevj').format_at_cursor, desc = 'reverse-J' },
+  }
+  return m
+end
+function Map.leap()
+  return {
+    { 'S', '<Plug>(leap-anywhere)', desc = 'leap anywhere' },
+    { '<C-s>', '<Plug>(leap)', desc = 'leap', mode = { 'i', 'n' } },
+  }
+end
+
+--[[ function Map.obs()
+  -- n key currently not occupied, so these are fine.
+  local mappings = {
+    { '<leader>nn', '<cmd>ObsNvimFollowLink<cr>', desc = 'Obs Follow Link' },
+    { '<leader>nr', '<cmd>ObsNvimRandomNote<cr>', desc = 'Obs open [r]andom Note' },
+    { '<leader>nN', '<cmd>ObsNvimNewNote<cr>', desc = 'Obs [N]ew note' },
+    { '<leader>ny', '<cmd>ObsNvimCopyObsidianLinkToNote<cr>', desc = 'Obs [y]ank link to obsidian note' },
+    { '<leader>no', '<cmd>ObsNvimOpenInObsidian<cr>', desc = 'Obs [o]pen in Obsidian' },
+    --{ '<leader>nd', '<cmd>ObsNvimDailyNote<cr>' ,desc = 'Obs [D]aily Note'},
+    { '<leader>nw', '<cmd>ObsNvimWeeklyNote<cr>', desc = 'Obs [w]eekly Note' },
+    { '<leader>nrn', '<cmd>ObsNvimRename<cr>', desc = 'Obs [r]e[n]ame' },
+    { '<leader>nT', '<cmd>ObsNvimTemplate<cr>', desc = 'Obs [T]emplate' },
+    { '<leader>nM', '<cmd>ObsNvimMove<cr>', desc = 'Obs [M]ove' },
+    { '<leader>nb', '<cmd>ObsNvimBacklinks<cr>', desc = 'Obs [b]acklinks' },
+    { '<leader>nfj', '<cmd>ObsNvimFindInJournal<cr>', desc = 'Obs [f]ind in [j]ournal' },
+    { '<leader>nff', '<cmd>ObsNvimFindNote<cr>', desc = 'Obs [f]ind [n]ote' },
+    { '<leader>nfg', '<cmd>ObsNvimFindInNotes<cr>', desc = 'Obs [f]ind in notes' },
+  }
+  Map.wk.add(mappings)
+end
+ ]]
 return Map
