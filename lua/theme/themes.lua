@@ -1,3 +1,4 @@
+local nofunc = function() end
 local Maker = {}
 --[[
       reference theme names/repo info
@@ -7,37 +8,52 @@ local Maker = {}
       alexvzyl/nordic.nvim
       folke/tokyonight
   --]]
-local themelist = {
+Maker.themelist = {
   --{ 'tjdevries/colorbuddy.nvim' },
   { 'mhartington/oceanic-next' }, --+ good all-round blue toward green theme
-  { 'Donearm/Ubaryd' }, --+ good brown. Gutter highlight semi-issue, really is fine.
-  { 'vext01/theunixzoo-vim-colorscheme' }, --~ good alternate brown-green theme. Tab highlight issue
+  { 'Donearm/Ubaryd', cond = false }, --+ good brown. Gutter highlight semi-issue, really is fine.
+  { 'vext01/theunixzoo-vim-colorscheme', cond = false }, --~ good alternate brown-green theme. Tab highlight issue
   { 'vim-scripts/ego.vim' }, --~ loud, tab highlight issue but not as bad. more contrast than others
   { 'fynnfluegge/monet.nvim' }, --+ good theme blue toward purp, good cohesion
   { 'jsit/toast.vim' }, --+ the best blue toward green theme so far. darker than solar
-  { 'Nequo/vim-allomancer' }, --~ decent neutral theme, color cohesion isn't ideal, pink/purp sticks out
+  { 'Nequo/vim-allomancer', cond = false }, --~ decent neutral theme, color cohesion isn't ideal, pink/purp sticks out
   { 'marcelbeumer/spacedust.vim' }, --~ love it, besides tab highlight issue
   { 'PHSix/nvim-hybrid' }, --~ its fine, doesnt pop out at me
-  { 'FrenzyExists/aquarium-vim' }, --~ tabspace highlight issue. besides that, nice slightly cool
+  { 'FrenzyExists/aquarium-vim', cond = false }, --~ tabspace highlight issue. besides that, nice slightly cool
   { 'kvrohit/rasmus.nvim' }, --~ dark, okay color cohesion. kind of nicer vscode, no sure abt
   { 'ribru17/bamboo.nvim' }, --+nice greenish slightly warm, good color cohesion
   { 'cryptomilk/nightcity.nvim' }, --+good color cohesion, washed-out grub with some blues. weird string highlighting
-  { 'HoNamDuong/hybrid.nvim' }, --=it's fine. neutral pushing warm. have two of these for some reason
-  { 'lalitmee/cobalt2.nvim' }, -- it was working before. try again
-  { 'Tsuzat/NeoSolarized.nvim' }, --- no bg - could fix w config if I want to.
+  { 'raphamorim/lucario' }, --+ great cobalt-ish
+  { 'HoNamDuong/hybrid.nvim', config = true }, --=it's fine. neutral pushing warm. have two of these for some reason
+  --{ 'lalitmee/cobalt2.nvim', config = true, priority = 1000 }, -- needs colorbuddy
+  { 'Tsuzat/NeoSolarized.nvim', opts = { transparent = false }, priority = 1000 }, --- no bg - could fix w config if I want to.
   { 'cseelus/vim-colors-lanai' }, --~ poppy pastels, decent cohesion, best of more contrast themes sofar
   { 'rafalbromirski/vim-aurora' }, --+ it works. oh the whichkey bg is pure black tho, weird
   { 'EdenEast/Revolution.vim' }, --+ great
   { 'DemonCloud/J' }, --? dunno where this one is
   { 'franbach/miramare' }, --+ kinda ristrotto
-  { 'jedireza/vim-rizzle' }, --~ the rizzler. similar to toast, compare the two. blue-neut
+  { 'jedireza/vim-rizzle', cond = false }, --~ the rizzler. similar to toast, compare the two. blue-neut
   { 'bluz71/vim-nightfly-colors' }, --- blue, with some orange-yellows, darker, it's nice
   { 'tyrannicaltoucan/vim-quantum' }, --+ lighter dark theme, tends slightly blue toward green, it's good
   { 'Everblush/everblush.vim' }, --+ darker more neutral evergarden (kind of). only issue is red tab marks
   { 'sainnhe/everforest', name = 'everforest', priority = 1000 }, -- theme; mid-dark, green
 
+  { 'nvimdev/zephyr-nvim' }, --+ I like it. warm-bearish
+  { 'AlessandroYorba/Sierra' }, -- very muted lighter mint green-peach
+  { 'nvimdev/oceanic-material' },
+  { 'sam4llis/nvim-tundra' },
+  { 'nyoom-engineering/oxocarbon.nvim' },
+  { 'rebelot/kanagawa.nvim' },
+  { 'vv9k/bogster' }, --pops/contrast, blue toward slight green. it's good!
+  { 'relastle/bluewery.vim' },
+  { 'MvanDiemen/ghostbuster', cond = false }, -- I can't decide
+  { 'logico/typewriter' },
+  { 'flrnd/plastic.vim' },
+  { 'darkvoid-theme/darkvoid.nvim' },
+  { 'yuttie/hydrangea-vim' },
   -->oh-lucy: darkblue-steel bg, white, light-pink, cool yellow, touch of aqua/teal
   { 'yazeed1s/oh-lucy.nvim', name = 'oh-lucy' }, --+
+  { 'jacoborus/tender.vim' }, -- borderless. interesting, slight warm w/blue
   {
     'chama-chomo/grail', --~ it's alright, neutral-warmish bg with mixed but cohesive palette
     version = false,
@@ -75,9 +91,6 @@ local themelist = {
     name = 'nordic',
     lazy = false,
     priority = 1000,
-    config = function() --necessary?
-      require('nordic').load {}
-    end,
   },
   {
     'xero/miasma.nvim', -- deep jungley
@@ -87,48 +100,10 @@ local themelist = {
   {
     'folke/tokyonight.nvim', -- real blue toward purp, a classic
     priority = 1000,
-    config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('tokyonight').setup {
-        styles = { comments = { italic = false } }, -- Disable italics in comments
-      }
-    end,
   },
 }
-local themesPineapple = {
-  oxocarbon = { 'nyoom-engineering/oxocarbon.nvim', enabled = false },
-  lucario = { 'raphamorim/lucario', enabled = false }, --+ great cobalt-ish
-  zephyr = { 'nvimdev/zephyr-nvim', enabled = false }, --+ I like it. warm-bearish
-  anderson = { 'tlhr/anderson.vim', enabled = false }, --- warm but a bit too flat
-  sierra = { 'AlessandroYorba/Sierra', enabled = false }, -- very muted lighter mint green-peach
-  oceanic = { 'nvimdev/oceanic-material', enabled = false },
-  tender = { 'jacoborus/tender.vim', enabled = false }, -- borderless. interesting, slight warm w/blue
-  tundra = { 'sam4llis/nvim-tundra', enabled = false },
-  kanagawa = { 'rebelot/kanagawa.nvim', enabled = false },
-  witch = { 'sontungexpt/witch', enabled = false },
-  bogster = { 'vv9k/bogster', enabled = false }, --pops/contrast, blue toward slight green. it's good!
-  bluewery = { 'relastle/bluewery.vim', enabled = false },
-  ghostbuster = { 'MvanDiemen/ghostbuster', enabled = false }, -- I can't decide
-  typewriter = { 'logico/typewriter', enabled = false },
-  plastic = { 'flrnd/plastic.vim', enabled = false },
-  darkvoid = { 'darkvoid-theme/darkvoid.nvim', enabled = false },
-  hydrangea = { 'yuttie/hydrangea-vim', enabled = false },
-}
+local themesPineapple = {}
 
----@param enabledthemes table | nil list of theme moniker to enable
-function Maker.getlist(enabledthemes)
-  if enabledthemes then
-    for _, v in ipairs(enabledthemes) do
-      if themesPineapple[v] then
-        themesPineapple[v].enabled = true
-      end
-    end
-  end
-  for _, theme in pairs(themesPineapple) do
-    table.insert(themelist, theme)
-  end
-  return themelist
-end
 return Maker
 --[[ Disabling everything I dont need
 'savq/melange-nvim' -- nice, warm gruv-ish with more blues and more muted

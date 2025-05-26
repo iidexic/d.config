@@ -1,10 +1,14 @@
 ---@generic NK: table|string
 ---@class NKeyDict<NK>: { [string]: NK }
-
+local cmd = function(str)
+  return '<cmd>' .. str .. '<CR>'
+end
 --# Nested map structure
+-- to bind '<':
+-- Anything in < > will be taken as
 local nkex = {
-  firstmotionkey = {
-    secondmotionkey = {
+  firstmkey = {
+    secondmkey = {
       { 'third motionpart', ':cmd', 'description' },
       { 'third motion key', function() end, 'can use function as well' },
     },
@@ -14,12 +18,17 @@ local nkex = {
   ['<c-s>'] = { 'mk', function() end, 'desc' },
 } -- no idea how I will make this structure work though
 _ = nkex
+local nktest = {
+  { 't', '<C-j>', [[<Cmd>wincmd j<CR>]], 'terminal mode: move to window down' },
+  { '<leader>q', vim.diagnostic.setloclist },
+  { '<Esc>', '<cmd>nohlsearch<CR>' },
+  { '<C-h>', '<C-w><C-h>', 'Move focus to the left window' },
+  { '|', cmd 'lua MiniFiles.open()', 'MiniFiles open' },
+  { '<M-\\>', function() end, 'ToggleTerm Flip' },
+}
 local wk = require 'which-key'
-local function unwrapNest(key, NKmap, unwrap)
-  if type(NKmap) == 'string' then
-    --return key .. NKmap
-  elseif type(NKmap) == 'table' then
-  end
+local function unwrapNest(key, nmap, unwrap)
+  unwrap = unwrap .. key
 end
 local Nmap = {}
 

@@ -16,7 +16,7 @@ local O = {
     vim.opt.ignorecase = true -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
     vim.opt.smartcase = true
     vim.opt.signcolumn = 'yes' -- Keep signcolumn on by default
-    vim.opt.updatetime = 250 -- Decrease update time
+    vim.opt.updatetime = 450 -- Decrease update time (and then increase a bit from the decrease)
     vim.opt.timeoutlen = 300 -- Decrease mapped sequence wait time
     vim.opt.splitbelow = true
     vim.opt.splitright = true -- Configure how new splits should be opened
@@ -31,8 +31,8 @@ local O = {
     vim.opt.pumheight = 16
     --* indent/tab
     vim.opt.tabstop = 8 -- sets how nvim actually writes tabs in files. default is 8 (help says not to change?)
-    vim.opt.softtabstop = 8 -- this sets what tabs appear as in nvim, regardless of file contents
-    vim.opt.shiftwidth = 8
+    vim.opt.softtabstop = 3 -- this sets what tabs appear as in nvim, regardless of file contents
+    vim.opt.shiftwidth = 3
     vim.opt.expandtab = true
     vim.opt.breakindent = true -- Enable break indent (basically wraps visually I think??)
     ---*
@@ -46,12 +46,14 @@ local O = {
 
     ---* other potentially useful *---
     --vim.o.confirm = true --> instead of error on :q will ask if want to save
+    --* Match-Pairs *--
   end,
   ---@param opts table | nil
   last = function(opts)
     if opts and opts.sessionoptions then
       -- Is this from kickstart?
       vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
+      print(vim.o.sessionoptions)
     end
     ---* Lazygit Options *---
     vim.g.lazygit_floating_window_use_plenary = 1
@@ -59,9 +61,10 @@ local O = {
     ---*2nd try*---
     vim.o.winminwidth = 10
     vim.o.winwidth = 120
-    vim.o.winheight = 70
+    vim.o.winheight = 50
+    vim.o.winminheight = 8
     vim.o.equalalways = false
-    vim.o.splitkeep = 'screen'
+    vim.o.splitkeep = 'topline'
   end,
 }
 

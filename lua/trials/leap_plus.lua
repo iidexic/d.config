@@ -2,27 +2,31 @@
 --          │                  NOTE! Leap remaps s/S                  │
 --          ╰─────────────────────────────────────────────────────────╯
 --> hopefully this doesn't cause problems with surround/ai
+--> it does. I think it overwrites both
+--> Time to fix it :)
 ---@param leapOn boolean enable leap.nvim
 ---@param flitOn boolean enable flit.nvim
 ---@param spookOn boolean enable leap-spooky. Takes priority over teleOn, can only have 1
 ---@param teleOn boolean enable telepath. disabled regardless if spookOn=true
+
 local function initleap(leapOn, flitOn, spookOn, teleOn)
-  local plugin = {
+  local M = {}
+  M.plugins = {
 
     { --Plugin to quickly jump anywhere in buffer/on screen
       'ggandor/leap.nvim',
       dependencies = {
         'tpope/vim-repeat',
       },
-      enabled = leapOn,
-      config = true, -- remove if having issues
+      cond = leapOn,
+      config = true,
     },
     { -- Leap extension, buffs f/F/t/T finds
-      ' ggandor/flit.nvim',
+      'ggandor/flit.nvim',
       dependencies = {
         'ggandor/leap.nvim',
       },
-      enabled = flitOn,
+      cond = flitOn,
       config = true,
     },
 
@@ -33,18 +37,16 @@ local function initleap(leapOn, flitOn, spookOn, teleOn)
     -- ──────────────────────────────────────────────────────────────────────
     { -- Leap extension. Seems like it adds leap to surround+other key combos. unsure of extent
       'ggandor/leap-spooky.nvim',
-      enabled = spookOn,
-      config = function()
-        require('leap').set_default_mappings()
-      end,
+      cond = spookOn,
+      config = true,
     },
     {
       'rasulomaroff/telepath.nvim',
       dependencies = 'ggandor/leap.nvim',
-      -- there's no sence in using lazy loading since telepath won't load the main module
+      -- there's no sense in using lazy loading since telepath won't load the main module
       -- until you actually use mappings
       lazy = false,
-      enabled = (function() -- quick inline to prevent both spook and tele enabled
+      cond = (function() -- quick inline to prevent both spook and tele enabled
         if spookOn then
           return false
         else
@@ -52,11 +54,26 @@ local function initleap(leapOn, flitOn, spookOn, teleOn)
         end
       end)(),
       config = function()
-        require('telepath').use_default_mappings()
+        require('telepath').set_default_mappings()
       end,
     },
     -- ──────────────────────────────────────────────────────────────────────
   }
+
+  -- ┌───────────────────────────────────────────── leap key aliases: ────┐
+  --[[
+    -> <Plug>(leap)
+    -> <Plug>(leap-from-window
+    -> <Plug>(leap-anywhere)
+    -> <Plug>(leap-forward)
+    -> <Plug>(leap-forward-to)
+    -> <Plug>(leap-forward-till)
+    -> <Plug>(leap-backward)
+    -> <Plug>(leap-backward-to)
+    -> <Plug>(leap-backward-till)
+ --]]
+  -- └────────────────────────────────────────────────────────────────────┘
+  M.setup = function() end
 
   -- will find out quick if this clashes with telepath config func
   --[[ 
@@ -71,7 +88,7 @@ local function initleap(leapOn, flitOn, spookOn, teleOn)
     see :h leap-custom-mappings for more
     if it's not all there, take a look at the github readme
   ]]
-  return plugin
+  return M
 end
 
 return initleap

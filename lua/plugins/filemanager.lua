@@ -16,7 +16,7 @@ M.plugins = {
         ':Neotree toggle=true<CR>',
         --[[function() require('neo-tree.command').execute {'toggle'} end,--]]
         desc = 'NeoTree toggle',
-        --silent = true,
+        silent = true,
       },
     },
     opts = {
