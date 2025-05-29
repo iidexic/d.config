@@ -14,6 +14,7 @@ return {
       { 'nvim-lua/plenary.nvim' },
       { 'salorak/whaler.nvim' },
       { 'cbochs/grapple.nvim' },
+      { 'desdic/agrolens.nvim' },
       { 'jvgrootveld/telescope-zoxide' },
       { -- if get errors, see telescope-fzf-native readme for installation instructions
         'nvim-telescope/telescope-fzf-native.nvim',
@@ -27,9 +28,13 @@ return {
     },
     config = function() -- [[ configure telescope ]] see `:help telescope` and `:help telescope.setup()`
       local telescope = require 'telescope'
-      telescope.setup { -- all the info you're looking for is in `:help telescope.setup()`
-        -- defaults = { mappings = { i = { ['<c-enter>'] = 'to_fuzzy_refine' }}},
-        -- pickers = {} -- what are pickers
+      -- all the info you're looking for is in `:help telescope.setup()`
+      telescope.setup {
+        defaults = {
+          mappings = { i = { ['<c-enter>'] = 'to_fuzzy_refine' } },
+          layout_strategy = 'flex', -- horizontal | center | cursor | vertical | flex | bottom_pane
+        },
+        -- pickers = {}
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -64,6 +69,7 @@ return {
       pcall(telescope.load_extension, 'zoxide')
       pcall(telescope.load_extension, 'auto-session') -- most likely no worky
       pcall(telescope.load_extension, 'telescope-helpgrep')
+      pcall(telescope.load_extension, 'agrolens')
 
       local builtin = require 'telescope.builtin' -- See `:help telescope.builtin`
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
@@ -83,6 +89,7 @@ return {
       vim.keymap.set('n', '<leader>sw', telescope.extensions.whaler.whaler, { desc = '[S]earch [w]haler paths' })
       vim.keymap.set('n', '<leader>sH', telescope.extensions.helpgrep.helpgrep, { desc = '[S]earch [H]elp with grep' })
       vim.keymap.set('n', '<leader>sc', builtin.colorscheme, { desc = '[S]earch [C]olorschemes' })
+      vim.keymap.set('n', '<leader>sl', builtin.colorscheme, { desc = '[S]earch symbols agro[l]ens' })
 
       --unicode_picker. not a telescope extension directly but is a telescope command
       vim.keymap.set('n', '<leader>uu', '<cmd>Telescope unicode_picker<CR>', { desc = 'Unicode Picker' })

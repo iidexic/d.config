@@ -1,4 +1,5 @@
-return {
+local M = {}
+M.plugins = {
   { -- LazyGit because I just really prefer it to Neovim
     'kdheepak/lazygit.nvim',
     lazy = true,
@@ -15,14 +16,16 @@ return {
     },
     keys = {
       { '<leader>gl', '<cmd>LazyGit<cr>', desc = 'LazyGit' },
+      { '<leader>go', '<cmd>LazyGit<cr>', desc = 'LazyGitLog' },
     },
   },
-  { -- and why not slap tinygit in here to round it out
+  -- covered by neogit, but want it whether or not neogit is active/enabled
+  { 'sindrets/diffview.nvim' },
+  { -- nice quick git actions
     'chrisgrieser/nvim-tinygit',
     dependencies = 'nvim-telescope/telescope.nvim',
   },
-  --[[ can live without it I think
-  {
+  { -- giving it another go
     'NeogitOrg/neogit',
     dependencies = {
       'nvim-lua/plenary.nvim', -- required
@@ -89,3 +92,5 @@ return {
     },
   },
 }
+
+return M

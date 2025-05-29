@@ -1,5 +1,7 @@
 ---@generic NK: table|string
----@class NKeyDict<NK>: { [string]: NK }
+---@class NKeyDict<NK>: { [string|integer]: NK } # freeform table of nested/regular mappings
+---@field run function()|string|table
+
 local cmd = function(str)
   return '<cmd>' .. str .. '<CR>'
 end

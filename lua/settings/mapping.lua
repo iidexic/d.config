@@ -69,8 +69,11 @@ local maptables = {
   vismode = {
     --{ 'v', '<C-l>', vim.cmd },
   },
+  --NOTE: Thinking all mappings should be after lazy init?
+  --      I don't think descriptions here go to which-key.
+  --      Which-key description for go mappings is just using command name
   assigns = {
-    { '<leader>q', vim.diagnostic.setloclist },
+    --{ '<leader>q', vim.diagnostic.setloclist, dsc 'Quickfix list' }, -- moving to Trouble.
     { '<Esc>', '<cmd>nohlsearch<CR>' },
     { '<C-h>', '<C-w><C-h>', dsc 'Move focus to the left window' },
     { '<C-k>', '<C-w><C-k>', dsc 'Move focus to the upper window' },
@@ -96,8 +99,7 @@ local maptables = {
     { '<leader>lI', cmd 'GoImpl', dsc 'GoImpl' },
   },
   lsp_learning = {
-    { '<A-l>i', vim.lsp.buf.incoming_calls(), dsc 'show incoming calls' },
-    { '<A-l>h', vim.lsp.buf.hover(), dsc 'show hover info' },
+    --{ '<A-l>h', vim.lsp.buf.hover(), dsc 'show hover info' }, this is already on 'K'
   },
 }
 local Map = {
@@ -112,7 +114,7 @@ local Map = {
 }
 function Map.configReloads()
   local cmap = {
-    { '<leader>Ra', require('settings.autocommands').post_autocmd(), desc = '[R]eload [a]utocommands' },
+    { '<leader>Ra', require('settings.autocommands').post_autocmd, desc = '[R]eload [a]utocommands' },
     {
       '<leader>Rm',
       function()
@@ -124,9 +126,11 @@ function Map.configReloads()
   }
   return cmap
 end
+-- Map.plugins performs all post-lazy mappings
+-- in the future it will be all mappings
+-- need to change the name of it
 function Map.plugins()
-  local mappings = {}
-  Map.wk = require 'which-key'
+  Map.wk = require 'which-key' -- does this cause use of extra mem throughout nvim running or does it just point?
   local pr = require 'persistence'
   Map.wk.add {
     mode = 'n',
@@ -143,11 +147,17 @@ function Map.plugins()
       { ld 'pd', pr.stop, desc = 'Disable session save' },
     },
   }
-  Map.wk.add(Map.tinygit())
-  Map.wk.add(Map.other_plugins())
-  Map.wk.add(Map.leap())
-  Map.wk.add(Map.commentbox())
-  Map.wk.add(Map.configReloads())
+  local mappingFunctions = { Map.tinygit, Map.other_plugins, Map.leap, Map.commentbox, Map.configReloads }
+  for _, mfn in ipairs(mappingFunctions) do
+    Map.wk.add(mfn())
+  end
+end
+
+function Map.vim()
+  local m = {
+    { 'gl', vim.lsp.buf.incoming_calls(), desc = 'show incoming calls to symbol under cursor' },
+    { '<leader>q', require('trouble').open { mode = '' } },
+  }
 end
 
 function Map.tinygit()
@@ -190,9 +200,14 @@ function Map.other_plugins()
   --local neoclip = require('neo')
   local aerial = require 'aerial'
   local m = {
+    -- Precognition
     { ld 'up', precog.toggle, desc = '[U]til: [p]recognition toggle' },
+    -- Aerial
     { ld 'ua', aerial.open, desc = '[U]til: [a]erial' },
-    { '<A-j>', require('trevj').format_at_cursor, desc = 'reverse-J' },
+    -- Trevj. this uh splits lists etc into lines? That's what it seems like at least
+    { '<A-j>', require('trevj').format_at_cursor, desc = 'breakout list to lines' },
+    -- Render-Markdown
+    { 'gR', cmd 'RenderMarkdown toggle', desc = 'Render Markdown' },
   }
   return m
 end
@@ -203,6 +218,24 @@ function Map.leap()
   }
 end
 
+-- ╭──────────────╮
+-- │ not used yet │
+-- ╰──────────────╯
+function Map.hover()
+  -- Setup keymaps
+  vim.keymap.set('n', 'K', require('hover').hover, { desc = 'hover.nvim' }) -- replace default hover
+  vim.keymap.set('n', 'gK', require('hover').hover_select, { desc = 'hover.nvim (select)' }) -- new?
+  vim.keymap.set('n', '<C-p>', function()
+    require('hover').hover_switch 'previous'
+  end, { desc = 'hover.nvim (previous source)' })
+  vim.keymap.set('n', '<C-n>', function()
+    require('hover').hover_switch 'next'
+  end, { desc = 'hover.nvim (next source)' })
+
+  -- Mouse support - eh why not
+  vim.keymap.set('n', '<MouseMove>', require('hover').hover_mouse, { desc = 'hover.nvim (mouse)' })
+  vim.o.mousemoveevent = true
+end
 --[[ function Map.obs()
   -- n key currently not occupied, so these are fine.
   local mappings = {

@@ -8,7 +8,7 @@ local M = {
   {
     'exit91/bufferline-editor.nvim',
     dependencies = 'akinsho/bufferline.nvim',
-    opts = { max_width = 120, max_height = 30 },
+    opts = { max_width = 160, max_height = 30 },
   },
 }
 function M.setup()

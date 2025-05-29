@@ -107,10 +107,18 @@ return {
 
       local servers = { -- Enable the following language servers
         -- clangd = {},  pyright = {}, rust_analyzer = {}, -- `:help lspconfig-all` to see all preconfigured LSP
-        ruff = {},
+        --# Python ──────────────────────────────────────────────────────────
+        ruff = { init_options = {
+          configuration = 'C:/dev/.config/lsp/ruff.toml',
+        } },
+        basedpyright = {},
+        pylsp = {},
+        sourcery = {},
+        --# Golang ──────────────────────────────────────────────────────────
         gopls = {},
-        lua_ls = {
-          -- cmd = { ... }, -- filetypes = { ... }, -- capabilities = {},
+        golangci_lint_ls = {},
+        --# Lua ─────────────────────────────────────────────────────────────
+        lua_ls = { -- cmd = { ... }, -- filetypes = { ... }, -- capabilities = {},
           settings = {
             Lua = {
               completion = {
@@ -121,6 +129,10 @@ return {
             },
           },
         },
+        --# Zig ─────────────────────────────────────────────────────────────
+        --zls = {},
+        --# Other ───────────────────────────────────────────────────────────
+        --markdown_oxide = {}
       }
 
       local ensure_installed = vim.tbl_keys(servers or {}) -- Ensure the servers and tools above are installed
@@ -133,7 +145,7 @@ return {
       require('mason-lspconfig').setup {
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
         automatic_installation = false,
-        automatic_enable = true,
+        automatic_enable = { exclude = { 'markdown_oxide', 'golangci_lint_ls' } },
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}

@@ -67,7 +67,7 @@ Maker.themelist = {
     name = 'evergarden',
     priority = 1000, -- Colorscheme plugin is loaded first before any other plugins
     opts = { -- variants: 'winter'|'fall'|'spring'|'summer'
-      theme = { variant = 'fall', accent = 'purple' },
+      theme = { variant = 'fall', accent = 'red' }, -- cant b purple :)
       editor = {
         transparent_background = false,
         sign = { color = 'none' },

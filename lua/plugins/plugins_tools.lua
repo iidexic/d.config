@@ -71,17 +71,6 @@ return {
     opts = {},
   },
   {
-    'OXY2DEV/markview.nvim',
-    lazy = false,
-    enabled = false,
-    opts = { preview = { icon_provider = 'devicons' } },
-    -- For blink.cmp's completion
-    -- source
-    -- dependencies = {
-    --     "saghen/blink.cmp"
-    -- },
-  },
-  {
     'uga-rosa/ccc.nvim',
     opts = {},
   },

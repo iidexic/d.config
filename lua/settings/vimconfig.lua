@@ -16,6 +16,7 @@ local O = {
     vim.opt.ignorecase = true -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
     vim.opt.smartcase = true
     vim.opt.signcolumn = 'yes' -- Keep signcolumn on by default
+    -- Neither does screen
     vim.opt.updatetime = 450 -- Decrease update time (and then increase a bit from the decrease)
     vim.opt.timeoutlen = 300 -- Decrease mapped sequence wait time
     vim.opt.splitbelow = true
@@ -35,36 +36,36 @@ local O = {
     vim.opt.shiftwidth = 3
     vim.opt.expandtab = true
     vim.opt.breakindent = true -- Enable break indent (basically wraps visually I think??)
-    ---*
-    ---* Window opts *---
-    --- going to do this twice as it seems it does not work here
-    vim.o.winminwidth = 10
-    vim.o.winwidth = 120
-    vim.o.winheight = 70
-    vim.o.equalalways = false
-    vim.o.splitkeep = 'screen'
 
-    ---* other potentially useful *---
-    --vim.o.confirm = true --> instead of error on :q will ask if want to save
-    --* Match-Pairs *--
+    --* Setting these twice (now, and postlazy), EVERGARDEN broken, trying to figure out
+    vim.o.equalalways = false
+    vim.o.splitkeep = 'screen' -- 'topline' is the least messy on moves. but doesn't keep cursor pos
+    -- Neither does screen
+
+    --* mainly for/from nvim-UFO
+    vim.o.foldcolumn = '1' -- '0' is not bad
+    vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+    vim.o.foldlevelstart = 99
+    vim.o.foldenable = true
   end,
   ---@param opts table | nil
   last = function(opts)
+    -- still don't remember what this was for
     if opts and opts.sessionoptions then
-      -- Is this from kickstart?
       vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
-      print(vim.o.sessionoptions)
+      --print(vim.o.sessionoptions)
     end
     ---* Lazygit Options *---
     vim.g.lazygit_floating_window_use_plenary = 1
-    vim.g.lazygit_floating_window_scaling_factor = 0.7
+    vim.g.lazygit_floating_window_scaling_factor = 0.8
     ---*2nd try*---
     vim.o.winminwidth = 10
     vim.o.winwidth = 120
     vim.o.winheight = 50
-    vim.o.winminheight = 8
     vim.o.equalalways = false
-    vim.o.splitkeep = 'topline'
+    -- vim.o.winbar = "" -- contents of a w--indow bar for every window. I think it's off right now
+    --vim.o.winblend = 10 -- sets pseudo transparency
+    vim.o.splitkeep = 'screen' -- 'topline' is the least messy on moves. but doesn't keep cursor pos
   end,
 }
 

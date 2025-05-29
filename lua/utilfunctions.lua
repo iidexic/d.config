@@ -76,7 +76,7 @@ M.sh = {
   end,
 }
 
---#dainty plugin calls
+--#pcall plugin requires. unused, will probably be removed
 M.maybeplug = {
   loadDone = false,
   _count_load = 0,
@@ -103,6 +103,7 @@ end
 
 -- uh this just makes LazyDone loading into a latched bool in M.maybeplug
 -- it also makes a command to see how many times (-1) LazyDone triggers; I would guess this happens only once
+-- This will probably also be removed
 vim.api.nvim_create_autocmd('User', {
   group = vim.api.nvim_create_augroup('maybeplug-lazy-check', { clear = true }),
   pattern = 'LazyDone',

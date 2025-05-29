@@ -42,8 +42,8 @@ local fntblPlugins = {
     end
     -- if you only want these mappings for toggle term use term://*toggleterm#* instead
     vim.cmd 'autocmd! TermOpen term://* lua ttmap()'
-    -- ──────────────────────────────────────────────────────────────────────
   end,
+  -- ──────────────────────────────────────────────────────────────────────
   toggletermFlip = function()
     local term = require('toggleterm.terminal').get(1)
     if term and term.direction == 'horizontal' then
@@ -63,8 +63,9 @@ local fntblPlugins = {
 local binds = {}
 binds.preLazy = {
   builtins = {
-    { '<leader>q', vim.diagnostic.setloclist },
+    --{ '<leader>q', vim.diagnostic.setloclist },
     { '<Esc>', '<cmd>nohlsearch<CR>' },
+    {mod = 'C', desc = 'Move focus to the', run=}
     { '<C-h>', '<C-w><C-h>', desc = 'Move focus to the left window' },
     { '<C-k>', '<C-w><C-k>', desc = 'Move focus to the upper window' },
     { '<C-l>', '<C-w><C-l>', desc = 'Move focus to the right window' },
@@ -75,7 +76,7 @@ binds.preLazy = {
   },
 }
 binds.plugins = {
-  persistence = { '<leader>', { ldr 'Ps', run = 'load', desc = 'Load cwd session' }, { ldr 'PS', run = 'select', desc = 'Select session' } },
+  persistence = { '<leader>', { 'Ps', run = 'load', desc = 'Load cwd session' }, {'PS', run = 'select', desc = 'Select session' } },
   tinygit = {
     '<leader>',
     desc = 'git',
@@ -87,7 +88,7 @@ binds.plugins = {
     { '<M-\\>', fntblPlugins.toggletermFlip, desc = 'ToggleTerm Flip' }, -- this is buggy
   },
 }
--- All comment-box
+-- Comment-box
 
 --- keeps a number within bounds defined by limit. any number over
 ---@alias boundsdict {min:number,max:number} dict form of bounds
@@ -161,7 +162,7 @@ binds.commentbox = {
 --          │                     MAPPER FOR DMAP                     │
 --          ╘═════════════════════════════════════════════════════════╛
 local mapper = {}
-local option_names = { 'mode', 'disable_join', 'run', 'plugin', 'args', 'rawdog', 'prefix', 'modifier', 'apply_modifier' }
+local option_names = { {'mode', 'm'}, {'disable_join','nojoin'}, 'run', 'plugin', 'args', 'rawdog', 'prefix', {'modifier', 'mod'}, 'apply_modifier' }
 local pmap = {
   mode = 'n',
   rawdog = true,

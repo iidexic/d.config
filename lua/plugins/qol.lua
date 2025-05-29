@@ -1,13 +1,10 @@
 return {
-  {
-    'smjonas/live-command.nvim',
-    -- live-command supports semantic versioning via Git tags
-    -- tag = "2.*",
+  { -- escape input mode with 'jk'
+    'TheBlob42/houdini.nvim', --https://github.com/TheBlob42/houdini.nvim
     config = true,
-    cond = false,
   },
   { -- centers the current buffer in window
-    --? any issue with current window width/height opts?
+    -- kind of underwhelming. look at zen mode
     'shortcuts/no-neck-pain.nvim',
     cond = true,
   },
@@ -16,10 +13,5 @@ return {
     -- I know those exist. disabled for now
     'andersevenrud/nvim_context_vt',
     enabled = false,
-  },
-  { -- makes folds look nicer. its fine, check later
-    'OXY2DEV/foldtext.nvim',
-    lazy = false,
-    enabled = true,
   },
 }

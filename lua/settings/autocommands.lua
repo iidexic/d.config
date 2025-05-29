@@ -4,8 +4,6 @@ local ag = function(name)
   return vim.api.nvim_create_augroup(name, { clear = true })
 end
 
--- astronvim autocommands (old I think) - [ https://github.com/AstroNvim/AstroNvim/blob/271c9c3f71c2e315cb16c31276dec81ddca6a5a6/lua/astronvim/autocmds.lua ]
-
 local M = {
   opts = {
     hover = true, -- enable/disable hover popup
@@ -30,6 +28,16 @@ local function autocmd()
   vim.keymap.set('n', 'gh', function()
     M.opts.hover = not M.opts.hover
   end, { desc = 'toggle hover popup' })
+  --  ── [0] quick startup auto ──────────────────────────────────────────────
+  auto('VimEnter', {
+    desc = 'run persistence, would prefer both persistence and whaler',
+    group = ag 'startup-greet',
+    callback = function()
+      --require('persistence').select()
+      require('telescope').extensions.whaler.whaler()
+    end,
+  })
+
   --  ── [1] highlight on yank ───────────────────────────────────────────────
   auto('TextYankPost', { -- Try it with `yap` in normal mode
     desc = 'Highlight when yanking (copying) text', --See`:help vim.highlight.on_yank()`
@@ -73,18 +81,19 @@ local function autocmd()
         callback = function()
           if M.opts.hover then -- best way to set this up?
             vim.lsp.buf.hover {
-              --height = 4,
-              --width = 40,
               max_height = 40,
               max_width = 160,
               --offset_x = 4, -- offset defaults probably 0
               --offset_y = 2,
-              --zindex = 50, -- default 50, idk what this does
-              anchor_bias = 'auto', --|above|below
-              relative = 'cursor', --|mouse|editor
+              --zindex = 50, -- default 50, is forward/back. keep here
+              anchor_bias = 'auto', --auto|above|below
+              relative = 'cursor', --cursor|mouse|editor
               focus = false,
               silent = true,
-              --border = 'rounded', --looks bad
+              --not the biggest fan of border but damn does it make shit easier
+              -- "none", "single"(line), "double", "rounded", "solid"(block), "shadow"
+              border = 'none', -- borders are being shitty rn
+
               --close_events = {''} --idk defaults,
             }
           end
@@ -103,7 +112,6 @@ local function autocmd()
       })
     end,
   })
-
   -- ── [6] Adds close with q to specified windows ──────────────────────────
   auto('FileType', {
     group = ag 'close_with_q',
@@ -165,30 +173,9 @@ local function autocmd()
   })
 
   -- ─[ AstroNvim Fold Persistence Autocommands ]────────────────────────
-  --* Probably will check out nvim.UFO first
-  --[[ local view_group = augroup("auto_view", { clear = true })
-autocmd({ "BufWinLeave", "BufWritePost", "WinLeave" }, {
-  desc = "Save view with mkview for real files",
-  group = view_group,
-  callback = function(args)
-    if vim.b[args.buf].view_activated then vim.cmd.mkview { mods = { emsg_silent = true } } end
-  end,
-})
-autocmd("BufWinEnter", {
-  desc = "Try to load file view if available and enable view saving for real files",
-  group = view_group,
-  callback = function(args)
-    if not vim.b[args.buf].view_activated then
-      local filetype = vim.api.nvim_get_option_value("filetype", { buf = args.buf })
-      local buftype = vim.api.nvim_get_option_value("buftype", { buf = args.buf })
-      local ignore_filetypes = { "gitcommit", "gitrebase", "svg", "hgcommit" }
-      if buftype == "" and filetype and filetype ~= "" and not vim.tbl_contains(ignore_filetypes, filetype) then
-        vim.b[args.buf].view_activated = true
-        vim.cmd.loadview { mods = { emsg_silent = true } }
-      end
-    end
-  end,
-}) ]]
+  -- astronvim autocommands (old I think) - [ https://github.com/AstroNvim/AstroNvim/blob/271c9c3f71c2e315cb16c31276dec81ddca6a5a6/lua/astronvim/autocmds.lua ]
+  --* Using UFO is good with me. Visit the link if want to try with autocommands
+
   -- ─[ Dirty Debug Auto-Log ]───────────────────────────────────────────
   --[[# Quick Log/Debug: throws out a bunch of info on an event
   -- This setup was for debugging error on exit, prints and also writes to exitlog.txt
@@ -214,7 +201,7 @@ autocmd("BufWinEnter", {
         --print(unpack(vim.v.oldfiles))
         --- Single-string details
 
-        vim.fn.writefile(writel, 'C:\\users\\derek\\appdata\\local\\nvim\\exitlog.txt', 'a')
+        vim.fn.writefile(writel, vim.fn.stdpath("config") .. "\\exitlog.txt", 'a')
       end
     end,
   }) --]]

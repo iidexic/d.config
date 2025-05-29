@@ -15,4 +15,10 @@ return {
       indent = { enable = true, disable = { 'ruby' } },
     },
   },
+  { -- Semshi (for python), off
+    -- kickstart-python suggests both semshi and treesitter but looking at a comparison
+    -- it's not a big enough difference for me to worry about having it
+    'numirias/semshi',
+    cond = false,
+  },
 }

@@ -30,6 +30,11 @@ Wf.plugins = {
     'AckslD/nvim-trevJ.lua',
     opts = {},
   },
+  {
+    '2kabhishek/markit.nvim',
+    config = true, --load_config 'tools.marks', -- never seen this before. setting to true for now
+    event = { 'BufReadPre', 'BufNewFile' },
+  },
   --Leap and extensions
 }
 

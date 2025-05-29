@@ -11,7 +11,10 @@ return {
     config = true,
     -- version = "*" -- Uncomment for only stable versions
   },
-
+  { -- nicer floating window/picker ui. try out some time
+    'stevearc/dressing.nvim',
+    cond = false,
+  },
   {
     'rachartier/tiny-devicons-auto-colors.nvim',
     dependencies = {

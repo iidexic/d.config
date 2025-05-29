@@ -32,8 +32,8 @@ local M = {
         { ';M', '<cmd>Grapple toggle_tags<cr>', desc = 'grapple open tags window' },
         { ';n', '<cmd>Grapple cycle_tags next<cr>', desc = 'grapple cycle next tag' },
         { ';p', '<cmd>Grapple cycle_tags prev<cr>', desc = 'grapple cycle previous tag' },
-        { ';xp', '<cmd>Grapple  prune<cr>', desc = 'grapple prune scope' },
-        { ';xa', '<cmd>Grapple remove all<cr>', desc = 'grapple untag*' },
+        { ';`', '<cmd>Grapple  prune<cr>', desc = 'grapple prune scope' },
+        { ';~', '<cmd>Grapple remove all<cr>', desc = 'grapple untag*' },
 
         { ';q', '<cmd>Grapple select index=1<cr>' },
         { ';w', '<cmd>Grapple select index=2<cr>' },
@@ -84,6 +84,7 @@ function M.setup()
     { ';s', '<cmd>Grapple select index=6<cr>', desc = M.gtagfn(6, grap) },
     { ';d', '<cmd>Grapple select index=7<cr>', desc = M.gtagfn(7, grap) },
     { ';f', '<cmd>Grapple select index=8<cr>', desc = M.gtagfn(8, grap) },
+    { ';;', grap.open_tags, desc = 'open tags' },
   }
   require('which-key').add(gmap)
 end

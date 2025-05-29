@@ -23,13 +23,33 @@ local P = { allplugins = {}, pnames = {}, setups = {} }
 --- nplugs: len(allplugins)@lazycall, ins: P.add inserts to allplugins
 --- bad = dirtycheck false, reqs: count of files required
 --- ers = empty req returns, mods: count loadmodule calls, noms = mod call w/empty module
-P.n = { nplugs = 0, xnplugs = 0, ins = 0, bad = 0, reqs = 0, ers = 0, mods = 0, noms = 0, setups = 0, sdone = 0 }
+local counters = {
+  'nplugs',
+  'xnplugs',
+  'ins',
+  'bad',
+  'reqs',
+  'ers',
+  'mods',
+  'noms',
+  'setups',
+  'sdone',
+  'hdis',
+  'sdis',
+}
+P.n = { nplugs = 0, xnplugs = 0, ins = 0, bad = 0, reqs = 0, ers = 0, mods = 0, noms = 0, setups = 0, sdone = 0, hdis = 0, sdis = 0 }
 
 function P.add(plugins)
   for _, plug in ipairs(plugins) do
     if dirtycheckplug(plug) then
       table.insert(P.allplugins, plug)
       P.n.ins = P.n.ins + 1 --++
+      if plug.cond and plug.cond == false then
+        P.n.sdis = P.n.sdis + 1
+      end
+      if plug.enabled and plug.enabled == false then
+        P.n.hdis = P.n.hdis + 1
+      end
     else
       P.n.bad = P.n.bad + 1 --++
     end
@@ -118,14 +138,46 @@ function P.N()
     noms = 'Calls with no/empty loadmodule(): ',
     setups = 'Setup functions added: ',
     sdone = 'Setup functions executed: ',
+    hdis = 'Hard-disabled plugins(enabled = false): ',
+    sdis = 'Soft-disabled plugins(cond = false): ',
   }
-  local prtstr = '===============| PluginLoader Stats: |==============\n'
-  for k, v in pairs(P.n) do
-    prtstr = prtstr .. ndetail[k] .. v .. '\n'
-  end
-  vim.api.nvim_create_user_command('DcfgStat', function()
+  local header = '===============| PluginLoader Stats: |==============\n'
+  local prtstr = header -- probably easier to make a table and unpack it
+  vim.api.nvim_create_user_command('DcfgStat', function(args)
+    if args and args.fargs then
+      local countadded = 0
+      for _, v in ipairs(args.fargs) do
+        if P.n[v] then
+          prtstr = prtstr .. ndetail[v] .. P.n[v] .. '\n'
+          countadded = countadded + 1
+        end
+      end
+      if countadded == 0 then
+        prtstr = prtstr .. 'no existing counters named in provided arguments\n'
+      end
+    else
+      -- no arg = print all
+      for k, v in pairs(P.n) do
+        prtstr = prtstr .. ndetail[k] .. v .. '\n'
+      end
+    end
     vim.print(prtstr)
-  end, {})
+  end, {
+    nargs = '*',
+    complete = function(arglead, cmdline, cursorpos)
+      if arglead == '' then
+        return counters
+      else
+        local possible = {}
+        for _, v in ipairs(counters) do
+          if #arglead <= #v and arglead == string.sub(v, 1, #arglead) then
+            table.insert(possible, v)
+          end
+        end
+        return possible
+      end
+    end,
+  })
 end
 
 ---@param enableplugins table list of plugin in conditional table to enable
