@@ -51,33 +51,11 @@ local D = {
       --'trials.spectre'
       --'trials.tiny_inline_diagnostic',
     }
-    --[[
--- ╭─────────────────────────────────────────────────────────╮
--- │                     Trials Results                      │
--- ╰─────────────────────────────────────────────────────────╯
--- 0. staying:
---    split, trailblazer, double-check what hawtkeys is
---    startup.nvim, neo-clip, precognition
--- 1. To main plugins:
---    'trials.aerial',
---    'trials.ufo',
---    'trials.houdini',
---    'trials.leap_plus',
---    'trials.persist',
---    'LspSaga' (in nvim_dev.lua)
--- 2. Grouped up and put in a single file
---    hot, hawtkeys, snacks
--- 3. Probably deleted
---    - nest
---    - peepsight (check if function is covered)
---    - racer-nvim (do one last check of the github)
---    - scretch
--- 4. Other:
---    - buffon: clone repo, make dev plug
---]]
-    --# Check if dev plugs are present
 
+    --# Dev Plugin Loading
     ---returns table of folder contents in the format {pathname, pathtype}
+    ---Note: this comes with the issue that if a dir does not exist, it will panic
+    ---This is difficult to get around. Using plenary would be nice. Could we use Lazy.reload() for the dev plugins?
     ---@param path string # directory path
     ---@param check? table # {pathname, pathtype} to check for (for 2nd return val)
     ---@return table, boolean? # pathlist, if path `check` is in pathlist

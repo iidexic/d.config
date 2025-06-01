@@ -3,7 +3,7 @@ local M = {}
 M.plugins = {
   {
     'kevinhwang91/nvim-ufo',
-    dependencies = 'kevinhwang91/promise-async',
+    dependencies = { 'kevinhwang91/promise-async', 'neovim/nvim-lspconfig' },
     -- moved to config so can disable and not get the rebinds
     -- plugin loader setup does not have that capaability yet
     config = function()

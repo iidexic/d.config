@@ -90,6 +90,7 @@ local maptables = {
   go = { -- changed first key after leader to 'l'
     { '<leader>lr', cmd 'GoRun', dsc 'Go Run' },
     { '<leader>ld', cmd 'GoDoc', dsc 'GoDoc lookup' },
+    { '<leader>lD', cmd 'GoSearch', dsc 'GoSearch (godoc.nvim)' },
     { '<leader>la', cmd 'GoAlt', dsc 'Toggle to test file' },
     { '<leader>lf', cmd 'GoRun -F', dsc 'Go Run Floating window' },
     { '<leader>lb', cmd 'GoBuild', dsc 'Go Build to cwd' },
@@ -147,7 +148,7 @@ function Map.plugins()
       { ld 'pd', pr.stop, desc = 'Disable session save' },
     },
   }
-  local mappingFunctions = { Map.tinygit, Map.other_plugins, Map.leap, Map.commentbox, Map.configReloads }
+  local mappingFunctions = { Map.gitplugins, Map.other_plugins, Map.leap, Map.commentbox, Map.configReloads }
   for _, mfn in ipairs(mappingFunctions) do
     Map.wk.add(mfn())
   end
@@ -160,16 +161,22 @@ function Map.vim()
   }
 end
 
-function Map.tinygit()
+function Map.gitplugins()
   local tinygit = require 'tinygit'
+  local neogit = require 'neogit'
   return {
     { '<leader>ga', tinygit.interactiveStaging, desc = 'git add' },
     { '<leader>gc', tinygit.smartCommit, desc = 'git commit' },
     { '<leader>gp', tinygit.push, desc = 'git push' },
+    { '<leader>gn', neogit.open, desc = 'Neogit' },
+    {
+      '<leader>gm',
+      function()
+        neogit.open { kind = 'vsplit' }
+      end,
+      desc = 'Neogit in vsplit',
+    },
   }
-  -- vim.keymap.set('n', '<leader>ga', tinygit.interactiveStaging, { desc = 'git add' })
-  -- vim.keymap.set('n', '<leader>gc', tinygit.smartCommit, { desc = 'git commit' })
-  -- vim.keymap.set('n', '<leader>gp',tinygit.push , { desc = 'git push' })
 end
 
 function Map.commentbox()
@@ -207,7 +214,14 @@ function Map.other_plugins()
     -- Trevj. this uh splits lists etc into lines? That's what it seems like at least
     { '<A-j>', require('trevj').format_at_cursor, desc = 'breakout list to lines' },
     -- Render-Markdown
-    { 'gR', cmd 'RenderMarkdown toggle', desc = 'Render Markdown' },
+    { 'gm', cmd 'RenderMarkdown toggle', desc = 'Render Markdown' },
+    {
+      'gR',
+      function()
+        return ':IncRename ' .. vim.fn.expand '<cword>'
+      end,
+      desc = 'iRename symbol',
+    },
   }
   return m
 end

@@ -8,7 +8,6 @@ local M = {
   {
     'exit91/bufferline-editor.nvim',
     dependencies = 'akinsho/bufferline.nvim',
-    opts = { max_width = 160, max_height = 30 },
   },
 }
 function M.setup()
@@ -58,10 +57,10 @@ function M.setup()
         -- tabnr (tabs only)   | int        | the "handle" of the tab, can be converted to its ordinal number using: `vim.api.nvim_tabpage_get_number(buf.tabnr)`
       end,
 
-      --max_name_length = 18,
+      max_name_length = 22,
       --max_prefix_length = 15, -- prefix used when buffer is de-duplicated
       --truncate_names = true, -- whether or not tab names should be truncated
-      --tab_size = 18,
+      tab_size = 18,
       diagnostics = 'nvim_lsp', -- false | "coc", --false is default
       -- diagnostics_update_in_insert = false, -- only applies to ----coc
       --diagnostics_update_on_event = true, -- use nvim's diagnostic handler
@@ -101,19 +100,10 @@ function M.setup()
       },
       --]]
       color_icons = true, -- whether or not to add the filetype icon highlights (default==true)
-      --[[
-            get_element_icon = function(element)
-              -- element consists of {filetype: string, path: string, extension: string, directory: string}
-              -- This can be used to change how bufferline fetches the icon
-              -- for an element e.g. a buffer or a tab.
-              -- e.g.
-              local icon, hl = require('nvim-web-devicons').get_icon_by_filetype(element.filetype, { default = false })
-              return icon, hl
-              -- or
-              local custom_map = {my_thing_ft: {icon = "my_thing_icon", hl}}
-              return custom_map[element.filetype]
-            end,
-    --]]
+      --[[ get_element_icon = function(element) element consists of {filetype: string, path: string, extension: string, directory: string}
+              This can be used to change how bufferline fetches the icon for an element e.g. a buffer or a tab. 
+              e.g. `local icon, hl = require('nvim-web-devicons').get_icon_by_filetype(element.filetype, { default = false }) return icon, hl`
+              or `local custom_map = {my_thing_ft: {icon = "my_thing_icon", hl}} return custom_map[element.filetype] end,` ]]
       --show_buffer_icons = true | false, -- disable filetype icons for buffers
       --show_buffer_close_icons = true | false,
       --show_close_icon = true | false,
