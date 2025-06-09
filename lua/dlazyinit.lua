@@ -1,21 +1,20 @@
 local D = {
   LazyPluginSetup = function()
     local plugload = require 'pluginloader'
-
+    local files = {}
     --# Main Plugins
-
-    local files = {
+    files = {
       'plugins.aerial',
       'plugins.bufferline',
       'plugins.filemanager',
       'plugins.grapple',
       --'plugins.hover',
       'plugins.lang-support',
-      'plugins.layout',
+      --'plugins.layout',
       'plugins.lsp_lspsaga',
       'plugins.markdown',
       'plugins.mini',
-      'plugins.obsidian',
+      --'plugins.obsidian',
       'plugins.persistence',
       'plugins.plugins_auto',
       'plugins.plugins_debug',
@@ -37,7 +36,7 @@ local D = {
     --# Trial Plugins
     local trials = {
       --'trials.hawtkeys',
-      'trials.split', -- doesn't interfere with existing g mappings -- ok but what does it do
+      'trials.split', -- its actually kind of the same as trevj, breaks down long lines
       --'trials.trailblazer',
       'trials.nvim_dev',
       'trials.neoclip',
@@ -54,7 +53,7 @@ local D = {
     --[[
 -- ╭─────────────────────────────────────────────────────────╮
 -- │                     Trials Results                      │
--- ╰─────────────────────────────────────────────────────────╯
+-- ╰────────────────────────────────────────────────────────╯
 -- 0. staying:
 --    split, trailblazer, double-check what hawtkeys is
 --    startup.nvim, neo-clip, precognition
@@ -99,17 +98,6 @@ local D = {
       return dirfiles, luadir
     end
 
-    local devplugs = require 'plugins._devplugins'
-    local existing_dev_plugins = {}
-    for i, plug in ipairs(devplugs) do
-      local d, isplug = dir_contents(plug.dir, { 'lua', 'directory' })
-      if isplug then
-        table.insert(existing_dev_plugins, plug)
-      end
-    end
-    if #existing_dev_plugins > 0 then
-      plugload.loadmodule(existing_dev_plugins)
-    end
     --leap
     local trialLeap = require 'trials.leap_plus'(true, true, true, false)
     plugload.loadmodule(trialLeap)

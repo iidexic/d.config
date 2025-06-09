@@ -43,18 +43,10 @@ return {
             auto_file_explorer = false,
             directories = {
               'c:\\dev',
-              'd:\\coding',
-              { path = 'd:\\coding\\github', alias = 'projects (github)' },
-              { path = 'c:\\dev\\zig', alias = 'zig' },
-              { path = 'c:\\dev\\luaprojects', alias = 'lua projects' },
               'c:\\dev\\python',
-              { path = 'c:\\dev\\.config', alias = '.config - backups' },
             },
             oneoff_directories = {
-              { path = 'c:\\dev\\zig\\raylib-zig\\interlacer', alias = 'zig-rl interlacer' },
               { path = '~\\appdata\\local\\nvim', alias = 'nvim' },
-              { path = '~\\appdata\\roaming\\neovide', alias = 'neovide config' },
-              { path = 'd:\\coding\\github\\go-ca-experiments', alias = 'go ca' },
             },
           },
           --* removing file_browser; superfluous

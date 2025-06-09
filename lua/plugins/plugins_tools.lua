@@ -68,6 +68,7 @@ return {
       'uga-rosa/utf8.nvim',
       'nvim-telescope/telescope.nvim',
     },
+    enabled = false,
     opts = {},
   },
   {

@@ -1,15 +1,19 @@
 --# Pre-Lazy Config
 local configure = require 'settings.apply'
-configure.prelazy()
-configure.theme 'evergarden' --Nordic, evergarden, nighthfox (+), miasma, oh-lucy, oh-lucy-evening*,
--- 'wal','everblush', 'miramare', 'zephyr', 'toast', 'flatlandia', 'monet','srcery','vesper'
+-- DEBUGGING! PUT BACK
+if vim.g.vscode then
+  require('vscinit').init()
+else
+  configure.prelazy()
+  configure.theme 'evergarden' --Nordic, evergarden, nighthfox (+), miasma, oh-lucy, oh-lucy-evening*,
+  -- 'wal','everblush', 'miramare', 'zephyr', 'toast', 'flatlandia', 'monet','srcery','vesper'
 
---# Lazy + Plugins:
-require('dlazyinit').LazyPluginSetup()
+  --# Lazy + Plugins:
+  require('dlazyinit').LazyPluginSetup()
 
---# Post-Lazy config
-configure.postlazy()
-
+  --# Post-Lazy config
+  configure.postlazy()
+end
 --[[
 Other plugins/plugin types to try:
 --------------------------------------------
