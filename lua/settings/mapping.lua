@@ -73,7 +73,8 @@ local maptables = {
   --      I don't think descriptions here go to which-key.
   --      Which-key description for go mappings is just using command name
   assigns = {
-    --{ '<leader>q', vim.diagnostic.setloclist, dsc 'Quickfix list' }, -- moving to Trouble.
+    -- trouble don't work good
+    { '<leader>q', vim.diagnostic.setloclist, dsc 'Quickfix list' },
     { '<Esc>', '<cmd>nohlsearch<CR>' },
     { '<C-h>', '<C-w><C-h>', dsc 'Move focus to the left window' },
     { '<C-k>', '<C-w><C-k>', dsc 'Move focus to the upper window' },
@@ -148,17 +149,26 @@ function Map.plugins()
       { ld 'pd', pr.stop, desc = 'Disable session save' },
     },
   }
-  local mappingFunctions = { Map.gitplugins, Map.other_plugins, Map.leap, Map.commentbox, Map.configReloads }
+  local mappingFunctions = { Map.gitplugins, Map.other_plugins, Map.leap, Map.commentbox, Map.configReloads, Map.lsp }
   for _, mfn in ipairs(mappingFunctions) do
     Map.wk.add(mfn())
   end
 end
 
+function Map.lsp()
+  local lspsaga = require 'lspsaga'
+  local m = {
+    { ld 'o', cmd 'Lspsaga outline', desc = '[o]utline Lspsaga' },
+    { ld 'd', cmd 'Lspsaga diagnostic', desc = '[d]iagnostic Lspsaga' },
+  }
+  return m
+end
 function Map.vim()
   local m = {
     { 'gl', vim.lsp.buf.incoming_calls(), desc = 'show incoming calls to symbol under cursor' },
     { '<leader>q', require('trouble').open { mode = '' } },
   }
+  return m
 end
 
 function Map.gitplugins()
@@ -176,6 +186,7 @@ function Map.gitplugins()
       end,
       desc = 'Neogit in vsplit',
     },
+    { ld 'gf', require('diffview').open {} },
   }
 end
 
@@ -211,17 +222,16 @@ function Map.other_plugins()
     { ld 'up', precog.toggle, desc = '[U]til: [p]recognition toggle' },
     -- Aerial
     { ld 'ua', aerial.open, desc = '[U]til: [a]erial' },
+    -- Ccc
+    { ld 'uc', cmd 'CccPicker', desc = '[U]til: [c]cc colorpicker' },
     -- Trevj. this uh splits lists etc into lines? That's what it seems like at least
     { '<A-j>', require('trevj').format_at_cursor, desc = 'breakout list to lines' },
     -- Render-Markdown
     { 'gm', cmd 'RenderMarkdown toggle', desc = 'Render Markdown' },
-    {
-      'gR',
-      function()
-        return ':IncRename ' .. vim.fn.expand '<cword>'
-      end,
-      desc = 'iRename symbol',
-    },
+    -- inc-rename
+    -- NOTE: provided function does not work.
+    -- { 'gR', function() return ':IncRename ' .. vim.fn.expand '<cword>' end, desc = 'iRename symbol', },
+    { 'gR', ':IncRename ', desc = 'Start IncRename' },
   }
   return m
 end

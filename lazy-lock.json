@@ -47,6 +47,7 @@
   "guihua.lua": { "branch": "master", "commit": "87bea7b98429405caf2a0ce4d029b027bb017c70" },
   "hererocks": { "branch": "master", "commit": "344c46ed54df9a4dbc2d2bf510dcd9a9d90497bf" },
   "houdini.nvim": { "branch": "main", "commit": "1b7ec0a713a2aa9965848d8b93f66dc93716fd1c" },
+  "hover.nvim": { "branch": "main", "commit": "07c7269c3a88751f2f36ed0563dc6e7b8b84f7f7" },
   "hybrid.nvim": { "branch": "master", "commit": "5f4003e71ef9b1d110e07affde6711d570f2ef5a" },
   "hydrangea-vim": { "branch": "main", "commit": "866d2f3ac65ca4bacc5da6e7687247f0053dafc6" },
   "hydrovim": { "branch": "main", "commit": "509516bd99fa41f707f86e46f56e0d605290a6b5" },

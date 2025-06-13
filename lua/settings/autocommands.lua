@@ -72,7 +72,9 @@ local function autocmd()
   })
 
   -- ── [4] make lsp autocommands on attach ─────────────────────────────────
-  auto('LspAttach', {
+  -- NOTE: had disabled; but this is needed regardless of hover being used
+
+  --[[ auto('LspAttach', {
     group = ag 'lsp-attached-setauto',
     callback = function() --──────────────── LSP ACTIVE ENTERED ───
       -- ───────────────────────── [4a] idle hover popup ───────────────────────
@@ -111,7 +113,7 @@ local function autocmd()
         -- no need to disable hover key really
       })
     end,
-  })
+  }) ]]
   -- ── [6] Adds close with q to specified windows ──────────────────────────
   auto('FileType', {
     group = ag 'close_with_q',

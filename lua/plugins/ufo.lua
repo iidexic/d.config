@@ -3,17 +3,20 @@ local M = {}
 M.plugins = {
   {
     'kevinhwang91/nvim-ufo',
+    -- will adding lspconfig here ensure it runs first?
     dependencies = { 'kevinhwang91/promise-async', 'neovim/nvim-lspconfig' },
     -- moved to config so can disable and not get the rebinds
     -- plugin loader setup does not have that capaability yet
+    cond = true,
     config = function()
-      vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
-      vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
+      local ufo = require 'ufo'
+      vim.keymap.set('n', 'zR', ufo.openAllFolds)
+      vim.keymap.set('n', 'zM', ufo.closeAllFolds)
       -- Option 2: nvim lsp as LSP client
       -- Tell the server the capability of foldingRange. Neovim hasn't added foldingRange to default capabilities, users must add it manually
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities.textDocument.foldingRange = {
-        dynamicRegistration = false,
+        dynamicRegistration = true, -- false? I dunno. This was originally false
         lineFoldingOnly = true,
       }
       local language_servers = vim.lsp.get_clients() -- or list servers manually like {'gopls', 'clangd'}
@@ -27,22 +30,5 @@ M.plugins = {
     end,
   },
 }
-
---[[ M.setup = function()
-  -- Haven't touched these settings before
-  -- moving to main vimconfig file
-  -- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
-end ]]
-
--- [Option 3:] treesitter as a main provider instead
--- (Note: the `nvim-treesitter` plugin is *not* needed.)
--- ufo uses the same query files for folding (queries/<lang>/folds.scm)
--- performance and stability are better than `foldmethod=nvim_treesitter#foldexpr()`
-
---[[ require('ufo').setup {
-  provider_selector = function(bufnr, filetype, buftype)
-    return { 'treesitter', 'indent' }
-  end,
-} ]]
 
 return M

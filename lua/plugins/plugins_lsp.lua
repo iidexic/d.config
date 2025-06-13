@@ -132,7 +132,7 @@ return {
         --# Zig ─────────────────────────────────────────────────────────────
         --zls = {},
         --# Other ───────────────────────────────────────────────────────────
-        --markdown_oxide = {}
+        marksman = {},
       }
 
       local ensure_installed = vim.tbl_keys(servers or {}) -- Ensure the servers and tools above are installed

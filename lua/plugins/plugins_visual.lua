@@ -1,4 +1,16 @@
 return {
+  {
+    'nvim-tree/nvim-web-devicons',
+    opts = {
+      override_by_filename = {
+        ['.go'] = {
+          icon = '󰟓',
+          color = '#1a90d6',
+          name = 'Gitignore',
+        },
+      },
+    },
+  },
   --# Comments
   { -- Highlight todo, notes, etc in comments
     'folke/todo-comments.nvim',

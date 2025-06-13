@@ -24,12 +24,12 @@ return {
         '<cmd>sil Trouble lsp toggle focus=false win.position=right<cr>',
         desc = 'LSP Definitions / references / ... (Trouble)',
       },
-      {
+      --[[ {
         -- Overwriting quickfix button with loclist
         '<leader>q',
         '<cmd>sil Trouble loclist toggle<cr>',
         desc = 'Location List (Trouble)',
-      },
+      }, ]]
       {
         '<leader>Q',
         '<cmd>sil Trouble qflist toggle<cr>',

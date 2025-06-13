@@ -8,7 +8,8 @@ function M.tlen(t)
   return count
 end
 
-function M.rtprint(t)
+-- remove. vim.print exists
+--[[ function M.rtprint(t)
   if t[1] then
     for i, v in ipairs(t) do
       print(i, '->', v)
@@ -28,14 +29,15 @@ function M.rtprint(t)
       end
     end
   end
-end
+end ]]
 
----function that wraps a different function in a function thingy
----anyway, supports up to 5 args, if you need more then stop writing functions like that
+--- function that wraps a different function in a function thingy
+--- anyway, supports up to 5 args, if you need more then stop writing functions like that
+--- not used, at all
 ---@param fn function
 ---@param args any[]
 function M.wrapf(fn, args)
-  -- I'm gonna be honest, IDK how to do this better without making a nested wrap via recursion. maybe I'll try that too
+  -- not sure how to do this better without nested wrap via recursion. maybe I'll try that too
   if args and #args > 0 then
     local wtable = {
       function()
@@ -61,7 +63,9 @@ function M.wrapf(fn, args)
   end
 end
 
---#plugin-specific functions
+-- ╭─────────────────────────────────────────────────────────╮
+--#│                plugin-specific functions                │
+-- ╰─────────────────────────────────────────────────────────╯
 function M.grappleKey(grapid)
   local grapkeys = { 'q', 'w', 'e', 'r', 'a', 's', 'd', 'f' }
   if type(grapid) == 'number' then
@@ -101,9 +105,8 @@ function M.plugin(plugin_name)
   end
 end
 
--- uh this just makes LazyDone loading into a latched bool in M.maybeplug
--- it also makes a command to see how many times (-1) LazyDone triggers; I would guess this happens only once
--- This will probably also be removed
+-- Experiment autocommand that I used check if LazyDone happened multiple times
+-- it does not
 vim.api.nvim_create_autocmd('User', {
   group = vim.api.nvim_create_augroup('maybeplug-lazy-check', { clear = true }),
   pattern = 'LazyDone',

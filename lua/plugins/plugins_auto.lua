@@ -7,7 +7,7 @@ return {
     event = { 'BufWritePre' },
     cmd = { 'ConformInfo' },
     keys = {
-      {
+      { --Bind <ldr>f to code format
         '<leader>f',
         function()
           require('conform').format { async = true, lsp_format = 'fallback' }
@@ -32,6 +32,7 @@ return {
           lsp_format = lsp_format_opt,
         }
       end,
+
       formatters_by_ft = {
         lua = { 'stylua' },
         go = { 'gofmt', 'gopls', 'goimports', 'gotests' },
@@ -87,13 +88,10 @@ return {
           ['<C-b>'] = cmp.mapping.scroll_docs(-4), -- scroll the documentation window [b]ack / [f]orward
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
           ['<C-y>'] = cmp.mapping.confirm { select = true }, -- accept[y] the completion (will expand snippets from lsp). this auto-imports if lsp supports it.
-          --['<C-,>'] = cmp.mapping.select_prev_item(),
-          --['<C-.>'] = cmp.mapping.select_next_item(),
           ['<C-CR>'] = cmp.mapping.confirm { select = true },
+          --['<C-,>'] = cmp.mapping.select_prev_item(), ['<C-.>'] = cmp.mapping.select_next_item(),
           --========[ If you prefer more traditional completion keymaps: ]========--
-          --['<CR>'] = cmp.mapping.confirm { select = true },
-          --['<Tab>'] = cmp.mapping.select_next_item(), -- you can uncomment the following lines
-          --['<S-Tab>'] = cmp.mapping.select_prev_item(),
+          --['<CR>'] = cmp.mapping.confirm { select = true }, ['<Tab>'] = cmp.mapping.select_next_item(), ['<S-Tab>'] = cmp.mapping.select_prev_item(),
 
           ['<C-Space>'] = cmp.mapping.complete {}, -- Manually trigger a completion from nvim-cmp. (these auto-display so generally not needed)
           ['<C-l>'] = cmp.mapping(function() -- move to right of each of the expansion locations.

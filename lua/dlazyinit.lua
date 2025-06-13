@@ -1,4 +1,8 @@
 local D = {
+  --NOTE: To make Lazy Reload work properly:
+  -- switch to a "module" setup:
+  -- change all files in plugin folder to exclusively return list of plugins
+  -- then pass lazy setup the directory instead of the completed list of plugins
   LazyPluginSetup = function()
     local plugload = require 'pluginloader'
 
@@ -9,7 +13,7 @@ local D = {
       'plugins.bufferline',
       'plugins.filemanager',
       'plugins.grapple',
-      --'plugins.hover',
+      'plugins.hover',
       'plugins.lang-support',
       'plugins.layout',
       'plugins.lsp_lspsaga',
@@ -41,6 +45,7 @@ local D = {
       --'trials.trailblazer',
       'trials.nvim_dev',
       'trials.neoclip',
+      --'trials.origami',
       --'trials.glance',
       --'trials.helpview',
       --'trials.iron',
