@@ -19,11 +19,10 @@ M.plugins = {
       { '<leader>go', '<cmd>LazyGit<cr>', desc = 'LazyGitLog' },
     },
   },
-  -- covered by neogit, but want it whether or not neogit is active/enabled
-  { 'sindrets/diffview.nvim' },
   { -- nice quick git actions
     'chrisgrieser/nvim-tinygit',
     dependencies = 'nvim-telescope/telescope.nvim',
+    opts = {},
   },
   { -- giving it another go
     'NeogitOrg/neogit',
@@ -38,7 +37,13 @@ M.plugins = {
     'lewis6991/gitsigns.nvim',
     opts = {
 
-      signs = { add = { text = '+' }, change = { text = '~' }, delete = { text = '_' }, topdelete = { text = '‾' }, changedelete = { text = '~' } },
+      signs = {
+        add = { text = '󰾗' }, -- '+'
+        change = { text = '󰯔' },
+        delete = { text = '󱔷' },
+        topdelete = { text = '󱔶' },
+        changedelete = { text = '󰾘' },
+      },
       on_attach = function(bufnr)
         local gitsigns = require 'gitsigns'
 

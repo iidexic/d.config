@@ -11,7 +11,7 @@ return {
         if term.direction == 'horizontal' then
           return 12
         elseif term.direction == 'vertical' then
-          return vim.o.columns * 0.18
+          return vim.o.columns * 0.2
         end
       end,
     },
@@ -47,13 +47,25 @@ return {
     opts = {
       file_picker = 'telescope',
       filetypes = { 'lua', 'go', 'zig', 'python' },
+      filetype_details = {
+        go = {
+          requireDir = true, -- true if each scratch file requires a new directory
+          filename = 'main', -- the filename of the scratch file in the new directory
+          content = { 'package main', '', 'func main() {', '  ', '}' },
+          cursor = {
+            location = { 4, 2 },
+            insert_mode = true,
+          },
+        },
+      },
       --filetype_details = {go = {...}} --* iffff go is acting weird, copy the section from helpfile to here
     },
   },
   { -- icon-picker: telescope picker for Nerd Fonts icons
     'ziontee113/icon-picker.nvim',
     config = function()
-      require('icon-picker').setup { disable_legacy_commands = true }
+      local ip = require 'icon-picker'
+      ip.setup { disable_legacy_commands = true }
 
       local opts = { noremap = true, silent = true }
 
@@ -61,6 +73,14 @@ return {
       --vim.keymap.set('n', '<Leader><Leader>y', '<cmd>IconPickerYank<cr>', opts) --> Yank the selected icon into register
       vim.keymap.set('i', '<C-i>', '<cmd>IconPickerInsert<cr>', opts) --insert mode
     end,
+  },
+  {
+    '2kabhishek/nerdy.nvim',
+    -- going to exclusively use telescope; disable snacks dep
+    --[[ dependencies = {
+      'folke/snacks.nvim',
+    }, ]]
+    cmd = 'Nerdy',
   },
   { -- unicode picker: telescope picker for unicode symbols
     'cosmicboots/unicode_picker.nvim',

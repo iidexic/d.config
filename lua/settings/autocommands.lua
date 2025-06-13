@@ -4,6 +4,32 @@ local ag = function(name)
   return vim.api.nvim_create_augroup(name, { clear = true })
 end
 
+-- Control which hover is being used
+-- vim basic, lspsaga, or hover.nvim (as of now)
+local hovr = { num = 1, selected = 'vim' }
+hovr.next = function()
+  hovr.sethover(hovr.num + 1)
+end
+hovr.prev = function()
+  hovr.sethover(hovr.num - 1)
+end
+function hovr.setnum(i)
+  hovr.num = ((i - 1) % 3) + 1 --  +1 cuz lua index starts at 1
+end
+function hovr.update_selection()
+  local methodmap = { 'vim', 'saga', 'hover.nvim' }
+  hovr.selected = methodmap[hovr.num]
+end
+
+local hoverselect = function()
+  if hovr.selected then
+    if hovr.selected == 'vim' then
+    elseif hovr.selected == 'saga' then
+    elseif hovr.selected == 'hover.nvim' then
+    end
+  end
+end
+
 local M = {
   opts = {
     hover = true, -- enable/disable hover popup
@@ -25,9 +51,10 @@ end
 local function autocmd()
   -- ── Autocommand-related mapping ───────────────────
   -- toggle hover
-  vim.keymap.set('n', 'gh', function()
+  --( NOT NEEDED: Use K (<S-k>))
+  --[[ vim.keymap.set('n', 'gh', function()
     M.opts.hover = not M.opts.hover
-  end, { desc = 'toggle hover popup' })
+  end, { desc = 'toggle hover popup' }) ]]
   --  ── [0] quick startup auto ──────────────────────────────────────────────
   auto('VimEnter', {
     desc = 'run persistence, would prefer both persistence and whaler',
@@ -48,6 +75,7 @@ local function autocmd()
   })
   --  ── [2] resize splits on window resize ───────────────────────────────
   -- (no idea how this works)
+  -- TODO: check if this is the source of resizing left-only
   auto({ 'VimResized' }, {
     group = ag 'resize-splits',
     callback = function()
@@ -74,7 +102,7 @@ local function autocmd()
   -- ── [4] make lsp autocommands on attach ─────────────────────────────────
   -- NOTE: had disabled; but this is needed regardless of hover being used
 
-  --[[ auto('LspAttach', {
+  auto('LspAttach', {
     group = ag 'lsp-attached-setauto',
     callback = function() --──────────────── LSP ACTIVE ENTERED ───
       -- ───────────────────────── [4a] idle hover popup ───────────────────────
@@ -94,7 +122,7 @@ local function autocmd()
               silent = true,
               --not the biggest fan of border but damn does it make shit easier
               -- "none", "single"(line), "double", "rounded", "solid"(block), "shadow"
-              border = 'none', -- borders are being shitty rn
+              border = 'none', -- shadow would be best; it has issues
 
               --close_events = {''} --idk defaults,
             }
@@ -104,6 +132,7 @@ local function autocmd()
     end,
   })
 
+  -- ── [5] clear lsp autocommands on detach ────────────────────────────────
   auto('LspDetach', {
     group = ag 'lsp-detached-setauto',
     callback = function()
@@ -113,7 +142,7 @@ local function autocmd()
         -- no need to disable hover key really
       })
     end,
-  }) ]]
+  })
   -- ── [6] Adds close with q to specified windows ──────────────────────────
   auto('FileType', {
     group = ag 'close_with_q',
@@ -133,9 +162,11 @@ local function autocmd()
       'spectre_panel',
       'startuptime',
       'tsplayground',
+      '*\\*_luapad.lua',
     },
     callback = function(event)
       vim.bo[event.buf].buflisted = false
+      -- TODO: learn how vim.schedule works!
       vim.schedule(function() -- runs this until it gets a true?
         vim.keymap.set('n', 'q', function()
           vim.cmd 'close'

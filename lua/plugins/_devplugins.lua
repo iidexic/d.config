@@ -12,7 +12,8 @@ M.plugins = {
     end,
     opts = {},
   },
-  { 'iidexic/material.nvim', dir = 'c:/dev/luaprojects/material.nvim', dev = true, opts = {} },
+  { 'iidexic/material.nvim', dir = 'c:/dev/luaprojects/material.nvim/', dev = true, opts = {} },
+  { 'helpme', dir = 'c:/dev/luaprojects/helpme/', dev = true },
 }
 
 return M.plugins

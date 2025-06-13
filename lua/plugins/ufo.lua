@@ -1,4 +1,3 @@
---- Originally just took AstroNvim's UFO setup. It's too Astro-ey
 local M = {}
 M.plugins = {
   {
@@ -12,21 +11,32 @@ M.plugins = {
       local ufo = require 'ufo'
       vim.keymap.set('n', 'zR', ufo.openAllFolds)
       vim.keymap.set('n', 'zM', ufo.closeAllFolds)
-      -- Option 2: nvim lsp as LSP client
+      -- ╭─────────────────────────────────────────────────────────╮
+      -- │  NOTE: Currently testing using both lsp and treesitter  │
+      -- │             as fold provider simultaneously             │
+      -- ╰─────────────────────────────────────────────────────────╯
+      -- for the time being this has worked; will update if run into problems
+
+      -- ── Option 2: nvim lsp as provider ────────────────────────────────
       -- Tell the server the capability of foldingRange. Neovim hasn't added foldingRange to default capabilities, users must add it manually
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities.textDocument.foldingRange = {
         dynamicRegistration = true, -- false? I dunno. This was originally false
         lineFoldingOnly = true,
       }
-      local language_servers = vim.lsp.get_clients() -- or list servers manually like {'gopls', 'clangd'}
+      local language_servers = vim.lsp.get_clients() -- or list servers {'gopls', 'clangd'}
       for _, ls in ipairs(language_servers) do
         require('lspconfig')[ls].setup {
           capabilities = capabilities,
-          -- you can add other fields for setting up lsp server in this table
-        }
+        } -- you can add other fields for setting up lsp server in this table
       end
-      require('ufo').setup()
+      --require('ufo').setup()
+      -- ── Treesitter as provider ──────────────────────────────────────────
+      require('ufo').setup {
+        provider_selector = function(bufnr, filetype, buftype)
+          return { 'treesitter', 'indent' }
+        end,
+      }
     end,
   },
 }

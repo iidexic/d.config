@@ -84,6 +84,15 @@ local maptables = {
     { '<M-\\>', toggletermFlip, dsc 'ToggleTerm Flip' },
     { '<M-h>', tabpage_prev, dsc 'previous tabpage' },
     { '<M-l>', tabpage_next, dsc 'next tabpage' },
+    {
+      '<leader>ub',
+      function()
+        local b = 'name:[' .. vim.fn.bufname() .. ']\nnum: ' .. vim.fn.bufnr()
+        vim.print(b)
+      end,
+      dsc 'print current buffer detail',
+    },
+
     -- -- this is going to be set in autocommands,
     --[[ { 'gh', function() vim.lsp.buf.signature_help { max_width = 86, max_height = 30 } end, dsc 'show signature help. (hover="KK")', }, ]]
   },
@@ -166,7 +175,8 @@ end
 function Map.vim()
   local m = {
     { 'gl', vim.lsp.buf.incoming_calls(), desc = 'show incoming calls to symbol under cursor' },
-    { '<leader>q', require('trouble').open { mode = '' } },
+    -- removed. trouble quickfix is iffy
+    --{ '<leader>q', require('trouble').open { mode = '' } },
   }
   return m
 end
@@ -178,6 +188,14 @@ function Map.gitplugins()
     { '<leader>ga', tinygit.interactiveStaging, desc = 'git add' },
     { '<leader>gc', tinygit.smartCommit, desc = 'git commit' },
     { '<leader>gp', tinygit.push, desc = 'git push' },
+    {
+      '<leader>gI',
+      function()
+        tinygit.issuesAndPrs { type = 'all', state = 'all' }
+      end,
+      desc = 'search Github issues + Pull Requests',
+    },
+    { '<leader>gh', tinygit.fileHistory(), desc = 'search file history' },
     { '<leader>gn', neogit.open, desc = 'Neogit' },
     {
       '<leader>gm',
@@ -186,7 +204,17 @@ function Map.gitplugins()
       end,
       desc = 'Neogit in vsplit',
     },
-    { ld 'gf', require('diffview').open {} },
+    -- Need to add context or this will just open the full project diffview
+    { ld 'gd', require('diffview').open, desc = 'open diffview' },
+    -- Errors if not in diffview. Could be implementation problem
+    -- try the plugin config keymap
+    --[[ {
+      '<esc><esc>',
+      function()
+        require('diffview.config').actions { 'close' }
+      end,
+      desc = 'close diffview',
+    }, ]]
   }
 end
 

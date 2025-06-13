@@ -25,29 +25,8 @@ return {
       }
       require('mini.icons').setup() -- for mini.files specifically
       -- not disabling, I need this shit. alternatives?
-      require('mini.surround').setup()
+      require('mini.surround').setup {}
 
-      --require('mini.hues').setup() --generate colorschemes
-      --[[
-      require('mini.jump2d').setup {
-        -- function 4 producing jump spots. (:help MiniJump2d.start)
-        spotter = nil, -- nil = MiniJump2d.default_spotter
-        labels = 'abcdefghijklmnopqrstuvwxyz',
-        view = { -- Options for visual effects
-          dim = false, -- Whether to dim lines with at least one jump spot
-          n_steps_ahead = 0, -- How many steps ahead to show. Set to big number to show all steps.
-        },
-        -- lines allowed to place spots. cursor_before = up, cursor_after = down.
-        allowed_lines = { blank = true, fold = true, cursor_before = true, cursor_at = true, cursor_after = true },
-        allowed_windows = { current = true, not_current = true }, -- toggle jump between window
-        -- Functions to be executed at certain events
-        hooks = { before_start = nil, after_jump = nil },
-        -- Module mappings. Use `''` (empty string) to disable one.
-        mappings = { start_jumping = '<M-CR>' },
-
-        silent = false, -- toggle non-error feedback. also affects idle helper messages when user input required.
-      }
-      --]]
       local statusline = require 'mini.statusline' -- Simple and easy statusline.
 
       statusline.setup {

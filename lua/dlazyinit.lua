@@ -7,10 +7,10 @@ local D = {
     local plugload = require 'pluginloader'
 
     --# Main Plugins
-
     local files = {
       'plugins.aerial',
       'plugins.bufferline',
+      'plugins.diffview',
       'plugins.filemanager',
       'plugins.grapple',
       'plugins.hover',
@@ -47,6 +47,7 @@ local D = {
       'trials.neoclip',
       --'trials.origami',
       --'trials.glance',
+      'trials.grug-far',
       --'trials.helpview',
       --'trials.iron',
       --'trials.nvim_dev',
@@ -57,42 +58,8 @@ local D = {
       --'trials.tiny_inline_diagnostic',
     }
 
-    --# Dev Plugin Loading
-    ---returns table of folder contents in the format {pathname, pathtype}
-    ---Note: this comes with the issue that if a dir does not exist, it will panic
-    ---This is difficult to get around. Using plenary would be nice. Could we use Lazy.reload() for the dev plugins?
-    ---@param path string # directory path
-    ---@param check? table # {pathname, pathtype} to check for (for 2nd return val)
-    ---@return table, boolean? # pathlist, if path `check` is in pathlist
-    --@return boolean # path contains directory named lua
-    local dir_contents = function(path, check)
-      local ls = vim.fs.dir(path)
-      local luadir = false
-      local dirfiles = {}
-      local fn, typ
-      repeat
-        fn, typ = ls()
-        if fn then
-          table.insert(dirfiles, { fn, typ })
-          if check and { fn, typ } == check then
-            luadir = true
-          end
-        end
-      until not fn
-      return dirfiles, luadir
-    end
-
     local devplugs = require 'plugins._devplugins'
-    local existing_dev_plugins = {}
-    for i, plug in ipairs(devplugs) do
-      local d, isplug = dir_contents(plug.dir, { 'lua', 'directory' })
-      if isplug then
-        table.insert(existing_dev_plugins, plug)
-      end
-    end
-    if #existing_dev_plugins > 0 then
-      plugload.loadmodule(existing_dev_plugins)
-    end
+    plugload.loadmodule(devplugs)
     --leap
     local trialLeap = require 'trials.leap_plus'(true, true, true, false)
     plugload.loadmodule(trialLeap)

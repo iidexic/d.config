@@ -11,11 +11,13 @@ return {
     'nvim-telescope/telescope.nvim',
     event = 'vimenter',
     dependencies = {
+      { 'nvim-telescope/telescope-ui-select.nvim' },
+      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
       { 'nvim-lua/plenary.nvim' },
       { 'salorak/whaler.nvim' },
       { 'cbochs/grapple.nvim' },
-      { 'desdic/agrolens.nvim' },
       { 'jvgrootveld/telescope-zoxide' },
+      { '2kabhishek/nerdy.nvim' },
       { -- if get errors, see telescope-fzf-native readme for installation instructions
         'nvim-telescope/telescope-fzf-native.nvim',
         build = 'make', -- only run on update/install
@@ -23,8 +25,21 @@ return {
           return vim.fn.executable 'make' == 1
         end,
       },
-      { 'nvim-telescope/telescope-ui-select.nvim' },
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      { -- I just have not found a use for this
+        'desdic/agrolens.nvim',
+        event = 'VeryLazy',
+        -- has to run like this
+        keys = {
+          {
+            'gl',
+            function()
+              require('agrolens').generate {}
+            end,
+            desc = 'generate agrolens query',
+          },
+          cond = false,
+        },
+      },
     },
     config = function() -- [[ configure telescope ]] see `:help telescope` and `:help telescope.setup()`
       local telescope = require 'telescope'
@@ -37,7 +52,8 @@ return {
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
-            require('telescope.themes').get_dropdown(),
+            require('telescope.themes').get_dropdown {},
+            kind = { require 'icon-picker' },
           },
           whaler = {
             auto_file_explorer = false,
@@ -57,6 +73,7 @@ return {
               { path = 'd:\\coding\\github\\go-ca-experiments', alias = 'go ca' },
             },
           },
+          --agrolens = { same_type = true, },
           --* removing file_browser; superfluous
           --file_browser = { -- theme = 'ivy', hijack_netrw = true, mappings = {['i'] = {my_custom_insert_mappings}, ['n'] = {my_custom_normal-mode_mappings}} },
         },
@@ -67,11 +84,12 @@ return {
       pcall(telescope.load_extension, 'grapple')
       pcall(telescope.load_extension, 'whaler')
       pcall(telescope.load_extension, 'zoxide')
-      pcall(telescope.load_extension, 'auto-session') -- most likely no worky
       pcall(telescope.load_extension, 'telescope-helpgrep')
-      pcall(telescope.load_extension, 'agrolens')
+      pcall(telescope.load_extension, 'nerdy')
+      --pcall(telescope.load_extension, 'agrolens')
 
       local builtin = require 'telescope.builtin' -- See `:help telescope.builtin`
+      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
@@ -81,25 +99,32 @@ return {
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader>st', builtin.tags, { desc = '[S]earch [T]ags' })
-      vim.keymap.set('n', '<leader>sz', telescope.extensions.zoxide.list, { desc = '[S]earch [z]oxide list' })
-      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader>sT', builtin.tags, { desc = '[S]earch [T]ags' })
+      vim.keymap.set('n', '<leader>sq', builtin.quickfix, { desc = '[S]earch [Q]uickfix' })
+      vim.keymap.set('n', '<leader>sD', builtin.lsp_definitions, { desc = '[S]earch lsp [D]efinitions' })
+      vim.keymap.set('n', '<leader>st', builtin.treesitter, { desc = '[S]earch [t]reesitter' })
       vim.keymap.set('n', '<leader>sz', telescope.extensions.zoxide.list, { desc = '[S]earch [z]oxide list' })
       vim.keymap.set('n', '<leader>sm', telescope.extensions.grapple.tags, { desc = '[S]earch [M]arks->grapple' })
       vim.keymap.set('n', '<leader>sw', telescope.extensions.whaler.whaler, { desc = '[S]earch [w]haler paths' })
       vim.keymap.set('n', '<leader>sH', telescope.extensions.helpgrep.helpgrep, { desc = '[S]earch [H]elp with grep' })
       vim.keymap.set('n', '<leader>sc', builtin.colorscheme, { desc = '[S]earch [C]olorschemes' })
-      vim.keymap.set('n', '<leader>sl', builtin.colorscheme, { desc = '[S]earch symbols agro[l]ens' })
+      vim.keymap.set('n', '<leader>sb', builtin.git_bcommits, { desc = '[S]earch [B]uffer Commit History' })
+      vim.keymap.set('n', '<leader>sR', builtin.reloader, { desc = '[S]earch [R]eloader???' })
+      vim.keymap.set('n', 'gI', builtin.lsp_implementations, { desc = 'LSP:[G]oto [I]mplementation(s)' })
+      vim.keymap.set('n', '<leader>un', function()
+        telescope.extensions.nerdy.nerdy { layout_strategy = 'vertical' }
+      end, { desc = 'Nerd Font Icon Search' })
 
+      --vim.keymap.set('n', '<leader>sl', telescope.extensions.agrolens.agrolens, { desc = '[S]earch symbols agro[l]ens' })
       --unicode_picker. not a telescope extension directly but is a telescope command
       vim.keymap.set('n', '<leader>uu', '<cmd>Telescope unicode_picker<CR>', { desc = 'Unicode Picker' })
 
-      local globaltags = function()
+      --[[ local globaltags = function()
         local t = require 'telescope'
         local g = require 'grapple'
         vim.print(t.extensions.grapple.tags())
         t.extension.grapple.tags()
-      end
+      end ]]
       vim.keymap.set('n', '<leader>/', function()
         -- Slightly advanced example of overriding default behavior and theme
         -- You can pass additional configuration to Telescope to change the theme, layout, etc.

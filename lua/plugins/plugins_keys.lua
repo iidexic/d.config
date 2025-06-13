@@ -1,18 +1,4 @@
 local M = {}
---[[
-local function wksg()
-  require('which-key').show { global = true }
-end
-local function showallWK()
-  local wk = require 'which-key'
-  local wks = wk.show
-  local g = { global = true }
-  local set = {
-    { 'n', 'a', wksg },
-    { 'n', 'i', wksg },
-  }
-en]]
---keys = { { '<leader>?', function() require('which-key').show { global = false } end, desc = 'Buffer Local Keymaps (which-key)', }, },
 M.plugins = {
   {
     --[which-key] - Show pending keybinds/motion completions
@@ -75,6 +61,7 @@ M.plugins = {
         { '<leader>P', group = '[P]ersist (stop using pls)' },
         { '<leader>u', group = '[U]tility' },
         { '<leader>x', group = 'Trouble' },
+        { '<leader>um', desc = 'miss.nvim' },
       },
     },
   },

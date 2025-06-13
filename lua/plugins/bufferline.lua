@@ -73,12 +73,20 @@ function M.setup()
                 end
             end,
     --]]
-      offsets = { {
-        filetype = 'neo-tree',
-        text = 'Neo-Tree',
-        text_align = 'center',
-        separator = true,
-      } },
+      offsets = {
+        {
+          filetype = 'neo-tree',
+          text = 'Neo-Tree',
+          text_align = 'center',
+          separator = true,
+        },
+        {
+          filetype = 'neo-tree',
+          text = 'Neo-Tree',
+          text_align = 'center',
+          separator = true,
+        },
+      },
     },
   }
   bufferline.setup(opts)

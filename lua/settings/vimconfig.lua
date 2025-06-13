@@ -61,7 +61,7 @@ local O = {
     vim.g.lazygit_floating_window_scaling_factor = 0.8
     ---*2nd try*---
     vim.o.winminwidth = 10
-    vim.o.winwidth = 80
+    vim.o.winwidth = 110
     vim.o.winheight = 20
     vim.o.equalalways = false
     -- vim.o.winbar = "" -- contents of a w--indow bar for every window. I think it's off right now
