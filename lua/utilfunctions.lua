@@ -62,7 +62,25 @@ function M.wrapf(fn, args)
     fn()
   end
 end
+-- Check if filepath exists, if it's a file and is readable
+function M.fileExists(filepath)
+  local f = io.open(filepath, 'r')
+  if f ~= nil then
+    io.close(f)
+    return true
+  else
+    return false
+  end
+end
 
+--TODO: Keep workign on this one!
+--[[ function M.prePlugin(path)
+
+  file_path = vim.fs.find(path, {type = 'file',path = vim.fs.joinpath(vim.fn.stdpath('data')})
+  local file_name = string.reverse(path)
+  if M.fileExists(path) then
+  end
+end ]]
 -- ╭─────────────────────────────────────────────────────────╮
 --#│                plugin-specific functions                │
 -- ╰─────────────────────────────────────────────────────────╯

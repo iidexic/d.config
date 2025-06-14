@@ -1,0 +1,20 @@
+# ╭──────────────────────────────────────────────────────────╮
+# │                  Main NVIM ruff config                   │
+# ╰──────────────────────────────────────────────────────────╯
+# ── defaults marked with #d ───────────────────────────────────────────
+#target-version = "py313"
+#exclude = [ ".bzr", ".direnv", ".eggs", ".git", ".git-rewrite", ".hg", ".ipynb_checkpoints", ".mypy_cache", ".nox", ".pants.d", ".pyenv", ".pytest_cache", ".pytype", ".ruff_cache", ".svn", ".tox", ".venv", ".vscode", "__pypackages__", "_build", "buck-out", "build", "dist", "node_modules", "site-packages", "venv", ]
+#line-length = 88
+
+
+[lint]
+select = ["E4", "E7", "E9", "F"] #d
+ignore = [
+   "E265", # comment start "# ", until can use blocks without it going off every "#%%"
+]
+
+#[flake8-quotes]
+#inline-quotes = "single"
+[format]
+#quote-style = "single"
+

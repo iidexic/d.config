@@ -195,7 +195,7 @@ function Map.gitplugins()
       end,
       desc = 'search Github issues + Pull Requests',
     },
-    { '<leader>gh', tinygit.fileHistory(), desc = 'search file history' },
+    { '<leader>gh', tinygit.fileHistory, desc = 'search file history' },
     { '<leader>gn', neogit.open, desc = 'Neogit' },
     {
       '<leader>gm',
