@@ -3,11 +3,8 @@ return {
   {
     'folke/snacks.nvim',
     priority = 1000,
-    dependencies = {
-      'nvim-tree' / 'nvim-web-devicons',
-    },
     lazy = false,
-
+    cond = false,
     ---@type snacks.Config
     opts = {
       -- your configuration comes here
@@ -22,8 +19,8 @@ return {
       notifier = { enabled = true },
       quickfile = { enabled = true },
       scope = { enabled = true },
-      scroll = { enabled = true },
-      statuscolumn = { enabled = true },
+      --scroll = { enabled = false },
+      --statuscolumn = { enabled = true },
       words = { enabled = true },
     },
   },

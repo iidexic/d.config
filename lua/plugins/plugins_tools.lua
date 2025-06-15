@@ -39,28 +39,10 @@ return {
     priority = 1001, -- Ensure that it runs first to minimize delay when opening file from terminal
   },
 
-  { -- Scratch: Create general/language-specific scratch buffers
-    'LintaoAmons/scratch.nvim',
-    dependencies = { 'nvim-telescope/telescope.nvim' },
-    event = 'VeryLazy',
-    keys = { { '<leader>us', '<cmd>Scratch<CR>', 'New Scratch Buffer' } },
-    opts = {
-      file_picker = 'telescope',
-      filetypes = { 'lua', 'go', 'zig', 'python' },
-      filetype_details = {
-        go = {
-          requireDir = true, -- true if each scratch file requires a new directory
-          filename = 'main', -- the filename of the scratch file in the new directory
-          content = { 'package main', '', 'func main() {', '  ', '}' },
-          cursor = {
-            location = { 4, 2 },
-            insert_mode = true,
-          },
-        },
-      },
-      --filetype_details = {go = {...}} --* iffff go is acting weird, copy the section from helpfile to here
-    },
-  },
+  -- ╭─────────────────────────────────────────────────────────╮
+  -- │  Who wants only one or two different plugins that let   │
+  -- │        you search for icons? you need at least 3        │
+  -- ╰─────────────────────────────────────────────────────────╯
   { -- icon-picker: telescope picker for Nerd Fonts icons
     'ziontee113/icon-picker.nvim',
     config = function()
@@ -81,6 +63,11 @@ return {
       'folke/snacks.nvim',
     }, ]]
     cmd = 'Nerdy',
+  },
+  {
+    'glepnir/nerdicons.nvim',
+    cmd = 'NerdIcons',
+    opts = {},
   },
   { -- unicode picker: telescope picker for unicode symbols
     'cosmicboots/unicode_picker.nvim',

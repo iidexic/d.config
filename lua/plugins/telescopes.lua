@@ -17,13 +17,19 @@ return {
       { 'salorak/whaler.nvim' },
       { 'cbochs/grapple.nvim' },
       { 'jvgrootveld/telescope-zoxide' },
+      {
+        'benfowler/telescope-luasnip.nvim',
+        -- this line confuse me
+        module = 'telescope._extensions.luasnip', -- if you wish to lazy-load
+      },
       { '2kabhishek/nerdy.nvim' },
-      { -- if get errors, see telescope-fzf-native readme for installation instructions
+      { -- Don't currently have a functional toolchain to build this
+        -- if get errors, see telescope-fzf-native readme for installation instructions
         'nvim-telescope/telescope-fzf-native.nvim',
-        build = 'make', -- only run on update/install
-        cond = function() -- `cond` = condition; determine if plugin should be installed/loaded.
-          return vim.fn.executable 'make' == 1
-        end,
+        --build = 'make', -- only run on update/install
+        -- Might as well try it
+        build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release',
+        cond = false, --function() return vim.fn.executable 'make' == 1 end,
       },
       { -- I just have not found a use for this
         'desdic/agrolens.nvim',
@@ -37,8 +43,8 @@ return {
             end,
             desc = 'generate agrolens query',
           },
-          cond = false,
         },
+        cond = false,
       },
     },
     config = function() -- [[ configure telescope ]] see `:help telescope` and `:help telescope.setup()`
@@ -79,6 +85,7 @@ return {
         },
       }
 
+      --TODO: remove pcalls? Probably prefer an error
       pcall(telescope.load_extension, 'fzf') -- enable telescope extensions if they are installed
       pcall(telescope.load_extension, 'ui-select')
       pcall(telescope.load_extension, 'grapple')
@@ -86,6 +93,7 @@ return {
       pcall(telescope.load_extension, 'zoxide')
       pcall(telescope.load_extension, 'telescope-helpgrep')
       pcall(telescope.load_extension, 'nerdy')
+      pcall(telescope.load_extension, 'luasnip')
       --pcall(telescope.load_extension, 'agrolens')
 
       local builtin = require 'telescope.builtin' -- See `:help telescope.builtin`
@@ -107,9 +115,10 @@ return {
       vim.keymap.set('n', '<leader>sm', telescope.extensions.grapple.tags, { desc = '[S]earch [M]arks->grapple' })
       vim.keymap.set('n', '<leader>sw', telescope.extensions.whaler.whaler, { desc = '[S]earch [w]haler paths' })
       vim.keymap.set('n', '<leader>sH', telescope.extensions.helpgrep.helpgrep, { desc = '[S]earch [H]elp with grep' })
+      vim.keymap.set('n', '<leader>sl', telescope.extensions.luasnip.luasnip, { desc = '[S]earch [l]uasnip snippets' })
       vim.keymap.set('n', '<leader>sc', builtin.colorscheme, { desc = '[S]earch [C]olorschemes' })
       vim.keymap.set('n', '<leader>sb', builtin.git_bcommits, { desc = '[S]earch [B]uffer Commit History' })
-      vim.keymap.set('n', '<leader>sR', builtin.reloader, { desc = '[S]earch [R]eloader???' })
+      vim.keymap.set('n', '<leader>sR', builtin.reloader, { desc = '[S]earch [R]eloader' })
       vim.keymap.set('n', 'gI', builtin.lsp_implementations, { desc = 'LSP:[G]oto [I]mplementation(s)' })
       vim.keymap.set('n', '<leader>un', function()
         telescope.extensions.nerdy.nerdy { layout_strategy = 'vertical' }

@@ -25,7 +25,7 @@ return {
   },
   { -- nicer floating window/picker ui. try out some time
     'stevearc/dressing.nvim',
-    cond = false,
+    cond = true,
   },
   {
     'rachartier/tiny-devicons-auto-colors.nvim',

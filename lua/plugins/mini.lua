@@ -28,7 +28,6 @@ return {
       require('mini.surround').setup {}
 
       local statusline = require 'mini.statusline' -- Simple and easy statusline.
-
       statusline.setup {
         content = {
           function()

@@ -38,11 +38,12 @@ M.plugins = {
     opts = {
 
       signs = {
-        add = { text = '󰾗' }, -- '+'
-        change = { text = '󰯔' },
-        delete = { text = '󱔷' },
-        topdelete = { text = '󱔶' },
-        changedelete = { text = '󰾘' },
+        -- timeline: 󰯔  󰾗  󰾘  󱔵  󰾚  󱔷  󰯒  󰯓  󱔶  󱔴
+        add = { text = 'פֿ' },
+        change = { text = '󰇙' },
+        delete = { text = 'סּ' },
+        topdelete = { text = '' },
+        changedelete = { text = 'ﬔ' },
       },
       on_attach = function(bufnr)
         local gitsigns = require 'gitsigns'

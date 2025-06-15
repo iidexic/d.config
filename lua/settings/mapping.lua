@@ -85,16 +85,15 @@ local maptables = {
     { '<M-h>', tabpage_prev, dsc 'previous tabpage' },
     { '<M-l>', tabpage_next, dsc 'next tabpage' },
     {
-      '<leader>ub',
+      '<leader>vb',
       function()
         local b = 'name:[' .. vim.fn.bufname() .. ']\nnum: ' .. vim.fn.bufnr()
         vim.print(b)
       end,
-      dsc 'print current buffer detail',
+      dsc 'Vim: print current buffer detail',
     },
 
     -- -- this is going to be set in autocommands,
-    --[[ { 'gh', function() vim.lsp.buf.signature_help { max_width = 86, max_height = 30 } end, dsc 'show signature help. (hover="KK")', }, ]]
   },
 
   go = { -- changed first key after leader to 'l'
@@ -195,7 +194,7 @@ function Map.gitplugins()
       end,
       desc = 'search Github issues + Pull Requests',
     },
-    { '<leader>gh', tinygit.fileHistory(), desc = 'search file history' },
+    { '<leader>gh', tinygit.fileHistory, desc = 'search file history' },
     { '<leader>gn', neogit.open, desc = 'Neogit' },
     {
       '<leader>gm',

@@ -40,21 +40,17 @@ local D = {
     plugload.loadfiles(files)
     --# Trial Plugins
     local trials = {
-      --'trials.hawtkeys',
+      --NEW:
+      'trials.snacks',
+      --'trials.windline', -- too much work right now
       'trials.split', -- doesn't interfere with existing g mappings -- ok but what does it do
-      --'trials.trailblazer',
       'trials.nvim_dev',
       'trials.neoclip',
-      --'trials.origami',
-      --'trials.glance',
       'trials.grug-far',
-      --'trials.helpview',
-      --'trials.iron',
-      --'trials.nvim_dev',
-      --'trials.plugin_bundle',
-      --'trials.prettyhover',
-      --'trials.supermaven_ai',
-      --'trials.spectre'
+
+      --'trials.trailblazer', 'trials.origami', 'trials.glance', 'trials.hawtkeys',
+      --'trials.helpview', 'trials.iron', 'trials.nvim_dev', 'trials.plugin_bundle',
+      --'trials.prettyhover', 'trials.supermaven_ai', 'trials.spectre'
       --'trials.tiny_inline_diagnostic',
     }
 
