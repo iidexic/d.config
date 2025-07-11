@@ -11,6 +11,7 @@ local D = {
       'plugins.aerial',
       'plugins.bufferline',
       'plugins.diffview',
+      'plugins.dropbar',
       'plugins.filemanager',
       'plugins.grapple',
       'plugins.hover',
@@ -63,6 +64,7 @@ local D = {
 
     --# Themes
     plugload.add(require('theme.themes').themelist)
+    plugload.add(require 'theme.more-themes')
     ------------------------------------------------------------------------------
     --# Lazy definitions
     local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'

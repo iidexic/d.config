@@ -84,18 +84,32 @@ local maptables = {
     { '<M-\\>', toggletermFlip, dsc 'ToggleTerm Flip' },
     { '<M-h>', tabpage_prev, dsc 'previous tabpage' },
     { '<M-l>', tabpage_next, dsc 'next tabpage' },
+    -- ── Custom Functions ────────────────────────────────────────────────
     {
       '<leader>vb',
       function()
         local b = 'name:[' .. vim.fn.bufname() .. ']\nnum: ' .. vim.fn.bufnr()
         vim.print(b)
       end,
-      dsc 'Vim: print current buffer detail',
+      desc = 'Vim: print current buffer detail',
     },
-
-    -- -- this is going to be set in autocommands,
+    {
+      '<C-w>f',
+      function()
+        vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.04
+      end,
+      desc = 'neovide scale ',
+    },
+    {
+      '<C-w>F',
+      function()
+        vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.04
+      end,
+      desc = 'neovide scale ',
+    },
   },
 
+  --TODO: Future state have all lang-specific mappings on l and change them on project or file change
   go = { -- changed first key after leader to 'l'
     { '<leader>lr', cmd 'GoRun', dsc 'Go Run' },
     { '<leader>ld', cmd 'GoDoc', dsc 'GoDoc lookup' },
@@ -122,10 +136,13 @@ local Map = {
     wkMapFromTable(pluginmappings)
   end,
 }
-function Map.configReloads()
+
+--[[ function Map.configReloads()
   local cmap = {
+    -- Needs to re-require these
     { '<leader>Ra', require('settings.autocommands').post_autocmd, desc = '[R]eload [a]utocommands' },
     {
+
       '<leader>Rm',
       function()
         Map.assign()
@@ -135,7 +152,8 @@ function Map.configReloads()
     },
   }
   return cmap
-end
+end ]]
+
 -- Map.plugins performs all post-lazy mappings
 -- in the future it will be all mappings
 -- need to change the name of it
@@ -157,7 +175,17 @@ function Map.plugins()
       { ld 'pd', pr.stop, desc = 'Disable session save' },
     },
   }
-  local mappingFunctions = { Map.gitplugins, Map.other_plugins, Map.leap, Map.commentbox, Map.configReloads, Map.lsp }
+  Map.wk.add({
+    { '<Leader>ui', '<cmd>IconPickerNormal<cr>', desc = 'Icon Picker 💪' },
+  }, { silent = true })
+  local mappingFunctions = {
+    Map.gitplugins,
+    Map.other_plugins,
+    Map.leap,
+    Map.commentbox,
+    Map.lsp,
+    Map.hover,
+  }
   for _, mfn in ipairs(mappingFunctions) do
     Map.wk.add(mfn())
   end
@@ -219,24 +247,26 @@ end
 
 function Map.commentbox()
   --write bool choice tbl
-  local CB = { b = 1, l = 1 }
-  local fcbs = function(write, choice)
-    if write then
-      --vim.tbl.extend or something
-    end
-  end
+  --b 1,2,3 = rounded, square, heavy, 4 dashed, 7 double
+  --b 12 = quote 13 = double lnquote, 18 vert enclose (L/R), 20 horiz enclose (top/btm)
+  --l (2,3) rounded dwn/up, (4,5) square dwn/up,  (6,7,8) enclosed {[,(,<)]},
+  --l 9 heavy ln , 12 weighted, 13 double
+  --box: b-1, s-2 (square), q-12/13, ev-18,eh-20, h-9
+  --[[ Ideally: set-up to toggle options (like box style # and alignment), but to also stay in a custom mode with custom keymap until command done ]]
+  --NOTE: potential select type wip functions moved to new_mapping or newmap_functions
   local km = {
-    --b 1,2,3 = rounded, square, heavy, 4 dashed, 7 double
-    --b 12 = quote 13 = double lnquote, 18 vert enclose (L/R), 20 horiz enclose (top/btm)
-    --l (2,3) rounded dwn/up, (4,5) square dwn/up,  (6,7,8) enclosed {[,(,<)]},
-    --l 9 heavy ln , 12 weighted, 13 double
-    --box: b-1, s-2 (square), q-12/13, ev-18,eh-20, h-9
-    --[[ Ideally: set-up to toggle options (like box style # and alignment), but to also stay in a custom mode with custom keymap until command done ]]
 
-    { 'gCb', cmd('CBlcbox ' .. 1) },
-    { 'gCl', cmd 'CBllline ' .. 1 },
-    { 'gCs', cmd 'CBlcbox ' .. 2 },
-    { 'gCq', cmd('CBlcline ' .. 2) },
+    --NOTE: cmd() not work with a join string?
+    --NOTE: 'go' overwrites default bind of jumping to a specific byte number
+    ------- if for some reason this becomes needed; switch back to gC, or use gp/gP(overwrites)
+    { 'gob', cmd('CBlcbox ' .. 1) }, --left-justify text, center-justify box, round corner
+    { 'goB', cmd 'CBlcbox 2' },
+    { 'gol', cmd 'CBllline ' .. 1 }, --left-justify text, left-justify line, default line
+    { 'gor', cmd('CBlcline ' .. 2) },
+    { 'goR', cmd('CBlcline ' .. 3) },
+    { 'gor', cmd('CBlcline ' .. 2) },
+    { 'goR', cmd('CBlcline ' .. 3) },
+    -- this is gCq
   }
   return km
 end
@@ -244,21 +274,40 @@ function Map.other_plugins()
   local precog = require 'precognition'
   --local neoclip = require('neo')
   local aerial = require 'aerial'
+  local dropbar_api = require 'dropbar.api'
+  vim.keymap.set('n', '<Leader>;', dropbar_api.pick, { desc = 'Pick symbols in winbar' })
+  vim.keymap.set('n', '[;', dropbar_api.goto_context_start, { desc = 'Go to start of current context' })
+  vim.keymap.set('n', '];', dropbar_api.select_next_context, { desc = 'Select next context' })
   local m = {
     -- Precognition
     { ld 'up', precog.toggle, desc = '[U]til: [p]recognition toggle' },
     -- Aerial
     { ld 'ua', aerial.open, desc = '[U]til: [a]erial' },
     -- Ccc
-    { ld 'uc', cmd 'CccPicker', desc = '[U]til: [c]cc colorpicker' },
+    { ld 'uc', cmd 'CccPick', desc = '[U]til: [c]cc colorpicker' },
     -- Trevj. this uh splits lists etc into lines? That's what it seems like at least
     { '<A-j>', require('trevj').format_at_cursor, desc = 'breakout list to lines' },
     -- Render-Markdown
     { 'gm', cmd 'RenderMarkdown toggle', desc = 'Render Markdown' },
     -- inc-rename
-    -- NOTE: provided function does not work.
-    -- { 'gR', function() return ':IncRename ' .. vim.fn.expand '<cword>' end, desc = 'iRename symbol', },
+    -- NOTE: provided function does not work: { 'gR', function() return ':IncRename ' .. vim.fn.expand '<cword>' end, desc = 'iRename symbol', },
     { 'gR', ':IncRename ', desc = 'Start IncRename' },
+    -- zen mode
+    {
+      '<leader>uz',
+      function()
+        require('zen-mode').toggle {
+          window = {
+            width = 0.65, -- width will be 85% of the editor width
+          },
+        }
+      end,
+      desc = '[u]til: [z]en mode',
+    },
+    --dropbar
+    { '<Leader>;', dropbar_api.pick, desc = 'Pick symbols in winbar' },
+    { '[;', dropbar_api.goto_context_start, desc = 'Go to start of current context' },
+    { '];', dropbar_api.select_next_context, desc = 'Select next context' },
   }
   return m
 end
@@ -274,7 +323,28 @@ end
 -- ╰──────────────╯
 function Map.hover()
   -- Setup keymaps
-  vim.keymap.set('n', 'K', require('hover').hover, { desc = 'hover.nvim' }) -- replace default hover
+  vim.o.mousemoveevent = true
+  return {
+    mode = 'n',
+    { 'K', require('hover').hover, desc = 'hover.nvim' },
+    { 'gK', require('hover').hover_select, desc = 'hover.nvim (select)' },
+    {
+      '<C-p>',
+      function()
+        require('hover').hover_switch 'previous'
+      end,
+      desc = 'hover.nvim (previous source)',
+    },
+    {
+      '<C-n>',
+      function()
+        require('hover').hover_switch 'next'
+      end,
+      desc = 'hover.nvim (previous source)',
+    },
+    { '<MouseMove>', require('hover').hover_mouse, desc = 'hover.nvim (mouse)' },
+  }
+  --[[ vim.keymap.set('n', 'K', require('hover').hover, { desc = 'hover.nvim' }) -- replace default hover
   vim.keymap.set('n', 'gK', require('hover').hover_select, { desc = 'hover.nvim (select)' }) -- new?
   vim.keymap.set('n', '<C-p>', function()
     require('hover').hover_switch 'previous'
@@ -282,10 +352,9 @@ function Map.hover()
   vim.keymap.set('n', '<C-n>', function()
     require('hover').hover_switch 'next'
   end, { desc = 'hover.nvim (next source)' })
-
-  -- Mouse support - eh why not
   vim.keymap.set('n', '<MouseMove>', require('hover').hover_mouse, { desc = 'hover.nvim (mouse)' })
-  vim.o.mousemoveevent = true
+]]
+  -- Mouse support - eh why not
 end
 --[[ function Map.obs()
   -- n key currently not occupied, so these are fine.

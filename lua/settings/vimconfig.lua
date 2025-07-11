@@ -1,4 +1,3 @@
-vim = vim
 local O = {
   first = function()
     --# Base config
@@ -44,7 +43,7 @@ local O = {
     -- Neither does screen
 
     --* mainly for/from nvim-UFO
-    vim.o.foldcolumn = '1' -- '0' is not bad
+    vim.o.foldcolumn = '0' -- '0' is not bad
     vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
     vim.o.foldlevelstart = 99
     vim.o.foldenable = true
@@ -64,7 +63,7 @@ local O = {
     vim.o.winwidth = 110
     vim.o.winheight = 20
     vim.o.equalalways = false
-    -- vim.o.winbar = "" -- contents of a w--indow bar for every window. I think it's off right now
+    -- vim.o.winbar = "" -- contents of a window bar for every window.
     --vim.o.winblend = 10 -- sets pseudo transparency
     vim.o.splitkeep = 'screen' -- 'topline' is the least messy on moves. but doesn't keep cursor pos
   end,

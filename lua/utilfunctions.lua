@@ -66,10 +66,18 @@ end
 -- ╭─────────────────────────────────────────────────────────╮
 --#│                plugin-specific functions                │
 -- ╰─────────────────────────────────────────────────────────╯
+function M.grapple_key_list()
+  -- index == grapid
+  return { 'q', 'w', 'e', 'r', 't', 'a', 's', 'd', 'f', 'g', 'z', 'x', 'c', 'v', 'b' }
+end
 function M.grappleKey(grapid)
-  local grapkeys = { 'q', 'w', 'e', 'r', 'a', 's', 'd', 'f' }
-  if type(grapid) == 'number' then
-    return grapkeys[grapid]
+  local grapkeys = { 'q', 'w', 'e', 'r', 't', 'a', 's', 'd', 'f', 'g', 'z', 'x', 'c', 'v', 'b' }
+  if type(grapid) == 'number' and grapkeys[grapid] then
+    if grapkeys[grapid] then
+      return grapkeys[grapid]
+    else
+      return '[?]'
+    end
   end
 end
 --# shorthand
@@ -104,23 +112,6 @@ function M.plugin(plugin_name)
     return nil
   end
 end
-
--- Experiment autocommand that I used check if LazyDone happened multiple times
--- it does not
-vim.api.nvim_create_autocmd('User', {
-  group = vim.api.nvim_create_augroup('maybeplug-lazy-check', { clear = true }),
-  pattern = 'LazyDone',
-  callback = function()
-    if not M.maybeplug.loadDone then
-      M.maybeplug.loadDone = true
-      vim.api.nvim_create_user_command('HowManyLazyDone', function()
-        vim.print(tostring(M._count_load) .. 'times LazyDone event triggered this sesh')
-      end, {})
-    else
-      M._count_load = M._count_load + 1
-    end
-  end,
-})
 
 M.luapad_global_table = function()
   local maintable = {

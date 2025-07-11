@@ -12,29 +12,40 @@ return {
     event = 'vimenter',
     dependencies = {
       { 'nvim-telescope/telescope-ui-select.nvim' },
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      {
+        'nvim-tree/nvim-web-devicons',
+        enabled = vim.g.have_nerd_font,
+        config = function()
+          require('nvim-web-devicons').set_icon_by_filetype {
+
+            ['.go'] = {
+
+              icon = '󰟓 ',
+              color = '#3ca7df',
+              --cterm_color = '65',
+              name = 'Go',
+            },
+          }
+        end,
+      },
       { 'nvim-lua/plenary.nvim' },
       { 'salorak/whaler.nvim' },
       { 'cbochs/grapple.nvim' },
       { 'jvgrootveld/telescope-zoxide' },
       {
         'benfowler/telescope-luasnip.nvim',
-        -- this line confuse me
         module = 'telescope._extensions.luasnip', -- if you wish to lazy-load
       },
       { '2kabhishek/nerdy.nvim' },
-      { -- Don't currently have a functional toolchain to build this
-        -- if get errors, see telescope-fzf-native readme for installation instructions
-        'nvim-telescope/telescope-fzf-native.nvim',
+      {
+        'nvim-telescope/telescope-fzf-native.nvim', -- Don't currently have working build system
         --build = 'make', -- only run on update/install
-        -- Might as well try it
         build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release',
         cond = false, --function() return vim.fn.executable 'make' == 1 end,
       },
-      { -- I just have not found a use for this
-        'desdic/agrolens.nvim',
+      { -- have not found a use for this
+        'dedic/agrolens.nvim',
         event = 'VeryLazy',
-        -- has to run like this
         keys = {
           {
             'gl',
@@ -47,14 +58,10 @@ return {
         cond = false,
       },
     },
-    config = function() -- [[ configure telescope ]] see `:help telescope` and `:help telescope.setup()`
+    config = function()
       local telescope = require 'telescope'
-      -- all the info you're looking for is in `:help telescope.setup()`
-      telescope.setup {
-        defaults = {
-          mappings = { i = { ['<c-enter>'] = 'to_fuzzy_refine' } },
-          layout_strategy = 'flex', -- horizontal | center | cursor | vertical | flex | bottom_pane
-        },
+      telescope.setup { -- layout_strategy = horizontal | center | cursor | vertical | flex | bottom_pane
+        defaults = { mappings = { i = { ['<c-enter>'] = 'to_fuzzy_refine' } }, layout_strategy = 'flex' },
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
@@ -79,9 +86,6 @@ return {
               { path = 'd:\\coding\\github\\go-ca-experiments', alias = 'go ca' },
             },
           },
-          --agrolens = { same_type = true, },
-          --* removing file_browser; superfluous
-          --file_browser = { -- theme = 'ivy', hijack_netrw = true, mappings = {['i'] = {my_custom_insert_mappings}, ['n'] = {my_custom_normal-mode_mappings}} },
         },
       }
 
@@ -96,6 +100,7 @@ return {
       pcall(telescope.load_extension, 'luasnip')
       --pcall(telescope.load_extension, 'agrolens')
 
+      --TODO: Move to mappings?
       local builtin = require 'telescope.builtin' -- See `:help telescope.builtin`
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
@@ -123,36 +128,29 @@ return {
       vim.keymap.set('n', '<leader>un', function()
         telescope.extensions.nerdy.nerdy { layout_strategy = 'vertical' }
       end, { desc = 'Nerd Font Icon Search' })
-
-      --vim.keymap.set('n', '<leader>sl', telescope.extensions.agrolens.agrolens, { desc = '[S]earch symbols agro[l]ens' })
       --unicode_picker. not a telescope extension directly but is a telescope command
       vim.keymap.set('n', '<leader>uu', '<cmd>Telescope unicode_picker<CR>', { desc = 'Unicode Picker' })
+      --vim.keymap.set('n', '<leader>sl', telescope.extensions.agrolens.agrolens, { desc = '[S]earch symbols agro[l]ens' })
 
-      --[[ local globaltags = function()
-        local t = require 'telescope'
-        local g = require 'grapple'
-        vim.print(t.extensions.grapple.tags())
-        t.extension.grapple.tags()
-      end ]]
+      -- Below mappings from: Kickstart.nvim
       vim.keymap.set('n', '<leader>/', function()
-        -- Slightly advanced example of overriding default behavior and theme
-        -- You can pass additional configuration to Telescope to change the theme, layout, etc.
-        builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-          winblend = 10,
-          previewer = false,
-        })
+        builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown { winblend = 10, previewer = false })
       end, { desc = '[/] Fuzzily search in current buffer' })
-      -- It's also possible to pass additional configuration options. See `:help telescope.builtin.live_grep()` for information about particular keys
+
       vim.keymap.set('n', '<leader>s/', function()
-        builtin.live_grep {
+        builtin.live_grep { -- see help for other config opts
           grep_open_files = true,
           prompt_title = 'Live Grep in Open Files',
         }
       end, { desc = '[S]earch [/] in Open Files' })
 
-      vim.keymap.set('n', '<leader>sn', function() -- Shortcut for searching your Neovim configuration files
+      vim.keymap.set('n', '<leader>sn', function() -- telescope search nvim config files
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
+
+      vim.keymap.set('n', '<leader>so', function() -- telescope search Obsidian notes
+        builtin.find_files { cwd = '~/OneDrive/Apps/remotely-save/DVAULT/' }
+      end, { desc = '[S]earch [O]bsidian notes' })
     end,
   },
 }

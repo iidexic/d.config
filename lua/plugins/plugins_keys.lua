@@ -37,7 +37,7 @@ M.plugins = {
     desc = 'Buffer Local Keymaps (which-key)',
     opts = {
       delay = 10, -- delay between pressing a key and opening which-key (milliseconds) (independent of vim.opt.timeoutlen)
-
+      sort = { 'order', 'local', 'group', 'alphanum', 'mod' },
       keys = { scroll_down = '<c-n>', scroll_up = '<c-p>' },
 
       icons = {

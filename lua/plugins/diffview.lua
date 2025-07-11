@@ -7,8 +7,13 @@ M.plugins = {
     opts = {
       keymaps = {
         disable_defaults = false,
+
         view = {
+          { 'n', 'q', '<cmd>DiffviewClose<CR>', { desc = 'Close Diffview' } },
+        },
+        panel = {
           { 'n', '<esc><esc>', '<cmd>DiffviewClose<CR>', { desc = 'Close Diffview' } },
+          { 'n', 'q', '<cmd>DiffviewClose<CR>', { desc = 'Close Diffview' } },
         },
       },
     },

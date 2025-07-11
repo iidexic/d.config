@@ -8,23 +8,35 @@ local M = {
   {
     'exit91/bufferline-editor.nvim',
     dependencies = 'akinsho/bufferline.nvim',
+    cond = false,
   },
 }
 function M.setup()
   local bufferline = require 'bufferline'
   --local grapple = require 'grapple'
   local opts = {
-    options = { --mode = 'buffers', --| 'tabs'
-      --style_preset = bufferline.style_preset.default, -- or style_preset.minimal
-      style = 'underline',
-      --
 
-      --grapple.options: buffer? integer , path? string ,name? string, index? integer ,cursor? integer[], scope? string, scope_id? string, command? fun(path: string)
-      -- name_formatter can be used to change the buffer's label in the bufferline.
-      -- some names can/will break the bufferline, use at your discretion knowing it has limitations
-      -- buf contains:
-      -- for buffer mode: base [name](str) of file, full [path](str), [bufnr](int),
-      -- for tab mode: numbers of the [buffers](tbl{int}), tab handle id [tabnr](int) - can convert to ordinal with `vim.api.nvim_tabpage_get_number(buf.tabnr)`
+    options = {
+      --mode = 'buffers', --| 'tabs'
+      --style_preset = bufferline.style_preset.default, -- or style_preset.default
+      --separator_style = 'slope',
+
+      indicator = {
+        icon = '󰇝', -- this should be omitted if indicator style is not 'icon'
+        style = 'icon', --| 'underline' | 'none',
+      },
+      groups = {
+        items = {
+          {
+            name = '󰛢',
+            priority = 1,
+            highlight = { sp = '#302f2f' },
+            matcher = function(buf)
+              return require('grapple').exists { buffer = buf.id }
+            end,
+          },
+        },
+      },
       name_formatter = function(buf)
         local grapple = require 'grapple'
         local fname = ''
@@ -40,14 +52,58 @@ function M.setup()
         --    tabnr ("handle" of the tab, convert to ordinal number: `vim.api.nvim_tabpage_get_number(buf.tabnr)`
       end,
 
-      max_name_length = 22,
-      --max_prefix_length = 15, -- prefix used when buffer is de-duplicated
-      --truncate_names = true, -- whether or not tab names should be truncated
+      max_name_length = 26,
       tab_size = 16,
       diagnostics = 'nvim_lsp', -- false | "coc", --false is default
-      -- diagnostics_update_in_insert = false, -- only applies to ----coc
-      --diagnostics_update_on_event = true, -- use nvim's diagnostic handler
-      --[[
+
+      offsets = {
+        {
+          filetype = 'neo-tree',
+          text = 'Neo-Tree',
+          text_align = 'center',
+          separator = true,
+        },
+        {
+          filetype = 'neo-tree',
+          text = 'Neo-Tree',
+          text_align = 'center',
+          separator = true,
+        },
+      },
+    },
+  }
+
+  --[[ groups = {
+    items = {
+      {
+        name = 'tagged',
+        priority = 1,
+        highlight = { underline = true, sp = 'gold' },
+        matcher = function(buf)
+          return buf.bufnr and require('grapple').exists { buffer = buf.bufnr }
+        end,
+      },
+    },
+    other = {
+      {
+        name = 'not_tagged',
+        priority = 2,
+        matcher = function(buf)
+          return not (buf.bufnr and require('grapple').exists { buffer = buf.bufnr })
+        end,
+      },
+    },
+  } ]]
+  bufferline.setup(opts)
+end
+
+return M
+
+-- diagnostics_update_in_insert = false, -- only applies to ----coc
+--diagnostics_update_on_event = true, -- use nvim's diagnostic handler
+--max_prefix_length = 15, -- prefix used when buffer is de-duplicated
+--truncate_names = true, -- whether or not tab names should be truncated
+--[[
             -- diagnostics indicator can be set to nil to keep the buffer name highlight but delete the highlighting
             diagnostics_indicator = function(count, level, diagnostics_dict, context)
                 return "("..count..")"
@@ -73,27 +129,6 @@ function M.setup()
                 end
             end,
     --]]
-      offsets = {
-        {
-          filetype = 'neo-tree',
-          text = 'Neo-Tree',
-          text_align = 'center',
-          separator = true,
-        },
-        {
-          filetype = 'neo-tree',
-          text = 'Neo-Tree',
-          text_align = 'center',
-          separator = true,
-        },
-      },
-    },
-  }
-  bufferline.setup(opts)
-end
-
-return M
-
 --[[
 -- ── Other Bufferline Options ────────────────────────────────────────
       --numbers->'none'|'ordinal'|'buffer_id'|'both'|function({ordinal,id,lower,raise}):string (i think none is default)

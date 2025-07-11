@@ -1,4 +1,5 @@
-return {
+local M = {}
+M.plugins = {
   { 'tpope/vim-sleuth' }, -- Detect tabstop/shiftwidth automatically
   { -- terminal
     'akinsho/toggleterm.nvim',
@@ -39,23 +40,6 @@ return {
     priority = 1001, -- Ensure that it runs first to minimize delay when opening file from terminal
   },
 
-  -- ╭─────────────────────────────────────────────────────────╮
-  -- │  Who wants only one or two different plugins that let   │
-  -- │        you search for icons? you need at least 3        │
-  -- ╰─────────────────────────────────────────────────────────╯
-  { -- icon-picker: telescope picker for Nerd Fonts icons
-    'ziontee113/icon-picker.nvim',
-    config = function()
-      local ip = require 'icon-picker'
-      ip.setup { disable_legacy_commands = true }
-
-      local opts = { noremap = true, silent = true }
-
-      vim.keymap.set('n', '<Leader>ui', '<cmd>IconPickerNormal<cr>', opts)
-      --vim.keymap.set('n', '<Leader><Leader>y', '<cmd>IconPickerYank<cr>', opts) --> Yank the selected icon into register
-      vim.keymap.set('i', '<C-i>', '<cmd>IconPickerInsert<cr>', opts) --insert mode
-    end,
-  },
   {
     '2kabhishek/nerdy.nvim',
     -- going to exclusively use telescope; disable snacks dep
@@ -106,3 +90,23 @@ return {
     opts = {},
   },
 }
+
+--TODO: When new-mappings implemented: change M.setup2 to M.setup
+M.setup2 = function()
+  function _G.ttmap()
+    local opts = { buffer = 0 }
+    vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
+    --vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts) I think this making lazygit shit work bad
+    vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts) --{ '<Esc><Esc>', '<C-\\><C-n>' }--wtf is this
+    vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
+    vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
+    vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
+    vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
+    -- works only when term not selected/not open?
+    --opts.desc = 'ToggleTermFlip' --vim.keymap.set('t', '<M-\\>', toggletermFlip, opts)
+  end
+  -- if you only want these mappings for toggle term use term://*toggleterm#* instead
+  vim.cmd 'autocmd! TermOpen term://* lua ttmap()'
+end
+
+return M

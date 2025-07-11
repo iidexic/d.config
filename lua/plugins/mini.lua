@@ -25,8 +25,22 @@ return {
       }
       require('mini.icons').setup() -- for mini.files specifically
       -- not disabling, I need this shit. alternatives?
-      require('mini.surround').setup {}
 
+      require('mini.surround').setup {
+        custom_surroundings = {
+          ['w'] = {
+            output = function()
+              local ft = vim.bo.filetype:lower()
+              if ft == 'lua' then
+                return { left = 'function() ', right = ' end' }
+              elseif ft == 'go' then
+                return { left = 'func (){', right = '}' }
+              end
+              return { left = '', right = '' }
+            end,
+          },
+        },
+      }
       local statusline = require 'mini.statusline' -- Simple and easy statusline.
       statusline.setup {
         content = {

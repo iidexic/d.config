@@ -60,7 +60,15 @@ Tagtable Format:
 { { cursor = {15, 2},--row/column
     path = "c:\\file\\path" } }
 --]]
-function M.gtagfn(n, gr)
+
+-- last/secondlast used to do quick swap between two buffers
+M.last = 0
+M.secondlast = 1
+---returns a function that can be run to get which-key description with filename
+---@param n integer # grapple_index
+---@return function # which-key mapping desc function
+function M.gtagfn(n)
+  local gr = require 'grapple'
   local a = gr.app()
   return function()
     if gr.exists { index = n } then
@@ -73,20 +81,67 @@ function M.gtagfn(n, gr)
     end
   end
 end
+
+--- create/run command to select grapple tag
+--- updates M.last/secondlast
+function M.grapSelect(n)
+  return function()
+    M.secondlast = M.last
+    M.last = n
+    local cmd_grapple = 'Grapple select index=' .. n
+    vim.cmd(cmd_grapple)
+  end
+end
+
+-- create/run command to select the previous grapple tag selected
+function M.grapLast()
+  return function()
+    local store = M.secondlast
+    M.secondlast = M.last
+    M.last = store
+    local cmd_grapple = 'Grapple select index=' .. store
+    vim.cmd(cmd_grapple)
+  end
+end
+
+function M.makeGrappleMappings()
+  local gk = require('utilfunctions').grapple_key_list()
+  local grap_map = {}
+  for i, key in ipairs(gk) do
+    local cmd_grapple = M.grapSelect(i) --'<cmd>Grapple select index=' .. i .. '<cr>'
+    table.insert(grap_map, i, {
+      ';' .. key, ---{lhs}
+      cmd_grapple, --{rhs}
+      desc = M.gtagfn(i),
+      --group = ';',
+      --hidden = not M.gcondfn(i),
+    })
+  end
+  table.insert(grap_map, { ';;', M.grapLast(), desc = '󰛢 last 󱈤 ' })
+  return grap_map
+end
 function M.setup()
-  local grap = require 'grapple'
+  -- removing
+  --[[ local grap = require 'grapple'
   local gmap = {
-    { ';q', '<cmd>Grapple select index=1<cr>', desc = M.gtagfn(1, grap) },
-    { ';w', '<cmd>Grapple select index=2<cr>', desc = M.gtagfn(2, grap) },
-    { ';e', '<cmd>Grapple select index=3<cr>', desc = M.gtagfn(3, grap) },
-    { ';r', '<cmd>Grapple select index=4<cr>', desc = M.gtagfn(4, grap) },
-    { ';a', '<cmd>Grapple select index=5<cr>', desc = M.gtagfn(5, grap) },
-    { ';s', '<cmd>Grapple select index=6<cr>', desc = M.gtagfn(6, grap) },
-    { ';d', '<cmd>Grapple select index=7<cr>', desc = M.gtagfn(7, grap) },
-    { ';f', '<cmd>Grapple select index=8<cr>', desc = M.gtagfn(8, grap) },
+    { ';q', '<cmd>Grapple select index=1<cr>', desc = M.gtagfn(1) },
+    { ';w', '<cmd>Grapple select index=2<cr>', desc = M.gtagfn(2) },
+    { ';e', '<cmd>Grapple select index=3<cr>', desc = M.gtagfn(3) },
+    { ';r', '<cmd>Grapple select index=4<cr>', desc = M.gtagfn(4) },
+    { ';t', '<cmd>Grapple select index=5<cr>', desc = M.gtagfn(5) },
+    { ';a', '<cmd>Grapple select index=7<cr>', desc = M.gtagfn(6) },
+    { ';s', '<cmd>Grapple select index=8<cr>', desc = M.gtagfn(7) },
+    { ';d', '<cmd>Grapple select index=9<cr>', desc = M.gtagfn(8) },
+    { ';f', '<cmd>Grapple select index=10<cr>', desc = M.gtagfn(9) },
+    { ';g', '<cmd>Grapple select index=11<cr>', desc = M.gtagfn(10) },
+    { ';z', '<cmd>Grapple select index=12<cr>', desc = M.gtagfn(11) },
+    { ';x', '<cmd>Grapple select index=13<cr>', desc = M.gtagfn(12) },
+    { ';c', '<cmd>Grapple select index=14<cr>', desc = M.gtagfn(13) },
+    { ';v', '<cmd>Grapple select index=15<cr>', desc = M.gtagfn(14) },
+    { ';b', '<cmd>Grapple select index=16<cr>', desc = M.gtagfn(15) },
     { ';;', grap.open_tags, desc = 'open tags' },
-  }
-  require('which-key').add(gmap)
+  } ]]
+  require('which-key').add(M.makeGrappleMappings()) -- gmap
 end
 M.g = Grap
 return M

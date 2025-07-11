@@ -15,16 +15,20 @@ M.plugins = {
           -- require('hover.providers.fold_preview')
           require 'hover.providers.diagnostic'
           -- require('hover.providers.man')
-          require 'hover.providers.dictionary'
+          --require 'hover.providers.dictionary'
           -- require('hover.providers.highlight')
         end,
         preview_opts = {
-          border = 'single',
+          border = 'none', -- same as vim hover, 'single', 'shadow', etc. still not great
+          --height, width
+          max_height = 20,
+          max_width = 120,
         },
         -- Whether the contents of a currently open hover window should be moved
         -- to a :h preview-window when pressing the hover keymap.
-        preview_window = false,
+        preview_window = true,
         title = true,
+
         mouse_providers = {
           'LSP',
         },
