@@ -108,9 +108,9 @@ return {
       local servers = { -- Enable the following language servers
         -- clangd = {},  pyright = {}, rust_analyzer = {}, -- `:help lspconfig-all` to see all preconfigured LSP
         --# Python ──────────────────────────────────────────────────────────
-        ruff = { init_options = {
+        --[[ ruff = { init_options = {
           configuration = 'C:/dev/.config/lsp/ruff.toml',
-        } },
+        } }, ]]
         basedpyright = {},
         pylsp = {},
         sourcery = {},
@@ -138,14 +138,13 @@ return {
       local ensure_installed = vim.tbl_keys(servers or {}) -- Ensure the servers and tools above are installed
       --- Trying to make sure ruff is set up?
       --- Is this necessary?
-      vim.lsp.config('ruff', { init_options = { settings = {} } })
 
       vim.list_extend(ensure_installed, { 'stylua' }) -- Used to format Lua code. add more LSPs here, check w mason
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
       require('mason-lspconfig').setup {
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
         automatic_installation = false,
-        automatic_enable = { exclude = { 'markdown_oxide', 'golangci_lint_ls' } },
+        automatic_enable = { exclude = { 'markdown_oxide', 'golangci_lint_ls', 'ruff' } },
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}

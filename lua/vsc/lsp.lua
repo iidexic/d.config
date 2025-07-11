@@ -108,10 +108,11 @@ return {
       local servers = { -- Enable the following language servers
         -- clangd = {},  pyright = {}, rust_analyzer = {}, -- `:help lspconfig-all` to see all preconfigured LSP
         --# Python ──────────────────────────────────────────────────────────
-        ruff = { init_options = {
+        --[[ ruff = { init_options = {
           configuration = 'C:/dev/.config/lsp/ruff.toml',
-        } },
-        basedpyright = {},
+        } }, ]]
+        --basedpyright = {},
+        black = {},
         pylsp = {},
         sourcery = {},
         --# Golang ──────────────────────────────────────────────────────────

@@ -22,6 +22,10 @@ return {
     dependencies = { 'MunifTanjim/nui.nvim' },
   },
   {
+    'dccsillag/magma-nvim',
+    opts = {},
+  },
+  {
     'alexpasmantier/pymple.nvim',
     dependencies = {
       'nvim-lua/plenary.nvim',

@@ -144,7 +144,10 @@ function Map.other_plugins()
     { ld 'up', precog.toggle, desc = '[U]til: [p]recognition toggle' },
     -- Trevj. breaks a line out to multiple lines
     { '<A-j>', require('trevj').format_at_cursor, desc = 'breakout list to lines' },
+    { 'gm', '<cmd>MagmaReevaluateCell<CR>', desc = 'Magma:(re)Evaluate Cell' },
+    { 'gM' },
   }
+
   return m
 end
 function Map.leap()

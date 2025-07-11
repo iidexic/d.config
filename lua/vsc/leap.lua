@@ -41,4 +41,4 @@ M.plugins = {
   },
 }
 M.setup = function() end
-return M
+return M.plugins

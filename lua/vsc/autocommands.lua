@@ -147,6 +147,11 @@ local function autocmd()
     end,
   })
 
+  -- ── [6] Python Project: Initialize Magma  ──────────────────────────
+  -- How to do this?
+  -- 1. Run on BufEnter/BufClose and check if other python files open.
+  --    * don't run on BufLeave or whatever (switching windows) as that will happen too much
+  -- TODO: Write Autocommand to initialize Magma (RUN PYTHON)
   -- show signature help on exit insert
   --[[ auto({ 'InsertLeave' }, {
     group = ag 'insert-leave-sighelp',
