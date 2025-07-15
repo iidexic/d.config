@@ -37,7 +37,7 @@ return {
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' }) -- usually need cursor on lsp message
           map('<leader>csb', require('telescope.builtin').lsp_document_symbols, '[S]ymbols in [b]uffer', { 'n', 'x' }) -- Fuzzy find all the symbols in your current document.
           map('<leader>csw', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[S]ymbols in [W]orkspace') -- Fuzzy find all the symbols in your current workspace.
-          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame') -- Rename the variable under your cursor
+          map('<leader>r', vim.lsp.buf.rename, '[R]ename') -- Rename the variable under your cursor
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
           --- Removed client_supports_method, intended to bridge a gap between nvim 0.10 and 0.11; see notes.fake.lua, lines 515 to 527 for original function
@@ -132,7 +132,7 @@ return {
         --# Zig ─────────────────────────────────────────────────────────────
         --zls = {},
         --# Other ───────────────────────────────────────────────────────────
-        --markdown_oxide = {}
+        marksman = {},
       }
 
       local ensure_installed = vim.tbl_keys(servers or {}) -- Ensure the servers and tools above are installed

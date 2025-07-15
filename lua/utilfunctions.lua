@@ -8,7 +8,8 @@ function M.tlen(t)
   return count
 end
 
-function M.rtprint(t)
+-- remove. vim.print exists
+--[[ function M.rtprint(t)
   if t[1] then
     for i, v in ipairs(t) do
       print(i, '->', v)
@@ -28,14 +29,15 @@ function M.rtprint(t)
       end
     end
   end
-end
+end ]]
 
----function that wraps a different function in a function thingy
----anyway, supports up to 5 args, if you need more then stop writing functions like that
+--- function that wraps a different function in a function thingy
+--- anyway, supports up to 5 args, if you need more then stop writing functions like that
+--- not used, at all
 ---@param fn function
 ---@param args any[]
 function M.wrapf(fn, args)
-  -- I'm gonna be honest, IDK how to do this better without making a nested wrap via recursion. maybe I'll try that too
+  -- not sure how to do this better without nested wrap via recursion. maybe I'll try that too
   if args and #args > 0 then
     local wtable = {
       function()
@@ -61,11 +63,21 @@ function M.wrapf(fn, args)
   end
 end
 
---#plugin-specific functions
+-- ╭─────────────────────────────────────────────────────────╮
+--#│                plugin-specific functions                │
+-- ╰─────────────────────────────────────────────────────────╯
+function M.grapple_key_list()
+  -- index == grapid
+  return { 'q', 'w', 'e', 'r', 't', 'a', 's', 'd', 'f', 'g', 'z', 'x', 'c', 'v', 'b' }
+end
 function M.grappleKey(grapid)
-  local grapkeys = { 'q', 'w', 'e', 'r', 'a', 's', 'd', 'f' }
-  if type(grapid) == 'number' then
-    return grapkeys[grapid]
+  local grapkeys = { 'q', 'w', 'e', 'r', 't', 'a', 's', 'd', 'f', 'g', 'z', 'x', 'c', 'v', 'b' }
+  if type(grapid) == 'number' and grapkeys[grapid] then
+    if grapkeys[grapid] then
+      return grapkeys[grapid]
+    else
+      return '[?]'
+    end
   end
 end
 --# shorthand
@@ -101,22 +113,74 @@ function M.plugin(plugin_name)
   end
 end
 
--- uh this just makes LazyDone loading into a latched bool in M.maybeplug
--- it also makes a command to see how many times (-1) LazyDone triggers; I would guess this happens only once
--- This will probably also be removed
-vim.api.nvim_create_autocmd('User', {
-  group = vim.api.nvim_create_augroup('maybeplug-lazy-check', { clear = true }),
-  pattern = 'LazyDone',
-  callback = function()
-    if not M.maybeplug.loadDone then
-      M.maybeplug.loadDone = true
-      vim.api.nvim_create_user_command('HowManyLazyDone', function()
-        vim.print(tostring(M._count_load) .. 'times LazyDone event triggered this sesh')
-      end, {})
-    else
-      M._count_load = M._count_load + 1
+M.luapad_global_table = function()
+  local maintable = {
+    t = { --#FOLD---------------
+      dict = { one = 1, two = 2, three = '3', five = 'nan', four = nil },
+      list = { 1, 'two', 3, 16, 'orange :)' },
+      lnums = { 1513, 205, 9647, 135.0, 249.58, -369.4, 1035.135 },
+      mixed = {
+        'a',
+        6,
+        type = 'babinga',
+        foo = function(txt)
+          return ('foogy' .. txt) or 'foogy'
+        end,
+        bar = 'bar',
+      },
+      nest = {
+        15,
+        lvl = 1,
+        cat = 'nested',
+        val = 0,
+        { 3, lvl = 2, val = 100, 'first one', { 'yes', ['a-b'] = false, cat = 'thingy', lvl = 3 } },
+        cfg = { -1, 120, val = 4.169, lvl = 2 },
+        { cat = { 'list', 'vals', lvl = 3 } },
+      },
+      nested = {
+        tb1 = { win = true, lose = 'that sucks', 14, pct = 0.465479 },
+        tb2 = { 4, 135, 93.845, src = 'nvim-luapad' },
+        { 200, 201, 202, 203, 204 },
+        'stringy',
+        { 'table', 'of', 'strings' },
+        tbl_of_strings = { stringOne = 'one', stringTwo = '2' },
+      },
+    },
+    -- I think this was just a nonsense function to check shit
+    categorizee = function(tbl, d, l, sum) --#FOLD----------------
+      for k, v in pairs(tbl) do
+        if type(k) == 'string' then
+          d[k] = v
+          if type(v) == 'number' then
+          elseif type(v) == 'string' then
+            d.str = d.str .. v
+          end
+        elseif type(k) == 'number' then
+          table.insert(l, v)
+          if sum[k] then
+            sum[k] = sum[k] + v
+          else
+            sum[k] = v
+          end
+        end
+      end
+    end,
+    fnunctoin = function(n1, n2, tbl)
+      table.insert(tbl, { n1, n2 })
+      return (n1 * n2)
+    end,
+    -- TODO: add Plugin requires for luapad
+  }
+  maintable.plugs = function()
+    require ''
+    local plugins_add = { 'plenary', 'lazy', 'grapple', 'telescope', 'ufo', 'bufferline', 'mason', 'luasnip', 'scratch', 'go', 'cmp' }
+    local plugreqs = {}
+    for _, plug in ipairs(plugins_add) do
+      plugreqs[plug] = require(plug)
     end
-  end,
-})
+    return plugreqs
+  end
+  return maintable
+end
 
 return M

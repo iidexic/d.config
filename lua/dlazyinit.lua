@@ -1,14 +1,20 @@
 local D = {
+  --NOTE: To make Lazy Reload work properly:
+  -- switch to a "module" setup:
+  -- change all files in plugin folder to exclusively return list of plugins
+  -- then pass lazy setup the directory instead of the completed list of plugins
   LazyPluginSetup = function()
     local plugload = require 'pluginloader'
     local files = {}
     --# Main Plugins
-    files = {
+    local files = {
       'plugins.aerial',
       'plugins.bufferline',
+      'plugins.diffview',
+      'plugins.dropbar',
       'plugins.filemanager',
       'plugins.grapple',
-      --'plugins.hover',
+      'plugins.hover',
       'plugins.lang-support',
       --'plugins.layout',
       'plugins.lsp_lspsaga',
@@ -40,64 +46,16 @@ local D = {
       --'trials.trailblazer',
       'trials.nvim_dev',
       'trials.neoclip',
-      --'trials.glance',
-      --'trials.helpview',
-      --'trials.iron',
-      --'trials.nvim_dev',
-      --'trials.plugin_bundle',
-      --'trials.prettyhover',
-      --'trials.supermaven_ai',
-      --'trials.spectre'
+      'trials.grug-far',
+
+      --'trials.trailblazer', 'trials.origami', 'trials.glance', 'trials.hawtkeys',
+      --'trials.helpview', 'trials.iron', 'trials.nvim_dev', 'trials.plugin_bundle',
+      --'trials.prettyhover', 'trials.supermaven_ai', 'trials.spectre'
       --'trials.tiny_inline_diagnostic',
     }
-    --[[
--- ╭─────────────────────────────────────────────────────────╮
--- │                     Trials Results                      │
--- ╰────────────────────────────────────────────────────────╯
--- 0. staying:
---    split, trailblazer, double-check what hawtkeys is
---    startup.nvim, neo-clip, precognition
--- 1. To main plugins:
---    'trials.aerial',
---    'trials.ufo',
---    'trials.houdini',
---    'trials.leap_plus',
---    'trials.persist',
---    'LspSaga' (in nvim_dev.lua)
--- 2. Grouped up and put in a single file
---    hot, hawtkeys, snacks
--- 3. Probably deleted
---    - nest
---    - peepsight (check if function is covered)
---    - racer-nvim (do one last check of the github)
---    - scretch
--- 4. Other:
---    - buffon: clone repo, make dev plug
---]]
-    --# Check if dev plugs are present
 
-    ---returns table of folder contents in the format {pathname, pathtype}
-    ---@param path string # directory path
-    ---@param check? table # {pathname, pathtype} to check for (for 2nd return val)
-    ---@return table, boolean? # pathlist, if path `check` is in pathlist
-    --@return boolean # path contains directory named lua
-    local dir_contents = function(path, check)
-      local ls = vim.fs.dir(path)
-      local luadir = false
-      local dirfiles = {}
-      local fn, typ
-      repeat
-        fn, typ = ls()
-        if fn then
-          table.insert(dirfiles, { fn, typ })
-          if check and { fn, typ } == check then
-            luadir = true
-          end
-        end
-      until not fn
-      return dirfiles, luadir
-    end
-
+    local devplugs = require 'plugins._devplugins'
+    plugload.loadmodule(devplugs)
     --leap
     local trialLeap = require 'trials.leap_plus'(true, true, true, false)
     plugload.loadmodule(trialLeap)
@@ -105,6 +63,7 @@ local D = {
 
     --# Themes
     plugload.add(require('theme.themes').themelist)
+    plugload.add(require 'theme.more-themes')
     ------------------------------------------------------------------------------
     --# Lazy definitions
     local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'

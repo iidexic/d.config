@@ -31,7 +31,7 @@ return {
       'nvim-lua/plenary.nvim',
       'MunifTanjim/nui.nvim',
       -- optional (nicer ui)
-      --'stevearc/dressing.nvim', -- added to vis on cond=false
+      'stevearc/dressing.nvim', -- currently enabled
       'nvim-tree/nvim-web-devicons',
     },
     build = ':PympleBuild',
@@ -78,7 +78,7 @@ return {
   },
   { -- visualize interface+struct+method implementation, and //go: comments. Very customizable
     'Yu-Leo/gosigns.nvim',
-    enabled = true,
+    cond = true,
     ft = 'go',
     cmd = { 'GosignsEnable', 'GosignsDisable', 'GosignsToggle' },
     opts = {}, -- for default options. Refer to the configuration section for custom setup.

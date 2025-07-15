@@ -1,7 +1,35 @@
 --# Helpers (no want write long)
 local auto = vim.api.nvim_create_autocmd
-local ag = function(name)
+local agnames = {}
+local make_augroup = function(name)
+  table.insert(agnames, name)
   return vim.api.nvim_create_augroup(name, { clear = true })
+end
+
+-- Control which hover is being used
+-- vim basic, lspsaga, or hover.nvim (as of now)
+local hovr = { num = 2, selected = 'saga' }
+hovr.next = function()
+  hovr.sethover(hovr.num + 1)
+end
+hovr.prev = function()
+  hovr.sethover(hovr.num - 1)
+end
+function hovr.setnum(i)
+  hovr.num = ((i - 1) % 3) + 1 --  +1 cuz lua index starts at 1
+end
+function hovr.update_selection()
+  local methodmap = { 'vim', 'saga', 'hover.nvim' }
+  hovr.selected = methodmap[hovr.num]
+end
+
+local hoverselect = function()
+  if hovr.selected then
+    if hovr.selected == 'vim' then
+    elseif hovr.selected == 'saga' then
+    elseif hovr.selected == 'hover.nvim' then
+    end
+  end
 end
 
 local M = {
@@ -14,7 +42,7 @@ local function persistAuto() -- why is this separate
   vim.api.nvim_create_autocmd('User', {
     pattern = 'PersistenceSavePre',
     desc = 'Avoid saving open neotree window',
-    group = vim.api.nvim_create_augroup('persistence-save', { clear = true }),
+    group = make_augroup 'persistence-save',
     callback = function()
       require('neo-tree.command').execute { action = 'close' }
     end,
@@ -25,41 +53,39 @@ end
 local function autocmd()
   -- ── Autocommand-related mapping ───────────────────
   -- toggle hover
-  vim.keymap.set('n', 'gh', function()
+  --( NOT NEEDED: Use K (<S-k>))
+  --[[ vim.keymap.set('n', 'gh', function()
     M.opts.hover = not M.opts.hover
-  end, { desc = 'toggle hover popup' })
+  end, { desc = 'toggle hover popup' }) ]]
   --  ── [0] quick startup auto ──────────────────────────────────────────────
   auto('VimEnter', {
-    desc = 'run persistence, would prefer both persistence and whaler',
-    group = ag 'startup-greet',
+    desc = 'run whaler, would prefer both persistence and whaler',
+    group = make_augroup 'startup-greet',
     callback = function()
       --require('persistence').select()
       require('telescope').extensions.whaler.whaler()
     end,
   })
-
   --  ── [1] highlight on yank ───────────────────────────────────────────────
   auto('TextYankPost', { -- Try it with `yap` in normal mode
     desc = 'Highlight when yanking (copying) text', --See`:help vim.highlight.on_yank()`
-    group = ag 'highlight-yank',
+    group = make_augroup 'highlight-yank',
     callback = function()
       vim.highlight.on_yank()
     end,
   })
-  --  ── [2] resize splits on window resize ───────────────────────────────
-  -- (no idea how this works)
+  --  ── [2] resize splits on window resize ─────────────────────────────── TODO: check if this is the source of resizing left-only
   auto({ 'VimResized' }, {
-    group = ag 'resize-splits',
+    group = make_augroup 'resize-splits',
     callback = function()
       local current_tab = vim.fn.tabpagenr()
       vim.cmd 'tabdo wincmd ='
       vim.cmd('tabnext ' .. current_tab)
     end,
   })
-
   -- ── [3] delete tmp shada on shada lockup ────────────────────────────────
   auto({ 'VimLeave' }, {
-    group = ag 'on-dirty-exit',
+    group = make_augroup 'on-dirty-exit',
     callback = function()
       if vim.v.dying and string.sub(vim.v.errmsg, 1, 4) == 'E138' then
         local shdir = vim.fn.stdpath 'data' .. '\\shada'
@@ -70,51 +96,51 @@ local function autocmd()
       end
     end,
   })
-
-  -- ── [4] make lsp autocommands on attach ─────────────────────────────────
-  auto('LspAttach', {
-    group = ag 'lsp-attached-setauto',
-    callback = function() --──────────────── LSP ACTIVE ENTERED ───
-      -- ───────────────────────── [4a] idle hover popup ───────────────────────
-      auto('CursorHold', {
-        group = ag 'lsp-hover-custom',
-        callback = function()
-          if M.opts.hover then -- best way to set this up?
-            vim.lsp.buf.hover {
-              max_height = 40,
-              max_width = 160,
-              --offset_x = 4, -- offset defaults probably 0
-              --offset_y = 2,
-              --zindex = 50, -- default 50, is forward/back. keep here
-              anchor_bias = 'auto', --auto|above|below
-              relative = 'cursor', --cursor|mouse|editor
-              focus = false,
-              silent = true,
-              --not the biggest fan of border but damn does it make shit easier
-              -- "none", "single"(line), "double", "rounded", "solid"(block), "shadow"
-              border = 'none', -- borders are being shitty rn
-
-              --close_events = {''} --idk defaults,
-            }
-          end
-        end,
-      })
-    end,
-  })
-
-  auto('LspDetach', {
-    group = ag 'lsp-detached-setauto',
-    callback = function()
-      auto('CursorHold', {
-        group = ag 'lsp-hover-custom', -- should clear hover auto
-        callback = function() end,
-        -- no need to disable hover key really
-      })
-    end,
-  })
+  -- ── [4] make lsp autocommands on attach ───────────────────────────────── NOTE: time to hang it up; for now at least
+  -- auto('LspAttach', {
+  --   group = ag 'lsp-attached-setauto',
+  --   callback = function() --──────────────── LSP ACTIVE ENTERED ───
+  --     -- ───────────────────────── [4a] idle hover popup ───────────────────────
+  --     auto('CursorHold', {
+  --       group = ag 'lsp-hover-custom',
+  --       callback = function()
+  --         if M.opts.hover then -- best way to set this up?
+  --           require('hover').hover()
+  --           --[[ vim.lsp.buf.hover {
+  --             max_height = 40,
+  --             max_width = 160,
+  --             --offset_x = 4, -- offset defaults probably 0
+  --             --offset_y = 2,
+  --             --zindex = 50, -- default 50, is forward/back. keep here
+  --             anchor_bias = 'auto', --auto|above|below
+  --             relative = 'cursor', --cursor|mouse|editor
+  --             focus = false,
+  --             silent = true,
+  --             --not the biggest fan of border but damn does it make shit easier
+  --             -- "none", "single"(line), "double", "rounded", "solid"(block), "shadow"
+  --             border = 'none', -- shadow would be best; it has issues
+  --
+  --             --close_events = {''} --idk defaults,
+  --           } ]]
+  --         end
+  --       end,
+  --     })
+  --   end,
+  -- })
+  -- ── [5] clear lsp autocommands on detach ────────────────────────────────
+  -- auto('LspDetach', {
+  --   group = ag 'lsp-detached-setauto',
+  --   callback = function()
+  --     auto('CursorHold', {
+  --       group = ag 'lsp-hover-custom', -- should clear hover auto
+  --       callback = function() end,
+  --       -- no need to disable hover key really
+  --     })
+  --   end,
+  -- })
   -- ── [6] Adds close with q to specified windows ──────────────────────────
   auto('FileType', {
-    group = ag 'close_with_q',
+    group = make_augroup 'close_with_q',
     pattern = {
       'PlenaryTestPopup',
       'checkhealth',
@@ -131,9 +157,12 @@ local function autocmd()
       'spectre_panel',
       'startuptime',
       'tsplayground',
+      '*\\*_luapad.lua',
+      'diffview',
     },
     callback = function(event)
       vim.bo[event.buf].buflisted = false
+      -- TODO: learn how vim.schedule works!
       vim.schedule(function() -- runs this until it gets a true?
         vim.keymap.set('n', 'q', function()
           vim.cmd 'close'
@@ -147,13 +176,29 @@ local function autocmd()
     end,
   })
 
-  -- show signature help on exit insert
-  --[[ auto({ 'InsertLeave' }, {
-    group = ag 'insert-leave-sighelp',
+  -- ── [7] Improve Colorscheme when loaded ─────────────────────────────────
+  vim.api.nvim_create_autocmd('Colorscheme', {
+    group = make_augroup 'theme-change-apply',
     callback = function()
-      vim.lsp.buf.signature_help { max_width = 86, max_height = 30 }
+      -- when a theme has black bg winbar, the table is always the same
+      local badWinBar = { bg = 460813, bold = true, cterm = { bold = true }, fg = 10198692 }
+      local currentWinBar = vim.api.nvim_get_hl(0, { name = 'WinBar' })
+      local normal = vim.api.nvim_get_hl(0, { name = 'Normal' })
+      local normNC = vim.api.nvim_get_hl(0, { name = 'NormalNC' })
+      if currentWinBar.bg == badWinBar.bg and currentWinBar.fg == badWinBar.fg then
+        vim.api.nvim_set_hl(0, 'WinBar', { bg = 'bg', fg = 'fg' })
+        local normal = vim.api.nvim_get_hl(0, { name = 'Normal' })
+        vim.cmd "highlight WinBar guibg='bg' guifg='fg' gui='italic'"
+        vim.cmd "highlight WinBarNC guibg='bg'"
+      end
+      --* taking the opportunity to spruce things up -> badWinBar
+      --TODO: implement unfocused buffer color dim/fade
+      --[[ if normal==normNC then
+         
+      end ]]
     end,
-  }) ]]
+  })
+
   --TODO: add q to quit for scratch bufs
   --TODO: Recolor minibar when recording
   --- pattern = filename
@@ -161,80 +206,20 @@ local function autocmd()
   -- auto ('RecordingEnter')
 
   -- ─────┤ Template: changes commands on switching to diff filtype ├─────
-  vim.api.nvim_create_autocmd({ 'FileType', 'BufEnter' }, {
-    group = vim.api.nvim_create_augroup('filetype_change', { clear = true }),
-    pattern = {},
+  -- Dirty method to pull filetype. whatever
+  vim.api.nvim_create_autocmd({ 'BufEnter' }, { -- , 'FileType'
+    group = make_augroup 'filetype_change',
+    --pattern = { '*.md' },
     callback = function(event)
-      local ftyp = vim.bo[event.buf].filetype
-      --NOTE: COME BACK HERE
-      --TODO: FINISH THIS
-      --WARNING: I dont remember what I was trying to do
-    end,
-  })
-
-  -- ─[ AstroNvim Fold Persistence Autocommands ]────────────────────────
-  -- astronvim autocommands (old I think) - [ https://github.com/AstroNvim/AstroNvim/blob/271c9c3f71c2e315cb16c31276dec81ddca6a5a6/lua/astronvim/autocmds.lua ]
-  --* Using UFO is good with me. Visit the link if want to try with autocommands
-
-  -- ─[ Dirty Debug Auto-Log ]───────────────────────────────────────────
-  --[[# Quick Log/Debug: throws out a bunch of info on an event
-  -- This setup was for debugging error on exit, prints and also writes to exitlog.txt
-    vim.api.nvim_create_autocmd({ 'VimLeave' }, {
-    group = vim.api.nvim_create_augroup('on-dirty-exit', { clear = true }),
-    callback = function()
-      local v = vim.v
-      if v.dying then
-        local writel = { 'last_except:', v.exception }
-        table.insert(writel, 'last_warn:')
-        table.insert(writel, vim.v.warningmsg)
-        table.insert(writel, 'throwpoint:')
-        table.insert(writel, v.throwpoint)
-        table.insert(writel, 'trace:')
-        unpackadd(writel, v.stacktrace)
-        table.insert(writel, 'last_error:' .. v.errmsg)
-        table.insert(writel, 'errors:')
-        unpackadd(writel, v.errors)
-        table.insert(writel, 'shada_old:')
-        unpackadd(writel, v.oldfiles)
-        --print(unpack(vim.v.stacktrace))
-        --print(unpack(vim.v.errors))
-        --print(unpack(vim.v.oldfiles))
-        --- Single-string details
-
-        vim.fn.writefile(writel, vim.fn.stdpath("config") .. "\\exitlog.txt", 'a')
+      local pos = event.match:find '.md'
+      if pos and pos == event.match:len() - 2 then
+        vim.o.conceallevel = 1
+        --do the thing obsidian plugin needs or whatever
+        --vim.o.
+      else
       end
     end,
-  }) --]]
-
-  -- ─[ LazyVim Autocommands ]───────────────────────────────────────────
-  --[[
-  -- Check if we need to reload the file when it changed
-      vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
-        group = augroup("checktime"),
-        callback = function()
-          if vim.o.buftype ~= "nofile" then
-            vim.cmd("checktime")
-          end
-        end,
-      })
-  -- Getting Lazy Startup and pushing to startuip dash
-      vim.api.nvim_create_autocmd("User", {
-        once = true,
-        pattern = "LazyVimStarted",
-        callback = function()
-          local stats = require("lazy").stats()
-          local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
-    -- replace all this shit til the end of funct with own stuff
-          dashboard.section.footer.val = "⚡ Neovim loaded "
-            .. stats.loaded
-            .. "/"
-            .. stats.count
-            .. " plugins in "
-            .. ms
-            .. "ms"
-          pcall(vim.cmd.AlphaRedraw)
-        end,
---]]
+  })
 end
 
 --- Change options for specific autocommands
@@ -247,6 +232,24 @@ end
 function M.post_autocmd()
   persistAuto()
   autocmd()
+end
+
+-- Delete/Clear all personally-created autogroups and autocmmands
+function M.wipe_autos()
+  local autocommands = vim.api.nvim_get_autocmds {}
+  local clearable = {}
+
+  for i, ac in ipairs(autocommands) do
+    for _, gname in ipairs(agnames) do
+      if ac.group_name == gname then
+        table.insert(clearable, ac.group_name)
+      end
+    end
+  end
+
+  for _, grp in ipairs(clearable) do
+    vim.api.nvim_del_augroup_by_name(grp)
+  end
 end
 
 return M

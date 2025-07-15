@@ -27,7 +27,9 @@ function Cfg.postlazy(opts)
     vim.cmd.colorscheme(Cfg.themeName)
   end
 
+  -- TODO: update to new mappings file
   Cfg.map.assign()
+  require('settings.vim_util').map_vim_utils()
   Cfg.map.plugins()
   require('settings.autocommands').post_autocmd()
 end
