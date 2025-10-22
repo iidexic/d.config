@@ -63,7 +63,7 @@ local function autocmd()
     group = make_augroup 'startup-greet',
     callback = function()
       --require('persistence').select()
-      require('telescope').extensions.whaler.whaler()
+      require('telescope').extensions.zoxide.list()
     end,
   })
   --  ── [1] highlight on yank ───────────────────────────────────────────────

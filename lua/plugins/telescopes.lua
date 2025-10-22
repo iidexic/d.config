@@ -64,10 +64,6 @@ return {
         defaults = { mappings = { i = { ['<c-enter>'] = 'to_fuzzy_refine' } }, layout_strategy = 'flex' },
         -- pickers = {}
         extensions = {
-          ['ui-select'] = {
-            require('telescope.themes').get_dropdown {},
-            kind = { require 'icon-picker' },
-          },
           whaler = {
             auto_file_explorer = false,
             directories = {

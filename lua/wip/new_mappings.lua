@@ -77,9 +77,6 @@ function Map.all_plugins()
       },
       { '<leader>pd', require('persistence').stop, desc = 'Disable session save' },
     },
-    icon_picker = {
-      { '<Leader>ui', '<cmd>IconPickerNormal<cr>' },
-    },
     precognition = { '<leader>up', require('precognition').toggle, desc = '[U]til: [p]recognition toggle' },
     aerial = { '<leader>ua', require('aerial').open, desc = '[U]til: [a]erial' },
     ccc = { '<leader>uc', '<cmd>CccPicker<CR>', desc = '[U]til: [c]cc colorpicker' },

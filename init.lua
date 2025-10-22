@@ -6,6 +6,7 @@ local configure = require 'settings.apply'
 configure.theme 'evergarden'
 configure.prelazy()
 
+require('neovide_config').neovide_config()
 --# ── 2. Lazy init + all plugin setup  ──────────────────────────────
 
 require('dlazyinit').LazyPluginSetup()
