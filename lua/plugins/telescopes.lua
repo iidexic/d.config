@@ -36,7 +36,6 @@ return {
         'benfowler/telescope-luasnip.nvim',
         module = 'telescope._extensions.luasnip', -- if you wish to lazy-load
       },
-      { '2kabhishek/nerdy.nvim' },
       {
         'nvim-telescope/telescope-fzf-native.nvim', -- Don't currently have working build system
         --build = 'make', -- only run on update/install
@@ -96,7 +95,6 @@ return {
       pcall(telescope.load_extension, 'whaler')
       pcall(telescope.load_extension, 'zoxide')
       pcall(telescope.load_extension, 'telescope-helpgrep')
-      pcall(telescope.load_extension, 'nerdy')
       pcall(telescope.load_extension, 'luasnip')
       --pcall(telescope.load_extension, 'agrolens')
 
@@ -110,9 +108,9 @@ return {
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
-      vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
-      vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader>sT', builtin.tags, { desc = '[S]earch [T]ags' })
+      vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = 'last [S]earch [R]esume' })
+      vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files' })
+      vim.keymap.set('n', '<leader>sT', builtin.tags, { desc = '[S]earch [T]ags' }) -- have never used
       vim.keymap.set('n', '<leader>sq', builtin.quickfix, { desc = '[S]earch [Q]uickfix' })
       vim.keymap.set('n', '<leader>sD', builtin.lsp_definitions, { desc = '[S]earch lsp [D]efinitions' })
       vim.keymap.set('n', '<leader>st', builtin.treesitter, { desc = '[S]earch [t]reesitter' })
@@ -125,9 +123,6 @@ return {
       vim.keymap.set('n', '<leader>sb', builtin.git_bcommits, { desc = '[S]earch [B]uffer Commit History' })
       vim.keymap.set('n', '<leader>sR', builtin.reloader, { desc = '[S]earch [R]eloader' })
       vim.keymap.set('n', 'gI', builtin.lsp_implementations, { desc = 'LSP:[G]oto [I]mplementation(s)' })
-      vim.keymap.set('n', '<leader>un', function()
-        telescope.extensions.nerdy.nerdy { layout_strategy = 'vertical' }
-      end, { desc = 'Nerd Font Icon Search' })
       --unicode_picker. not a telescope extension directly but is a telescope command
       vim.keymap.set('n', '<leader>uu', '<cmd>Telescope unicode_picker<CR>', { desc = 'Unicode Picker' })
       --vim.keymap.set('n', '<leader>sl', telescope.extensions.agrolens.agrolens, { desc = '[S]earch symbols agro[l]ens' })

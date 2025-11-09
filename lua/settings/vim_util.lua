@@ -16,6 +16,24 @@ local function reload_and_run(packageName, functionName)
     pkg[functionName]()
   end
 end
+
+local function renameAssist()
+  local bufsPee = vim.api.nvim_list_bufs()
+  local bufsWithChanges = {}
+
+  local ltext = ''
+  for i, b in ipairs(bufsPee) do
+    if vim.api.nvim_buf_is_loaded(b) and vim.api.nvim_get_option_value('modified', { buf = b }) then
+      bufsWithChanges[vim.fn.bufname(b)] = b
+    end
+  end
+
+  vim.lsp.buf.rename()
+  -- LSP events:
+  -- textDocument/prepareRename
+  -- textDocument/rename
+end
+
 local function lazy_kill() end
 local M = {}
 

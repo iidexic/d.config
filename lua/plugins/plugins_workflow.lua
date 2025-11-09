@@ -33,6 +33,7 @@ Wf.plugins = {
   {
     '2kabhishek/markit.nvim',
     config = true, --load_config 'tools.marks', -- never seen this before. setting to true for now
+    cond = false, -- Failing
     event = { 'BufReadPre', 'BufNewFile' },
   },
   --Leap and extensions

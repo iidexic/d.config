@@ -1,1 +1,5 @@
 extras/
+exitlog.txt
+lazy-lock.json
+macros.json
+vim_util_bkup.lua

@@ -21,6 +21,11 @@ M.plugins = {
     },
     opts = {
       filesystem = {
+        hide_hidden = false,
+        hide_by_name = {
+          '.git',
+          '.gitignore',
+        },
         window = {
           mappings = { ['l'] = 'open' }, --or: ['l'] = {command = 'open', nowait = true}
         },

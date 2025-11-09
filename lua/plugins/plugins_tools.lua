@@ -8,22 +8,34 @@ M.plugins = {
       open_mapping = [[<C-\>]],
       persist_size = true,
       shell = 'nu',
+      direction = 'float',
       size = function(term)
         if term.direction == 'horizontal' then
-          return 12
+          return vim.o.lines * 0.2
         elseif term.direction == 'vertical' then
           return vim.o.columns * 0.2
+        else
+          return 0.4
         end
       end,
+      float_opts = {
+        border = 'curved', --'single','double','shadow',or other options supported by win open
+        width = function()
+          return math.floor(vim.o.columns * 0.8)
+        end,
+        height = function()
+          return math.floor(vim.o.lines * 0.8)
+        end,
+      },
     },
-    config = true,
-    lazy = false,
-    -- trying to disable this to see if it makes the above mapping work from the start
+
+    --lazy = false,
   },
 
   {
     'willothy/wezterm.nvim',
     name = 'wezterm.nvim',
+    cond = not vim.g.neovide,
     config = true,
     opts = {
       create_commands = true,
@@ -32,21 +44,13 @@ M.plugins = {
     --q: can we interact remote with wezterm?
     --cond = not vim.g.neovide,
   },
-  { 'kazhala/close-buffers.nvim', opts = {} },
+  --WARNING: enabled 9-5, disable/remove if issues
+  { 'kazhala/close-buffers.nvim', opts = {}, cond = true },
   {
     'willothy/flatten.nvim',
     config = true, -- or pass configuration with opts = {  }
     lazy = false,
     priority = 1001, -- Ensure that it runs first to minimize delay when opening file from terminal
-  },
-
-  {
-    '2kabhishek/nerdy.nvim',
-    -- going to exclusively use telescope; disable snacks dep
-    --[[ dependencies = {
-      'folke/snacks.nvim',
-    }, ]]
-    cmd = 'Nerdy',
   },
   {
     'glepnir/nerdicons.nvim',
@@ -64,6 +68,15 @@ M.plugins = {
   {
     'uga-rosa/ccc.nvim',
     opts = {},
+  },
+  {
+    'romus204/referencer.nvim',
+    opts = {
+      enable = true,
+      format = '  %d reference(s)',
+      pattern = '*.go',
+    },
+    config = true,
   },
   {
     'famiu/bufdelete.nvim',

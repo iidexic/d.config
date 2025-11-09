@@ -11,7 +11,7 @@ M.plugins = {
         code_action = 'ﯦ',
       },
       LightBulb = {
-         virtual_text = false,
+        virtual_text = false,
       },
 
       outline = {
@@ -28,7 +28,7 @@ M.plugins = {
 
 M.setup = function()
   local lspsaga = require 'lspsaga'
-  lspsaga.config.symbol_in_winbar.enabled = false
+  lspsaga.config.symbol_in_winbar.enabled = true
   lspsaga.config.lightbulb.virtual_text = false
 end
 

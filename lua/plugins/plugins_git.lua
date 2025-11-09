@@ -43,7 +43,7 @@ M.plugins = {
         change = { text = '󰇙' },
         delete = { text = 'סּ' },
         topdelete = { text = '' },
-        changedelete = { text = 'ﬔ' },
+        changedelete = { text = 'ﮊ' },
       },
       on_attach = function(bufnr)
         local gitsigns = require 'gitsigns'

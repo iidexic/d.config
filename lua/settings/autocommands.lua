@@ -59,11 +59,13 @@ local function autocmd()
   end, { desc = 'toggle hover popup' }) ]]
   --  ── [0] quick startup auto ──────────────────────────────────────────────
   auto('VimEnter', {
-    desc = 'run whaler, would prefer both persistence and whaler',
+    desc = 'run whaler on startup if not in file',
     group = make_augroup 'startup-greet',
     callback = function()
       --require('persistence').select()
-      require('telescope').extensions.whaler.whaler()
+      if vim.bo.filetype == '' then
+        require('telescope').extensions.whaler.whaler()
+      end
     end,
   })
   --  ── [1] highlight on yank ───────────────────────────────────────────────
@@ -96,6 +98,7 @@ local function autocmd()
       end
     end,
   })
+
   -- ── [4] make lsp autocommands on attach ───────────────────────────────── NOTE: time to hang it up; for now at least
   -- auto('LspAttach', {
   --   group = ag 'lsp-attached-setauto',
@@ -127,6 +130,20 @@ local function autocmd()
   --     })
   --   end,
   -- })
+  auto('User', {
+    group = make_augroup 'pre-persistence-save',
+    pattern = 'PersistenceSavePre',
+    callback = function()
+      -- local bufnames_delete = { '[OUTLINE_1]', '[OUTLINE_2]' }
+      -- -- close buffers I don't want to save
+      -- local bufs = vim.fn.getbufinfo()
+      -- for _, buf in ipairs(bufs) do
+      --   if vim.tbl_contains(bufnames_delete, buf.name) then
+      --     vim.api.nvim_buf_delete(buf.bufnr, { force = true })
+      --   end
+      -- end
+    end,
+  })
   -- ── [5] clear lsp autocommands on detach ────────────────────────────────
   -- auto('LspDetach', {
   --   group = ag 'lsp-detached-setauto',
@@ -159,6 +176,7 @@ local function autocmd()
       'tsplayground',
       '*\\*_luapad.lua',
       'diffview',
+      'gitsigns://',
     },
     callback = function(event)
       vim.bo[event.buf].buflisted = false
@@ -185,12 +203,20 @@ local function autocmd()
       local currentWinBar = vim.api.nvim_get_hl(0, { name = 'WinBar' })
       local normal = vim.api.nvim_get_hl(0, { name = 'Normal' })
       local normNC = vim.api.nvim_get_hl(0, { name = 'NormalNC' })
-      if currentWinBar.bg == badWinBar.bg and currentWinBar.fg == badWinBar.fg then
-        vim.api.nvim_set_hl(0, 'WinBar', { bg = 'bg', fg = 'fg' })
-        local normal = vim.api.nvim_get_hl(0, { name = 'Normal' })
-        vim.cmd "highlight WinBar guibg='bg' guifg='fg' gui='italic'"
-        vim.cmd "highlight WinBarNC guibg='bg'"
+      if currentWinBar.bg and currentWinBar.fg then -- if need: !vim.tbl_contains(vim.tbl_keys(currentWinBar),'bg')
+        if currentWinBar.bg == badWinBar.bg and currentWinBar.fg == badWinBar.fg then
+          vim.api.nvim_set_hl(0, 'WinBar', { bg = 'bg', fg = 'fg' })
+          --local normal = vim.api.nvim_get_hl(0, { name = 'Normal' })
+          vim.cmd "highlight WinBar guibg='bg' guifg='fg' gui='italic'"
+          vim.cmd "highlight WinBarNC guibg='bg'"
+        end
       end
+      if vim.g.colors_name == 'moonbow' then
+        vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'bg' })
+
+        vim.cmd "highlight SignColumn guibg='bg' guifg='fg'"
+      end
+
       --* taking the opportunity to spruce things up -> badWinBar
       --TODO: implement unfocused buffer color dim/fade
       --[[ if normal==normNC then
@@ -198,6 +224,36 @@ local function autocmd()
       end ]]
     end,
   })
+
+  -- ── Rename Autosave Autocommand ─────────────────────────────────────
+  --[[ vim.api.nvim_create_autocmd({ 'LspNotify' }, {
+    group = make_augroup 'pre-rename-autosave',
+    callback = function(args)
+      --local bufnr = args.buf
+      --local client_id = args.data.client_id
+      local method = args.data.method
+      --local params = args.data.params
+
+      -- do something with the notification
+      if method == 'textDocument/prepareRename' then
+        local bufsPre = vim.api.nvim_list_bufs()
+        local bufsPreMod = {}
+        for i, b in ipairs(bufsPre) do
+          if vim.api.nvim_buf_is_loaded(b) and vim.api.nvim_get_option_value('modified', { buf = b }) then
+            bufsPreMod[vim.fn.bufname(b)] = b
+          end
+        end
+        vim.api.nvim_create_autocmd('LspNotify', {
+          group = make_augroup 'post-rename-autosave',
+          callback = function(args)
+            if args.data.method == 'textDocument/rename' then
+              --TODO: Auto-save and close all modified buffers not in original bufsPre list
+            end
+          end,
+        })
+      end
+    end,
+  }) ]]
 
   --TODO: add q to quit for scratch bufs
   --TODO: Recolor minibar when recording
@@ -217,6 +273,17 @@ local function autocmd()
         --do the thing obsidian plugin needs or whatever
         --vim.o.
       else
+      end
+    end,
+  })
+
+  vim.api.nvim_create_autocmd({ 'BufEnter' }, { -- , 'FileType'
+    group = make_augroup 'referencer_refresh',
+    pattern = { '*.go' },
+    callback = function(event)
+      local ref = require 'referencer'
+      if ref.enable then
+        ref.update()
       end
     end,
   })

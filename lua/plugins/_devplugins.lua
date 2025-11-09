@@ -1,10 +1,7 @@
 local M = {}
+-- Mainly where plugins go that I want to tweak internally
 
 M.plugins = {
-  -- ╭─────────────────────────────────────────────────────────╮
-  -- │  Who wants only one or two different plugins that let   │
-  -- │        you search for icons? you need at least 3        │
-  -- ╰─────────────────────────────────────────────────────────╯
   { -- icon-picker: telescope picker for Nerd Fonts icons
     'ziontee113/icon-picker.nvim',
     dir = 'c:/dev/luaprojects/icon-picker.nvim/',
@@ -37,7 +34,28 @@ M.plugins = {
     end,
     opts = {},
   },
-  { 'iidexic/material.nvim', dir = 'c:/dev/luaprojects/material.nvim/', dev = true, opts = {} },
+  {
+    'iidexic/material.nvim',
+    dir = 'c:/dev/luaprojects/material.nvim/',
+    dev = true,
+    opts = {
+      plugins = {
+        'neo-tree',
+        'neogit',
+        'which-key',
+        'lspsaga',
+        'trouble',
+        'gitsigns',
+        'dap',
+        'indent-blankline',
+        'nvim-cmp',
+        'fidget',
+        'mini',
+        'telescope',
+        'nvim-web-devicons',
+      },
+    },
+  },
   { 'helpme', dir = 'c:/dev/luaprojects/helpme/', dev = true },
   { -- Scratch: Create general/language-specific scratch buffers
     'iidexic/scratch.nvim',

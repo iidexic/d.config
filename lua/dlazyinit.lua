@@ -21,6 +21,7 @@ local D = {
       'plugins.markdown',
       'plugins.mini',
       'plugins.obsidian',
+      'plugins.outline',
       'plugins.persistence',
       'plugins.plugins_auto',
       'plugins.plugins_debug',
@@ -43,10 +44,15 @@ local D = {
     local trials = {
       --NEW:
       'trials.snacks',
+      'trials.dividerline',
+      --'trials.huez-themeBrowser',
       --'trials.windline', -- too much work right now
       'trials.split', -- doesn't interfere with existing g mappings -- ok but what does it do
       'trials.nvim_dev',
-      'trials.neoclip',
+      --      'trials.kanban', -- does not work
+      'trials.nvim-macros',
+      'trials.supermaven_ai',
+      --'trials.neoclip', -- just annoying
       'trials.grug-far',
 
       --'trials.trailblazer', 'trials.origami', 'trials.glance', 'trials.hawtkeys',
@@ -58,7 +64,7 @@ local D = {
     local devplugs = require 'plugins._devplugins'
     plugload.loadmodule(devplugs)
     --leap
-    local trialLeap = require 'trials.leap_plus'(true, true, true, false)
+    local trialLeap = require 'trials.leap_plus'(true, true, false, true)
     plugload.loadmodule(trialLeap)
     plugload.loadfiles(trials)
 

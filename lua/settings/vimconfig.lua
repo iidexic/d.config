@@ -31,9 +31,8 @@ local O = {
     vim.opt.termguicolors = true
     vim.opt.pumheight = 16
     --* indent/tab
-    vim.opt.tabstop = 8 -- sets how nvim actually writes tabs in files. default is 8 (help says not to change?)
-    vim.opt.softtabstop = 3 -- this sets what tabs appear as in nvim, regardless of file contents
-    vim.opt.shiftwidth = 3
+    vim.opt.softtabstop = 4 -- this sets what tabs appear as in nvim, regardless of file contents
+    vim.opt.shiftwidth = 4
     vim.opt.expandtab = true
     vim.opt.breakindent = true -- Enable break indent (basically wraps visually I think??)
 
@@ -52,7 +51,8 @@ local O = {
   last = function(opts)
     -- still don't remember what this was for
     if opts and opts.sessionoptions then
-      vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
+      vim.o.sessionoptions = 'buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
+      -- removed 'blank'
       --print(vim.o.sessionoptions)
     end
     ---* Lazygit Options *---
@@ -60,7 +60,7 @@ local O = {
     vim.g.lazygit_floating_window_scaling_factor = 0.8
     ---*2nd try*---
     vim.o.winminwidth = 10
-    vim.o.winwidth = 110
+    vim.o.winwidth = 96
     vim.o.winheight = 20
     vim.o.equalalways = false
     -- vim.o.winbar = "" -- contents of a window bar for every window.

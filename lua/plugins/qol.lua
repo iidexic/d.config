@@ -1,11 +1,24 @@
+local secretWin
 return {
   { -- escape input mode with 'jk'
     'TheBlob42/houdini.nvim', --https://github.com/TheBlob42/houdini.nvim
     config = true,
   },
   { -- centers the current buffer in window
-    -- kind of underwhelming. look at zen mode
+    -- Zen mode is good but this is also good for not losing outline and shit
     'shortcuts/no-neck-pain.nvim',
+    config = true,
+    opts = {
+      -- width
+      minSideBufferWidth = 06,
+      buffers = {
+        wo = { winfixwidth = true },
+      },
+      -- callbacks = {
+      --   postEnable = function(state)
+      --   end,
+      -- },
+    },
     cond = true,
   },
   { -- makes virtual text at pair close showing context
@@ -24,7 +37,7 @@ return {
       -- ────────────────────────────────────────────────────────────────────
       window = {
         backdrop = 0.9,
-        width = 0.65, -- 0.8 = 80% win width, 80 = 80 chars
+        width = 0.68, -- 0.8 = 80% win width, 80 = 80 chars
       },
       -- your configuration comes here
       -- or leave it empty to use the default settings
@@ -38,7 +51,8 @@ return {
           -- Will multiply the current scale factor by this number
           scale = 1.04,
           -- disable the Neovide animations while in Zen mode
-          disable_animations = {
+          disable_animations = false,
+          --[[{
             neovide_animation_length = 0,
             neovide_cursor_animate_command_line = false,
             neovide_scroll_animation_length = 0,
@@ -46,12 +60,13 @@ return {
             neovide_cursor_animation_length = 0,
             neovide_cursor_vfx_mode = '',
           },
+          --]]
         },
       },
     },
   },
-  {
-    'smjonas/inc-rename.nvim',
-    opts = {},
-  },
+  -- {
+  --   'smjonas/inc-rename.nvim',
+  --   opts = {},
+  -- },
 }

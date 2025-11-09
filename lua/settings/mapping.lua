@@ -10,12 +10,16 @@ local function ld(s)
   return '<leader>' .. s
 end
 
-local function toggletermFlip() -- assigned to alt-backslash in map.assign
-  local term = require('toggleterm.terminal').get(1)
-  if term and term.direction == 'horizontal' then
-    term.change_direction(term, 'vertical')
-  elseif term then
-    term.change_direction(term, 'horizontal')
+---@enum toggleterm_mode
+local ttmode = { h = 'horizontal', v = 'vertical', f = 'float', t = 'tab' }
+local function toggleterm_mode(mode) -- assigned to alt-backslash in map.assign
+  if mode then
+    return function()
+      local term = require('toggleterm.terminal').get(1)
+      if term then
+        term:change_direction(ttmode[mode])
+      end
+    end
   end
 end
 
@@ -31,9 +35,9 @@ local function map_toggleterm()
     vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
     vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
     -- works only when term not selected/not open?
-    --opts.desc = 'ToggleTermFlip' --vim.keymap.set('t', '<M-\\>', toggletermFlip, opts)
+    --opts.desc = 'ToggleTermFlip' vim.keymap.set('t', '<M-\\>', toggletermFlip, opts)
   end
-  -- if you only want these mappings for toggle term use term://*toggleterm#* instead
+  -- if you only want these mappings for toggle term only use term://*toggleterm#* instead
   vim.cmd 'autocmd! TermOpen term://* lua ttmap()'
 end
 
@@ -76,19 +80,28 @@ local maptables = {
     -- trouble don't work good
     { '<leader>q', vim.diagnostic.setloclist, dsc 'Quickfix list' },
     { '<Esc>', '<cmd>nohlsearch<CR>' },
-    { '<C-h>', '<C-w><C-h>', dsc 'Move focus to the left window' },
-    { '<C-k>', '<C-w><C-k>', dsc 'Move focus to the upper window' },
-    { '<C-l>', '<C-w><C-l>', dsc 'Move focus to the right window' },
-    { '<C-j>', '<C-w><C-j>', dsc 'Move focus to the lower window' },
-    { '|', cmd 'lua MiniFiles.open()', dsc 'MiniFiles open' },
-    { '<M-\\>', toggletermFlip, dsc 'ToggleTerm Flip' },
-    { '<M-h>', tabpage_prev, dsc 'previous tabpage' },
-    { '<M-l>', tabpage_next, dsc 'next tabpage' },
+    { '<C-h>', '<C-w><C-h>', desc = 'Move focus to the left window' },
+    { '<C-k>', '<C-w><C-k>', desc = 'Move focus to the upper window' },
+    { '<C-l>', '<C-w><C-l>', desc = 'Move focus to the right window' },
+    { '<C-j>', '<C-w><C-j>', desc = 'Move focus to the lower window' },
+    { '|', cmd 'lua MiniFiles.open()', desc = 'MiniFiles open' },
+    --hoping this will open wk
+    { '<M-\\>', desc = 'ToggleTerm Mode' },
+    { '<M-\\>h', toggleterm_mode 'h', desc = 'ToggleTerm Mode horizontal' },
+    { '<M-\\>v', toggleterm_mode 'v', desc = 'ToggleTerm Mode vertical' },
+    { '<M-\\>f', toggleterm_mode 'f', desc = 'ToggleTerm Mode float' },
+    { '<M-\\>t', toggleterm_mode 't', desc = 'ToggleTerm Mode tab' },
+    { '<M-h>', tabpage_prev, desc = 'previous tabpage' },
+    { '<M-l>', tabpage_next, desc = 'next tabpage' },
     -- ── Custom Functions ────────────────────────────────────────────────
     {
       '<leader>vb',
       function()
-        local b = 'name:[' .. vim.fn.bufname() .. ']\nnum: ' .. vim.fn.bufnr()
+        --local det = vim.fn.getbufinfo(vim.fn.bufnr())
+        local bnum = vim.fn.bufnr()
+        local bn = vim.fn.bufname(bnum)
+        local btype = vim.fn.getbufvar(bnum, '&buftype')
+        local b = 'BUFFER\nname: ' .. bn .. '\nnum: ' .. bnum .. '\ntype: ' .. btype
         vim.print(b)
       end,
       desc = 'Vim: print current buffer detail',
@@ -111,16 +124,17 @@ local maptables = {
 
   --TODO: Future state have all lang-specific mappings on l and change them on project or file change
   go = { -- changed first key after leader to 'l'
-    { '<leader>lr', cmd 'GoRun', dsc 'Go Run' },
-    { '<leader>ld', cmd 'GoDoc', dsc 'GoDoc lookup' },
-    { '<leader>lD', cmd 'GoSearch', dsc 'GoSearch (godoc.nvim)' },
-    { '<leader>la', cmd 'GoAlt', dsc 'Toggle to test file' },
-    { '<leader>lf', cmd 'GoRun -F', dsc 'Go Run Floating window' },
-    { '<leader>lb', cmd 'GoBuild', dsc 'Go Build to cwd' },
-    { '<leader>lt', cmd 'GoTest -n', dsc 'Go Test selected' },
-    { '<leader>lm', cmd 'GoModTidy', dsc 'Go Mod Tidy' },
-    { '<leader>ln', cmd 'GoRename', dsc 'Go Rename symbol' },
-    { '<leader>lI', cmd 'GoImpl', dsc 'GoImpl' },
+    { '<leader>lr', cmd 'GoRun', desc = 'Go Run' },
+    { '<leader>lr', cmd 'GoRun', desc = 'Go Run' },
+    { '<leader>ld', cmd 'GoDoc', desc = 'GoDoc lookup' },
+    { '<leader>lD', cmd 'GoSearch', desc = 'GoSearch (godoc.nvim)' },
+    { '<leader>la', cmd 'GoAlt', desc = 'Toggle to test file' },
+    { '<leader>lf', cmd 'GoRun -F', desc = 'Go Run Floating window' },
+    { '<leader>lb', cmd 'GoBuild', desc = 'Go Build to cwd' },
+    { '<leader>lt', cmd 'GoTest -n', desc = 'Go Test selected' },
+    { '<leader>lm', cmd 'GoModTidy', desc = 'Go Mod Tidy' },
+    { '<leader>ln', cmd 'GoRename', desc = 'Go Rename symbol' },
+    { '<leader>lI', cmd 'GoImpl', desc = 'GoImpl' },
   },
   lsp_learning = {
     --{ '<A-l>h', vim.lsp.buf.hover(), dsc 'show hover info' }, this is already on 'K'
@@ -128,7 +142,8 @@ local maptables = {
 }
 local Map = {
   assign = function()
-    vim.keymap.set('v', '<A-r>', ':lua<CR>', { desc = 'run selected lua code' })
+    -- moved next to wk
+    --vim.keymap.set('v', '<A-r>', ':lua<CR>', { desc = 'run selected lua code' })
     map_toggleterm()
 
     --# Apply Mappings
@@ -136,23 +151,6 @@ local Map = {
     wkMapFromTable(pluginmappings)
   end,
 }
-
---[[ function Map.configReloads()
-  local cmap = {
-    -- Needs to re-require these
-    { '<leader>Ra', require('settings.autocommands').post_autocmd, desc = '[R]eload [a]utocommands' },
-    {
-
-      '<leader>Rm',
-      function()
-        Map.assign()
-        Map.plugins()
-      end,
-      desc = '[R]erun [m]appings file',
-    },
-  }
-  return cmap
-end ]]
 
 -- Map.plugins performs all post-lazy mappings
 -- in the future it will be all mappings
@@ -185,6 +183,8 @@ function Map.plugins()
     Map.commentbox,
     Map.lsp,
     Map.hover,
+    Map.neovide,
+    Map.vim,
   }
   for _, mfn in ipairs(mappingFunctions) do
     Map.wk.add(mfn())
@@ -194,18 +194,31 @@ end
 function Map.lsp()
   local lspsaga = require 'lspsaga'
   local m = {
-    { ld 'o', cmd 'Lspsaga outline', desc = '[o]utline Lspsaga' },
-    { ld 'd', cmd 'Lspsaga diagnostic', desc = '[d]iagnostic Lspsaga' },
+    --{ '<leader>o', cmd 'Lspsaga outline', desc = '[o]utline Lspsaga' },
+    { '<leader>d', cmd 'Lspsaga diagnostic', desc = '[d]iagnostic Lspsaga' },
   }
   return m
 end
 function Map.vim()
   local m = {
+    { '<A-r>', ':lua<CR>', mode = 'v', desc = 'run selected lua code' },
     { 'gl', vim.lsp.buf.incoming_calls(), desc = 'show incoming calls to symbol under cursor' },
     -- removed. trouble quickfix is iffy
     --{ '<leader>q', require('trouble').open { mode = '' } },
   }
   return m
+end
+
+function Map.neovide()
+  return {
+    {
+      '<C-w><leader>',
+      function()
+        vim.g.neovide_fullscreen = not vim.g.neovide_fullscreen
+      end,
+      desc = 'toggle neovide fullscreen',
+    },
+  }
 end
 
 function Map.gitplugins()
@@ -272,42 +285,80 @@ function Map.commentbox()
 end
 function Map.other_plugins()
   local precog = require 'precognition'
-  --local neoclip = require('neo')
-  local aerial = require 'aerial'
-  local dropbar_api = require 'dropbar.api'
-  vim.keymap.set('n', '<Leader>;', dropbar_api.pick, { desc = 'Pick symbols in winbar' })
-  vim.keymap.set('n', '[;', dropbar_api.goto_context_start, { desc = 'Go to start of current context' })
-  vim.keymap.set('n', '];', dropbar_api.select_next_context, { desc = 'Select next context' })
+  local grug = require 'grug-far'
+
+  -- local dropbar_api = require 'dropbar.api'
+  -- vim.keymap.set('n', '<Leader>;', dropbar_api.pick, { desc = 'Pick symbols in winbar' })
+  -- vim.keymap.set('n', '[;', dropbar_api.goto_context_start, { desc = 'Go to start of current context' })
+  -- vim.keymap.set('n', '];', dropbar_api.select_next_context, { desc = 'Select next context' })
   local m = {
+    -- Bufferline:
+    { 'g<CR>', '<cmd>BufferLinePick<cr>', desc = 'Switch Buffer (Line)' },
+    { 'g<BS>', '<cmd>BufferLinePickClose<cr>', desc = 'Close Buffer (Line)' },
     -- Precognition
-    { ld 'up', precog.toggle, desc = '[U]til: [p]recognition toggle' },
+    { '<leader>up', precog.toggle, desc = '[U]til: [p]recognition toggle' },
     -- Aerial
-    { ld 'ua', aerial.open, desc = '[U]til: [a]erial' },
+    --{ ld 'ua', aerial.open, desc = '[U]til: [a]erial' },
+    { '<leader>ua', '<cmd>AerialToggle!<CR>', desc = '[U]til: [a]erial' },
+    -- Outline (in outline config in aerial.lua)
     -- Ccc
-    { ld 'uc', cmd 'CccPick', desc = '[U]til: [c]cc colorpicker' },
+    { '<leader>uc', cmd 'CccPick', desc = '[U]til: [c]cc colorpicker' },
+    { '<leader>uh', cmd 'CccHighlighterToggle', desc = '[U]til: ccc color [h]ighlight' },
     -- Trevj. this uh splits lists etc into lines? That's what it seems like at least
     { '<A-j>', require('trevj').format_at_cursor, desc = 'breakout list to lines' },
+
+    -- Molten. Run Jupyter notebooks
+    { '<leader>M', desc = 'Molten (Jupyter)' },
+    { '<leader>Mi', ':MoltenInit<CR>', desc = 'Initialize the plugin' },
+    { '<leader>Me', ':MoltenEvaluateOperator<CR>', desc = 'run operator selection' },
+    { '<localleader>Ml', ':MoltenEvaluateLine<CR>', desc = 'evaluate line' },
+    { '<leader>Mr', ':MoltenReevaluateCell<CR>', desc = 're-evaluate cell' },
+    { '<leader>Ms', ':<C-u>MoltenEvaluateVisual<CR>gv', desc = 'evaluate visual selection' },
+
+    -- Referencer.
+    { '<leader>e', desc = 'Referencer Toggle' },
+    { '<leader>et', '<cmd>ReferencerToggle<cr>', desc = 'Referencer Toggle' },
+    { '<leader>eu', '<cmd>ReferencerUpdate<cr>', desc = 'Referencer Update' },
+
+    -- nvim-macros
+    { '<leader>mw', ':MacroSave<cr>', desc = 'Save Macro' },
+    { '<leader>my', ':MacroYank<cr>', desc = 'Yank Macro (register)' },
+    { '<leader>ms', ':MacroSelect<cr>', desc = 'Select Saved Macro' },
+
+    -- Grug-Far
+    { 'gF', grug.open, desc = 'GrugFar Replace' },
+    { 'gW', '<cmd>GrugFarWithin<cr>', desc = 'GrugFar Replace Within Range' },
     -- Render-Markdown
     { 'gm', cmd 'RenderMarkdown toggle', desc = 'Render Markdown' },
-    -- inc-rename
-    -- NOTE: provided function does not work: { 'gR', function() return ':IncRename ' .. vim.fn.expand '<cword>' end, desc = 'iRename symbol', },
-    { 'gR', ':IncRename ', desc = 'Start IncRename' },
+    -- todo-comments:
+    { '<leader>2', desc = 'Todo-Comments' },
+    { '<leader>2d', '<cmd>TodoTelescope<cr>', desc = 'Search Todo Comments' },
+    { '<leader>2q', '<cmd>TodoTrouble<cr>', desc = 'List Todo in Quickfix' },
+    -- no-neck-pain:
+    { '<leader>n', desc = '[N]oNeckPain' },
+    { '<leader>nn', '<cmd>NoNeckPain<cr>', desc = 'Toggle NNP (On)/Off' }, -- TODO: disable minwidth
+    { '<leader>nr', '<cmd>NoNeckPainToggleRightSide<cr>', desc = '(Toggle Right)' },
+    { '<leader>nl', '<cmd>NoNeckPainToggleLeftSide<cr>', desc = '(Toggle Left)' },
+    { '<leader>nu', Map.nnp_resize(4), desc = '(Width+)' },
+    { '<leader>nU', Map.nnp_resize(1), desc = '(Width+ precise)' },
+    { '<leader>nd', Map.nnp_resize(-4), desc = '(Width-)' },
+    { '<leader>nd', Map.nnp_resize(-1), desc = '(Width- precise)' },
+
     -- zen mode
     {
       '<leader>uz',
       function()
         require('zen-mode').toggle {
-          window = {
-            width = 0.65, -- width will be 85% of the editor width
-          },
+          -- window = {
+          --   backdrop = 0.9,
+          --   width = 0.50, -- 0.8 = 80% win width, 80 = 80 chars
+          -- },
         }
       end,
       desc = '[u]til: [z]en mode',
     },
-    --dropbar
-    { '<Leader>;', dropbar_api.pick, desc = 'Pick symbols in winbar' },
-    { '[;', dropbar_api.goto_context_start, desc = 'Go to start of current context' },
-    { '];', dropbar_api.select_next_context, desc = 'Select next context' },
+    --DividerLine
+    { '<leader>ud', require('divider').toggle_outline, desc = 'Open Dividerline Sidebar' },
   }
   return m
 end
@@ -317,32 +368,52 @@ function Map.leap()
     { '<C-s>', '<Plug>(leap)', desc = 'leap', mode = { 'i', 'n' } },
   }
 end
-
+function Map.nnp_resize(size)
+  return function()
+    if size > 0 then
+      for _ = 1, size do
+        vim.cmd 'NoNeckPainWidthUp'
+      end
+    elseif size < 0 then
+      for _ = 1, -size do
+        vim.cmd 'NoNeckPainWidthDown'
+      end
+    end
+  end
+end
 -- ╭──────────────╮
 -- │ not used yet │
 -- ╰──────────────╯
+-- function Map.CustomEqualWindowSize()
+--   -- fix any windows needed:
+--   ---> no-neck-pain
+--   -- make equal:
+--   vim.o.equalalways = true
+--   vim.o.equalalways = false
+-- end
+
 function Map.hover()
   -- Setup keymaps
   vim.o.mousemoveevent = true
   return {
     mode = 'n',
-    { 'K', require('hover').hover, desc = 'hover.nvim' },
-    { 'gK', require('hover').hover_select, desc = 'hover.nvim (select)' },
+    { 'K', require('hover').open, desc = 'hover.nvim' },
+    { 'gK', require('hover').select, desc = 'hover.nvim (select)' },
     {
       '<C-p>',
       function()
-        require('hover').hover_switch 'previous'
+        require('hover').switch 'previous'
       end,
       desc = 'hover.nvim (previous source)',
     },
     {
       '<C-n>',
       function()
-        require('hover').hover_switch 'next'
+        require('hover').switch 'next'
       end,
       desc = 'hover.nvim (previous source)',
     },
-    { '<MouseMove>', require('hover').hover_mouse, desc = 'hover.nvim (mouse)' },
+    { '<MouseMove>', require('hover').mouse, desc = 'hover.nvim (mouse)' },
   }
   --[[ vim.keymap.set('n', 'K', require('hover').hover, { desc = 'hover.nvim' }) -- replace default hover
   vim.keymap.set('n', 'gK', require('hover').hover_select, { desc = 'hover.nvim (select)' }) -- new?

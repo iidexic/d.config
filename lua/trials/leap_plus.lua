@@ -1,14 +1,15 @@
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                  NOTE! Leap remaps s/S                  │
 --          ╰─────────────────────────────────────────────────────────╯
+
 --> hopefully this doesn't cause problems with surround/ai
 --> it does. I think it overwrites both
 --> Time to fix it :)
+---setup leap and additiobnal plugins
 ---@param leapOn boolean enable leap.nvim
 ---@param flitOn boolean enable flit.nvim
 ---@param spookOn boolean enable leap-spooky. Takes priority over teleOn, can only have 1
 ---@param teleOn boolean enable telepath. disabled regardless if spookOn=true
-
 local function initleap(leapOn, flitOn, spookOn, teleOn)
   local M = {}
   M.plugins = {
@@ -54,7 +55,7 @@ local function initleap(leapOn, flitOn, spookOn, teleOn)
         end
       end)(),
       config = function()
-        require('telepath').set_default_mappings()
+        require('telepath').use_default_mappings()
       end,
     },
     -- ──────────────────────────────────────────────────────────────────────

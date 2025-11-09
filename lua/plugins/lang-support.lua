@@ -16,6 +16,11 @@ return {
     -- vim.keymap.set("n", "<leader>a", require("lspimport").import, { noremap = true })
     -- find a way to make this an autocommand if end up using
   },
+  {
+    'benlubas/molten-nvim',
+    ---opts = {},
+    cond = false,
+  },
   { -- runs python code. I am guessing it prefers hydrogen format
     -- the readme says may only be usable if using vimscript config files.
     'smzm/hydrovim',
@@ -40,12 +45,13 @@ return {
         },
       },
     },
-    cond = false,
+    enabled = false,
   },
   -- ────────────────────────────────[ Zig ]────────────────────────────────
   { 'ziglang/zig.vim' },
 
   -- ────────────────────────────────[ Go ]─────────────────────────────────
+
   {
     'ray-x/go.nvim',
     dependencies = { -- optional packages
@@ -56,13 +62,15 @@ return {
       'theHamsta/nvim-dap-virtual-text',
     },
     config = function()
-      require('go').setup {}
+      require('go').setup {
+        --lsp_cfg = true,
+        build_tags = '-tags=mage',
+      }
     end,
     event = { 'CmdlineEnter' },
     ft = { 'go', 'gomod' },
     build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
   },
-
   --TODO: Need to choose between goplements and gosigns? one is gutter.
   -- could probably use both. not sure if gosigns is going to be actually useful
 
