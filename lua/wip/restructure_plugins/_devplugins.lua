@@ -1,10 +1,6 @@
 local M = {}
 
 M.plugins = {
-  -- ╭─────────────────────────────────────────────────────────╮
-  -- │  Who wants only one or two different plugins that let   │
-  -- │        you search for icons? you need at least 3        │
-  -- ╰─────────────────────────────────────────────────────────╯
   { -- icon-picker: telescope picker for Nerd Fonts icons
     'ziontee113/icon-picker.nvim',
     dir = 'c:/dev/luaprojects/icon-picker.nvim/',

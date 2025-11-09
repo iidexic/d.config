@@ -1,10 +1,3 @@
---#Utility Functions
-local cmd = function(cstr)
-  return '<cmd>' .. cstr .. '<cr>'
-end
-local ldr = function(keys)
-  return '<leader' .. keys
-end
 --#Function Tables
 local fntblVim = {
   tabpage_next = function()
@@ -17,13 +10,6 @@ local fntblVim = {
     local prevpg = vim.api.nvim_get_current_tabpage() - 1
     if vim.api.nvim_tabpage_is_valid(prevpg) then
       vim.api.nvim_set_current_tabpage(prevpg)
-    end
-  end,
-  ---@param n number tabpage number to go to
-  ---@problem cannot call in keybind proper
-  tabpage_goto = function(n)
-    if vim.api.nvim_tabpage_is_valid(n) then
-      vim.api.nvim_set_current_tabpage(n)
     end
   end,
 }
@@ -65,7 +51,7 @@ binds.preLazy = {
   builtins = {
     --{ '<leader>q', vim.diagnostic.setloclist },
     { '<Esc>', '<cmd>nohlsearch<CR>' },
-    {mod = 'C', desc = 'Move focus to the', run=}
+    { mod = 'C', desc = 'Move focus to the' },
     { '<C-h>', '<C-w><C-h>', desc = 'Move focus to the left window' },
     { '<C-k>', '<C-w><C-k>', desc = 'Move focus to the upper window' },
     { '<C-l>', '<C-w><C-l>', desc = 'Move focus to the right window' },
@@ -76,7 +62,7 @@ binds.preLazy = {
   },
 }
 binds.plugins = {
-  persistence = { '<leader>', { 'Ps', run = 'load', desc = 'Load cwd session' }, {'PS', run = 'select', desc = 'Select session' } },
+  persistence = { '<leader>', { 'Ps', run = 'load', desc = 'Load cwd session' }, { 'PS', run = 'select', desc = 'Select session' } },
   tinygit = {
     '<leader>',
     desc = 'git',
@@ -162,7 +148,7 @@ binds.commentbox = {
 --          │                     MAPPER FOR DMAP                     │
 --          ╘═════════════════════════════════════════════════════════╛
 local mapper = {}
-local option_names = { {'mode', 'm'}, {'disable_join','nojoin'}, 'run', 'plugin', 'args', 'rawdog', 'prefix', {'modifier', 'mod'}, 'apply_modifier' }
+local option_names = { { 'mode', 'm' }, { 'disable_join', 'nojoin' }, 'run', 'plugin', 'args', 'rawdog', 'prefix', { 'modifier', 'mod' }, 'apply_modifier' }
 local pmap = {
   mode = 'n',
   rawdog = true,

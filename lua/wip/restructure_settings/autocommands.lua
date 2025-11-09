@@ -21,15 +21,6 @@ function hovr.update_selection()
   hovr.selected = methodmap[hovr.num]
 end
 
-local hoverselect = function()
-  if hovr.selected then
-    if hovr.selected == 'vim' then
-    elseif hovr.selected == 'saga' then
-    elseif hovr.selected == 'hover.nvim' then
-    end
-  end
-end
-
 local M = {
   opts = {
     hover = true, -- enable/disable hover popup
@@ -49,13 +40,8 @@ end
 
 --  ┌─────────────────────────[ MAKE AUTOCOMMANDS ]─────────────────────────┐
 local function autocmd()
-  -- ── Autocommand-related mapping ───────────────────
-  -- toggle hover
-  --( NOT NEEDED: Use K (<S-k>))
-  --[[ vim.keymap.set('n', 'gh', function()
-    M.opts.hover = not M.opts.hover
-  end, { desc = 'toggle hover popup' }) ]]
   --  ── [0] quick startup auto ──────────────────────────────────────────────
+  --  TODO: only run if no file. Or just add a startup plugin/snacks
   auto('VimEnter', {
     desc = 'run whaler, would prefer both persistence and whaler',
     group = ag 'startup-greet',
@@ -97,45 +83,11 @@ local function autocmd()
   -- ── [4] make lsp autocommands on attach ───────────────────────────────── NOTE: time to hang it up; for now at least
   -- auto('LspAttach', {
   --   group = ag 'lsp-attached-setauto',
-  --   callback = function() --──────────────── LSP ACTIVE ENTERED ───
-  --     -- ───────────────────────── [4a] idle hover popup ───────────────────────
-  --     auto('CursorHold', {
-  --       group = ag 'lsp-hover-custom',
-  --       callback = function()
-  --         if M.opts.hover then -- best way to set this up?
-  --           require('hover').hover()
-  --           --[[ vim.lsp.buf.hover {
-  --             max_height = 40,
-  --             max_width = 160,
-  --             --offset_x = 4, -- offset defaults probably 0
-  --             --offset_y = 2,
-  --             --zindex = 50, -- default 50, is forward/back. keep here
-  --             anchor_bias = 'auto', --auto|above|below
-  --             relative = 'cursor', --cursor|mouse|editor
-  --             focus = false,
-  --             silent = true,
-  --             --not the biggest fan of border but damn does it make shit easier
-  --             -- "none", "single"(line), "double", "rounded", "solid"(block), "shadow"
-  --             border = 'none', -- shadow would be best; it has issues
-  --
-  --             --close_events = {''} --idk defaults,
-  --           } ]]
-  --         end
-  --       end,
-  --     })
+  --   callback = function()
   --   end,
   -- })
   -- ── [5] clear lsp autocommands on detach ────────────────────────────────
-  -- auto('LspDetach', {
-  --   group = ag 'lsp-detached-setauto',
-  --   callback = function()
-  --     auto('CursorHold', {
-  --       group = ag 'lsp-hover-custom', -- should clear hover auto
-  --       callback = function() end,
-  --       -- no need to disable hover key really
-  --     })
-  --   end,
-  -- })
+  -- auto('LspDetach', { group = ag 'lsp-detached-setauto', callback = function() end, })
   -- ── [6] Adds close with q to specified windows ──────────────────────────
   auto('FileType', {
     group = ag 'close_with_q',
@@ -161,7 +113,7 @@ local function autocmd()
     callback = function(event)
       vim.bo[event.buf].buflisted = false
       -- TODO: learn how vim.schedule works!
-      vim.schedule(function() -- runs this until it gets a true?
+      vim.schedule(function()
         vim.keymap.set('n', 'q', function()
           vim.cmd 'close'
           pcall(vim.api.nvim_buf_delete, event.buf, { force = true })
@@ -189,8 +141,6 @@ local function autocmd()
       local pos = event.match:find '.md'
       if pos and pos == event.match:len() - 2 then
         vim.o.conceallevel = 1
-        --do the thing obsidian plugin needs or whatever
-        --vim.o.
       else
       end
     end,
@@ -210,7 +160,7 @@ function M.post_autocmd()
 end
 
 function M.wipe_autos()
-  clear_these = {
+  local clear_these = {
     { event = 'User', groupname = 'persistence-save' },
     { event = 'VimEnter', groupname = 'startup-greet' },
     { event = 'TextYankPost', groupname = 'highlight-yank' },
