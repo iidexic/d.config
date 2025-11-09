@@ -58,8 +58,8 @@ local D = {
       --'trials.tiny_inline_diagnostic',
     }
 
-    local devplugs = require 'plugins._devplugins'
-    plugload.loadmodule(devplugs)
+    -- local devplugs = require 'plugins._devplugins'
+    -- plugload.loadmodule(devplugs)
     --leap
     local trialLeap = require 'trials.leap_plus'(true, true, true, false)
     plugload.loadmodule(trialLeap)

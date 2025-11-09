@@ -89,6 +89,7 @@ return {
       'nvim-telescope/telescope.nvim',
     },
     opts = {},
+    enabled = false,
   },
   {
     'uga-rosa/ccc.nvim',

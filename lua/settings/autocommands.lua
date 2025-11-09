@@ -56,14 +56,14 @@ local function autocmd()
     M.opts.hover = not M.opts.hover
   end, { desc = 'toggle hover popup' }) ]]
   --  ── [0] quick startup auto ──────────────────────────────────────────────
-  auto('VimEnter', {
-    desc = 'run persistence, would prefer both persistence and whaler',
-    group = ag 'startup-greet',
-    callback = function()
-      --require('persistence').select()
-      require('telescope').extensions.whaler.whaler()
-    end,
-  })
+  -- auto('vimenter', {
+  --   desc = 'run persistence, would prefer both persistence and whaler',
+  --   group = ag 'startup-greet',
+  --   callback = function()
+  --     --require('persistence').select()
+  --     require('telescope').extensions.whaler.whaler()
+  --   end,
+  -- })
 
   --  ── [1] highlight on yank ───────────────────────────────────────────────
   auto('TextYankPost', { -- Try it with `yap` in normal mode
