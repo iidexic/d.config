@@ -15,6 +15,7 @@ M.neovide_config = function()
   vim.o.guifont = 'Block mono nerd font:h12.0:w-1.0'
   vim.o.guifont = 'demmomono400 nerd font:h18.0:w-3.8'
   vim.o.guifont = 'featuremono nerd font:h15.0:w-0.6' -- [L]
+  vim.o.guifont = 'skyhookmono dnf:h15.6:w-1.0'
   vim.o.guifont = 'sudo nerd font:h16.0:w-0.6' -- [L]
   vim.o.guifont = 'crystald nerd font:h15.6:w-0.8'
   vim.o.guifont = 'monofokisquish nerd font:h15.4:w-0.6'
@@ -37,7 +38,7 @@ M.neovide_config = function()
 
   -- Besties
   vim.o.guifont = 'brassmonocode nerd font:h15.8:w-1.6' -- [L]
-  vim.o.guifont = 'monoidtight nerd font:h11.6:w0.2' -- [L]
+  vim.o.guifont = 'monoidtight nerd font:h11.6:w0.4' -- [L]
   vim.o.guifont = 'ankacoder nerd font:h15.0:w-0.4'
   vim.o.guifont = 'BinchotanSharpD Nerd Font:h15:w-1.4'
   vim.o.guifont = 'envycodeR Nerd Font:h14:w-0.6:#e-subpixelantialias'
@@ -58,24 +59,24 @@ M.neovide_config = function()
   vim.o.guifont = 'maple mono nf:h13:w-0.4' -- [L]
   vim.o.guifont = 'DaddyTimeMono nerd font:h12.7:w-1.0'
 
-  -- chunky
-  vim.o.guifont = 'kodemonodnf:h15.0:w-0.8' -- [L]
+  -- chunkyboys
+  vim.o.guifont = 'kodemonodnf:h15.0:w-0.5' -- [L]
   vim.o.guifont = 'kodemono nerd font:h12.5:w-1.0' -- [L]
   vim.o.guifont = 'barecast nerd font:h14.0:w-2.6'
   vim.o.guifont = 'gothamonov0.2 nerd font:h13.6:w-0.0'
-  vim.o.guifont = 'skyhookmono nerd font:h14:w-2.0'
+  vim.o.guifont = 'skyhookmono nerd font:h14:w-1.0'
   vim.o.guifont = 'Terminess Nerd Font:h15.0:w-1.2'
   vim.o.guifont = 'Spleen32x64 nerd font:h15.0:w-1.0'
   vim.o.guifont = 'greybeard22 nerd font:h16.4:w-1.0'
 
   -- wideboys
   vim.o.guifont = 'Anonymous pro:h16.4:w-0.6'
-  vim.o.guifont = 'hack nerd font:h14:w-2'
+  vim.o.guifont = 'hack nerd font:h14:w-1'
   vim.o.guifont = 'hurmit Nerd Font:h12.0:w-1.0'
   vim.o.guifont = 'geistmono nerd font:h14:w-0.8'
-  vim.o.guifont = 'recmonolinear nerd font:h13.6:w-2.0' -- [L]
-  vim.o.guifont = '0xproto v2 ligaturised nf:h13.4:w-2.0'
-  vim.o.guifont = 'overpassmtnf:h14.4:w-2.0'
+  vim.o.guifont = 'recmonolinear nerd font:h13.6:w-1.0' -- [L]
+  vim.o.guifont = '0xproto v2 ligaturised nf:h13.4:w-1.0'
+  vim.o.guifont = 'overpassmtnf:h14.4:w-1.0'
   vim.o.guifont = 'antikormono nerd font:h12.6:w-1.8'
   vim.o.guifont = 'commitmono nerd font:h15:w-1.8'
 
@@ -98,7 +99,7 @@ M.neovide_config = function()
   vim.o.guifont = 'ramono nerd font:h13:w-1.4'
 
   -- custom, meh
-  vim.o.guifont = 'indicatemono Nerd Font:h14:w-2.0'
+  vim.o.guifont = 'indicatemono Nerd Font:h14:w-0.6'
   vim.o.guifont = 'iosevkamayukaioriginal nerd font:h14:w-0.2'
   vim.o.guifont = 'ltbinaryneue nerd font:h13.6:w-1.0'
   vim.o.guifont = 'telegramarenderosn nerd font:h11:w-1.0'

@@ -113,7 +113,7 @@ return {
   --{ 'RishabhRD/gruvy'  }, no worky
   --{ 'embark-theme/vim' }, -- it's a lighter rose pine, do not need
   -- { 'Alexis12119/nightly.nvim', priority = 1000 }, --(L=F) OPTS={} IF ERRORS -- literally just everblush but with blue vals instead of yellow
-  -- { '2giosangmitom/nightfall.nvim', lazy = false, priority = 1000, opts = {} },
+  { '2giosangmitom/nightfall.nvim', lazy = false, priority = 1000, opts = {} }, -- Has Maron
   -- { 'Vallen217/eidolon.nvim', priority = 1000 }, --(L=F) like rose pine but more blues/greens. maybe delete.
   --{ 'calind/selenized.nvim' },
   --{ 'kvrohit/substrata.nvim' }, -- removing, just poimandres with super low contrast
