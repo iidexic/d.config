@@ -28,7 +28,7 @@ local function map_toggleterm()
   function _G.ttmap()
     local opts = { buffer = 0 }
     vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
-    --vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts) I think this making lazygit shit work bad
+    --vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
     vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts) --{ '<Esc><Esc>', '<C-\\><C-n>' }--wtf is this
     vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
     vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
@@ -192,10 +192,10 @@ function Map.plugins()
 end
 
 function Map.lsp()
-  local lspsaga = require 'lspsaga'
+  -- local lspsaga = require 'lspsaga'
   local m = {
     --{ '<leader>o', cmd 'Lspsaga outline', desc = '[o]utline Lspsaga' },
-    { '<leader>d', cmd 'Lspsaga diagnostic', desc = '[d]iagnostic Lspsaga' },
+    -- { '<leader>d', cmd 'Lspsaga diagnostic', desc = '[d]iagnostic Lspsaga' },
   }
   return m
 end

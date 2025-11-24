@@ -63,12 +63,6 @@ function M.setup()
           text_align = 'center',
           separator = true,
         },
-        {
-          filetype = 'neo-tree',
-          text = 'Neo-Tree',
-          text_align = 'center',
-          separator = true,
-        },
       },
     },
   }

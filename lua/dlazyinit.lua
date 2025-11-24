@@ -17,7 +17,7 @@ local D = {
       'plugins.hover',
       'plugins.lang-support',
       'plugins.layout',
-      'plugins.lsp_lspsaga',
+      --'plugins.lsp_lspsaga', -- DISABLED, does it clash with mason/lspconfig?
       'plugins.markdown',
       'plugins.mini',
       'plugins.obsidian',
@@ -43,22 +43,17 @@ local D = {
     --# Trial Plugins
     local trials = {
       --NEW:
-      'trials.snacks',
+      'trials.snacks', -- DISABLED
       'trials.dividerline',
-      --'trials.huez-themeBrowser',
-      --'trials.windline', -- too much work right now
-      'trials.split', -- doesn't interfere with existing g mappings -- ok but what does it do
+      --'trials.split', -- splits lines on delimiters
       'trials.nvim_dev',
-      --      'trials.kanban', -- does not work
-      'trials.nvim-macros',
+      --'trials.nvim-macros',
       'trials.supermaven_ai',
-      --'trials.neoclip', -- just annoying
       'trials.grug-far',
 
       --'trials.trailblazer', 'trials.origami', 'trials.glance', 'trials.hawtkeys',
       --'trials.helpview', 'trials.iron', 'trials.nvim_dev', 'trials.plugin_bundle',
-      --'trials.prettyhover', 'trials.supermaven_ai', 'trials.spectre'
-      --'trials.tiny_inline_diagnostic',
+      --'trials.prettyhover', 'trials.spectre', 'trials.tiny_inline_diagnostic',
     }
 
     local devplugs = require 'plugins._devplugins'
@@ -69,7 +64,7 @@ local D = {
     plugload.loadfiles(trials)
 
     --# Themes
-    plugload.add(require('theme.themes').themelist)
+    plugload.add(require 'theme.themes')
     plugload.add(require 'theme.more-themes')
     ------------------------------------------------------------------------------
     --# Lazy definitions

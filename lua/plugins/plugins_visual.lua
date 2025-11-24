@@ -18,31 +18,24 @@ return {
     dependencies = { 'nvim-lua/plenary.nvim' },
     opts = { signs = false },
   },
-  {
+  { -- TODO: Add a mapping to generate annotations
     'danymat/neogen',
     config = true,
+    opts = {
+      languages = { 'go', 'lua', 'python' },
+    },
     -- version = "*" -- Uncomment for only stable versions
   },
-  { -- nicer floating window/picker ui. try out some time
+  { -- nicer floating window/picker ui. (Has it been in use?)
     'stevearc/dressing.nvim',
-    cond = true,
-  },
-  {
-    'rachartier/tiny-devicons-auto-colors.nvim',
-    dependencies = {
-      'nvim-tree/nvim-web-devicons',
-    },
-    event = 'VeryLazy',
-    config = function()
-      require('tiny-devicons-auto-colors').setup()
-    end,
+    enabled = true,
   },
 
   {
     'soemre/commentless.nvim',
     cmd = 'Commentless',
     keys = {
-      {
+      { -- just add this to keymaps
         '<leader>\\',
         function()
           require('commentless').toggle()
@@ -53,12 +46,9 @@ return {
     dependencies = {
       'nvim-treesitter/nvim-treesitter',
     },
-    opts = {
-      -- Customize Configuration
-    },
+    opts = {},
   },
-  -- Fancy Comment Formatting - boxes, separators, all that good stuff
-  {
+  { -- Fancy Comment Formatting - boxes, separators, all that good stuff
     'LudoPinelli/comment-box.nvim',
   },
   { -- Commenting Plugin: Comment Toggling, regex ignore, other useful stuff

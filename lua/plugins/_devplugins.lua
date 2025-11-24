@@ -1,11 +1,34 @@
 local M = {}
 -- Mainly where plugins go that I want to tweak internally
+local fp = {
+  iconpicker = 'c:/dev/luaprojects/icon-picker.nvim',
+  miss = 'c:/dev/luaprojects/miss.nvim',
+  dur = 'c:/dev/luaprojects/dur.nvom',
+  material = 'c:/dev/luaprojects/material.nvim',
+  helpme = 'c:/dev/luaprojects/helpme',
+  scratch = 'c:/dev/luaprojects/scratch.nvim',
+}
+local function ifFile(path)
+  if fp[path] then
+    path = fp[path] .. '/init.lua'
+  end
+  local f = function()
+    local file = io.open(path, 'r')
+    if file ~= nil then
+      io.close(file)
+      return true
+    else
+      return false
+    end
+  end
+  return f
+end
 
 M.plugins = {
   { -- icon-picker: telescope picker for Nerd Fonts icons
     'ziontee113/icon-picker.nvim',
-    dir = 'c:/dev/luaprojects/icon-picker.nvim/',
-    dev = true,
+    dir = fp.iconpicker,
+    dev = ifFile 'iconpicker',
     config = function()
       local ip = require 'icon-picker'
       ip.setup { disable_legacy_commands = true }
@@ -20,14 +43,14 @@ M.plugins = {
   {
     'iidexic/miss.nvim',
     -- test github repo ver
-    dir = 'c:/dev/luaprojects/miss.nvim',
-    dev = true,
+    dir = fp.miss,
+    dev = ifFile 'miss',
     opts = { key_miss = '<leader>um' },
   },
   {
     'iidexic/dur.nvom',
-    dir = 'c:/dev/luaprojects/dur.nvom',
-    dev = true,
+    dir = fp.dur,
+    dev = ifFile 'dur',
     keys = function(self, keys)
       local map = {}
       return map
@@ -37,7 +60,7 @@ M.plugins = {
   {
     'iidexic/material.nvim',
     dir = 'c:/dev/luaprojects/material.nvim/',
-    dev = true,
+    dev = ifFile 'material',
     opts = {
       plugins = {
         'neo-tree',
@@ -59,8 +82,8 @@ M.plugins = {
   { 'helpme', dir = 'c:/dev/luaprojects/helpme/', dev = true },
   { -- Scratch: Create general/language-specific scratch buffers
     'iidexic/scratch.nvim',
-    dir = 'c:/dev/luaprojects/scratch.nvim/',
-    dev = true,
+    dir = fp.scratch,
+    dev = ifFile 'scratch',
     dependencies = { 'nvim-telescope/telescope.nvim' },
     event = 'VeryLazy',
     keys = { { '<leader>us', '<cmd>Scratch<CR>', 'New Scratch Buffer' } },

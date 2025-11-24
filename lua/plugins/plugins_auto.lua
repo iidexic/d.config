@@ -46,7 +46,6 @@ return {
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
     dependencies = {
-
       { -- Snippet Engine & its associated nvim-cmp source
         'L3MON4D3/LuaSnip',
         build = (function() -- Build Step is needed for regex support in snippets. Windows usually not supported
@@ -69,7 +68,7 @@ return {
       'hrsh7th/cmp-nvim-lsp', -- adds other completion capabilities. next 2 lines are included with this
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-nvim-lsp-signature-help',
-      'Snikimonkd/cmp-go-pkgs',
+      'Snikimonkd/cmp-go-pkgs', -- TODO: doublecheck on all these
     },
     config = function()
       local cmp = require 'cmp' -- see `:help cmp`
@@ -109,7 +108,7 @@ return {
               https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
           --]]
         },
-        sources = {
+        sources = { -- INFO: CHECK HELP, DOES THIS CAUSE LSP ISSUES
           {
             name = 'lazydev',
             group_index = 0, -- set group index to 0 to skip loading LuaLS completions as lazydev recommends it

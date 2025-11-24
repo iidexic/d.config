@@ -1,7 +1,4 @@
-local nofunc = function() end
-local Maker = {}
-
-Maker.themelist = {
+return {
   -- ── Cool Themes ─────────────────────────────────────────────────────
   { -- The best, main theme
     'everviolet/nvim',
@@ -21,8 +18,9 @@ Maker.themelist = {
     },
   },
   ----| Teal/blue-green |----
-  { 'raphamorim/lucario' }, --+ great cobalt-ish
-  { 'Tsuzat/NeoSolarized.nvim', opts = { transparent = false }, priority = 1000 },
+  -- { 'raphamorim/lucario' }, -- it's so bright
+  -- { 'Tsuzat/NeoSolarized.nvim', opts = { transparent = false }, priority = 1000 },
+  { 'vv9k/bogster' }, --+ best theme
   { 'mhartington/oceanic-next' }, --+ good all-round blue toward green theme
   { 'jsit/toast.vim' }, --+  blue toward green theme.
   --{ 'PHSix/nvim-hybrid', priority = 1000, lazy = false }, no alt bg
@@ -56,23 +54,16 @@ Maker.themelist = {
       },
     },
   }, --+ NVIM VERSION NOW! darker more neutral evergarden (kind of). only issue is red tab marks
-  { 'sainnhe/everforest', name = 'everforest', priority = 1000, enabled = false }, -- theme; mid-dark, green
+  -- { 'sainnhe/everforest', name = 'everforest', priority = 1000, enabled = false }, -- theme; mid-dark, green
 
   -- ── Near Neutrals ───────────────────────────────────────────────────
   { 'rebelot/kanagawa.nvim' }, -- has blue ish flat wave theme, darker jungley dragon theme
   { 'cryptomilk/nightcity.nvim' }, --+good color cohesion, washed-out grub with some blues. weird string highlighting
   --{ 'HoNamDuong/hybrid.nvim', priority = 1000, opts = { transparent = false, inverse = false } }, --=it's fine. neutral pushing warm. have two of these for some reason
-  { 'rafalbromirski/vim-aurora' }, --+ Darker Neutral, colorful. has some black bgs
-  { 'EdenEast/Revolution.vim' }, --+ great. Definitely slightly green/yellow
-  { 'flrnd/plastic.vim' }, -- neutral with muted blue/orange/green
+  -- { 'rafalbromirski/vim-aurora' }, --+ Darker Neutral, colorful. has some black bgs
+  -- { 'EdenEast/Revolution.vim' }, --+ great. Definitely slightly green/yellow
+  -- { 'flrnd/plastic.vim' }, -- neutral with muted blue/orange/green
   { 'sam4llis/nvim-tundra' }, -- certainly blue, but feels more neutral with all the reds
-  { -- pushes warm
-    'chama-chomo/grail', --~ replace in material!
-    version = false,
-    lazy = false,
-    priority = 1000, -- make sure to load this before all the other start plugins
-    opts = {},
-  },
   {
     'EdenEast/nightfox.nvim',
     names = { 'nightfox', 'nordfox', 'terafox', 'carbonfox', 'duskfox', 'dawnfox', 'dayfox' },
@@ -88,14 +79,13 @@ Maker.themelist = {
 
   ----|Brown|----
   { 'Donearm/Ubaryd', cond = true }, --+ light brown
-  { 'nvimdev/zephyr-nvim', priority = 1000 }, --+ neutral to warm
+  -- { 'nvimdev/zephyr-nvim', priority = 1000 }, --+ neutral to warm
 
-  { 'vv9k/bogster' }, --+ best theme
   { 'relastle/bluewery.vim' },
   { 'darkvoid-theme/darkvoid.nvim' }, -- good mono theme with green operators
-  { 'yuttie/hydrangea-vim' }, -- eh. strings are highlighted blue for some reason
+  -- { 'yuttie/hydrangea-vim' }, -- eh. strings are highlighted blue for some reason
   { 'yazeed1s/oh-lucy.nvim', name = 'oh-lucy' }, -- darkblue-steel bg, white, light-pink, cool yellow, touch of aqua/teal
-  { 'jacoborus/tender.vim' }, -- borderless. interesting, slight warm w/blue
+  -- { 'jacoborus/tender.vim' }, -- borderless. interesting, slight warm w/blue
 
   { --> Great, nordic with some reds added, works well
     'AlexvZyl/nordic.nvim',
@@ -109,7 +99,7 @@ Maker.themelist = {
     priority = 1000,
   },
   { 'tiagovla/tokyodark.nvim', opts = {} }, -- I think going to replace tokyonight
-  {
+  { -- I guess its fine? meh
     'folke/tokyonight.nvim', --  a classic
     priority = 1000,
   },
@@ -132,12 +122,7 @@ Maker.themelist = {
 -- { 'ronisbr/nano-theme.nvim', enabled = false }, -- Very minimal, have enough. add vim.o.background = 'dark' if this errors
 -- { 'oonamo/ef-themes.nvim', cond = false }, -- big ass pack. not worth wading thru
 -- ef keepers:
--- dream
--- tint ?
--- false
--- bio
--- maris-dark
--- tritanopia-dark
+-- dream, tint ?, false, bio, maris-dark, tritanopia-dark,
 -- ── removed ────────────────────────────────
 --{ 'Nequo/vim-allomancer', cond = false }, --~ decent neutral theme, color cohesion isn't ideal, pink/purp sticks out
 --{ 'FrenzyExists/aquarium-vim', cond = false }, --~ tabspace highlight issue. besides that, nice slightly cool
@@ -149,5 +134,42 @@ Maker.themelist = {
 --{ 'tjdevries/colorbuddy.nvim' }, -- try out again?
 --{ 'lalitmee/cobalt2.nvim', config = true, priority = 1000 }, -- needs colorbuddy
 -- { 'DemonCloud/J', opts = {} }, -- old vim one that you have to manually move??? wtf
-
-return Maker
+-- ── GO BYE BYE ──────────────────────────────────────────────────────────────────
+--{ 'kaiuri/nvim-juliana' }, -- no
+-- { 'bluz71/vim-moonfly-colors', name = 'moonfly', lazy = false, priority = 1000 },
+-- { 'zootedb0t/citruszest.nvim', lazy = false, priority = 1000 },
+-- { 'genmzy/deus.nvim' }, -- the only working deus lmao BUT I DONT NEED YOU NO MORE
+-- { 'sekke276/dark_flat.nvim' },
+-- { 'ptdewey/darkearth-nvim', priority = 1000 },
+-- { 'rockerBOO/boo-colorscheme-nvim' }, -- idk
+-- { 'sainnhe/sonokai', config = function() vim.g.sonokai_style = 'atlantis' vim.g.sonokai_better_performance = 1 end, }, -- STYLE: andromeda-atlantis (neut (w-c)), espresso (warm),
+--{ 'Abstract-IDE/Abstract-cs' }, -- steal, delete
+--{ 'yonlu/omni.vim' }, -- put in material
+--{ 'fenetikm/falcon' }, -- like
+--  { 'ofirgall/ofirkai.nvim', opts = { theme = 'dark_blue' } }, -- yellow monkai bg but also darkblue which is good. eh
+-- { 'adisen99/codeschool.nvim' },
+-- { 'kvrohit/rasmus.nvim', priority = 1000 }, -- trying again
+-- { 'lmburns/kimbox' }, -- may need opts {}
+-- { 'Mofiqul/adwaita.nvim', lazy = false, priority = 1000 },
+-- { 'slugbyte/lackluster.nvim', lazy = false, priority = 1000 }, -- dark, minimal, lowmid saturation
+-- { 'mcauley-penney/techbase.nvim', priority = 1000, opts = { transparent = false } }, -- not a complete theme
+-- { 'olivercederborg/poimandres.nvim', priority = 1000, opts = {} }, --(L=F)dark neut/blue bg with green accents
+-- { 'datsfilipe/vesper.nvim' },
+-- { 'https://gitlab.com/bartekjaszczak/luma-nvim', priority = 1000, }, -- ugly as sin rn
+-- { 'https://gitlab.com/bartekjaszczak/finale-nvim', priority = 1000 }, -- also pretty fuckin ugly
+--{ url = 'https://gitlab.com/sxwpb/halfspace.nvim' }, -- not workin prob Lazy thing
+--{ 'RishabhRD/gruvy'  }, no worky
+--{ 'embark-theme/vim' }, -- it's a lighter rose pine, do not need
+-- { 'Alexis12119/nightly.nvim', priority = 1000 }, --(L=F) OPTS={} IF ERRORS -- literally just everblush but with blue vals instead of yellow
+-- { 'Vallen217/eidolon.nvim', priority = 1000 }, --(L=F) like rose pine but more blues/greens. maybe delete.
+--{ 'calind/selenized.nvim' },
+--{ 'kvrohit/substrata.nvim' }, -- removing, just poimandres with super low contrast
+-- { 'JoosepAlviste/palenightfall.nvim' }, -- neut to bluepurp
+-- { 'mellow-theme/mellow.nvim' }, -- slight warm that looks good, has config opts
+--{
+--   'chama-chomo/grail', --~ replace in material!
+--   version = false,
+--   lazy = false,
+--   priority = 1000, -- make sure to load this before all the other start plugins
+--   opts = {},
+-- },

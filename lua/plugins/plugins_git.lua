@@ -1,24 +1,5 @@
 local M = {}
 M.plugins = {
-  { -- LazyGit because I just really prefer it to Neovim
-    'kdheepak/lazygit.nvim',
-    lazy = true,
-    cmd = {
-      'LazyGit',
-      'LazyGitConfig',
-      'LazyGitCurrentFile',
-      'LazyGitFilter',
-      'LazyGitFilterCurrentFile',
-    },
-    -- optional for floating window border decoration
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-    },
-    keys = {
-      { '<leader>gl', '<cmd>LazyGit<cr>', desc = 'LazyGit' },
-      { '<leader>go', '<cmd>LazyGit<cr>', desc = 'LazyGitLog' },
-    },
-  },
   { -- nice quick git actions
     'chrisgrieser/nvim-tinygit',
     dependencies = 'nvim-telescope/telescope.nvim',
@@ -28,7 +9,7 @@ M.plugins = {
     'NeogitOrg/neogit',
     dependencies = {
       'nvim-lua/plenary.nvim', -- required
-      'sindrets/diffview.nvim', -- optional - Diff integration
+      'sindrets/diffview.nvim', -- optional - Diff integration (I rarely use this)
       'nvim-telescope/telescope.nvim', -- optional
     },
   },

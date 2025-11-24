@@ -1,5 +1,5 @@
 return {
-  {
+  { -- I should still use this.
     'tris203/precognition.nvim',
     event = 'VeryLazy',
     opts = {

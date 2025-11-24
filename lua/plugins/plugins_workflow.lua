@@ -1,6 +1,4 @@
-local Wf = {}
--- this was here to have multiple lists but I just put them in diff places
-Wf.plugins = {
+return {
   {
     'windwp/nvim-autopairs',
     event = 'InsertEnter',
@@ -38,5 +36,3 @@ Wf.plugins = {
   },
   --Leap and extensions
 }
-
-return Wf.plugins
