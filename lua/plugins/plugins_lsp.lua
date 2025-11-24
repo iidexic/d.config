@@ -98,15 +98,17 @@ return {
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
-      -- This doesn't do anything
-      -- fuck off
       local servers = {
         basedpyright = {},
         pylsp = {},
 
         gopls = {
-          --buildFlags = { '-tags=mage', 'mage' },
-          standaloneTags = { 'ignore', 'mage' },
+          settings = {
+            gopls = {
+              buildFlags = { '-tags=mage' },
+              standaloneTags = { 'ignore', 'mage' },
+            },
+          },
         },
         golangci_lint_ls = {},
         lua_ls = {
@@ -134,26 +136,15 @@ return {
         automatic_enable = { exclude = { 'markdown_oxide', 'golangci_lint_ls' } },
         handlers = {
           function(server_name)
-            if server_name ~= 'gopls' then
-              local server = servers[server_name] or {}
-              server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-              require('lspconfig')[server_name].setup(server)
-            end
-          end,
-          ['gopls'] = function() -- Specific handler for golang (gopls)
-            local lspconfig = require 'lspconfig'
-            lspconfig['gopls'].setup {
-              capabilities = capabilities,
-              settings = {
-                gopls = {
-                  buildFlags = { '-tags=mage' },
-                  standaloneTags = { 'ignore', 'mage' },
-                },
-              },
-            }
+            local server = servers[server_name] or {}
+            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+            require('lspconfig')[server_name].setup(server)
           end,
         },
       }
+      for name, config in pairs(servers) do
+        vim.lsp.config(name, config)
+      end
     end,
   },
 }
