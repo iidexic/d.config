@@ -33,8 +33,7 @@ M.plugins = {
   { -- set this up!
     'willothy/wezterm.nvim',
     name = 'wezterm.nvim',
-    cond = not vim.g.neovide,
-    config = true,
+    cond = vim.g.neovide or false,
     opts = {
       create_commands = true,
     },
@@ -54,8 +53,9 @@ M.plugins = {
     'romus204/referencer.nvim',
     opts = {
       enable = true,
-      format = '  %d reference(s)',
-      pattern = '*.go',
+      format = '     %d refs',
+      pattern = {'*.go', '*.lua'},
+
     },
     config = true,
   },

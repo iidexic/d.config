@@ -2,6 +2,7 @@ local M = {
   {
     'stevearc/aerial.nvim',
     opts = {
+      layout = { width = 0.2 },
       -- layout = { },
       -- attach_mode = "global", -- default "window", global will change to show active buffer
       on_attach = function(bufnr)

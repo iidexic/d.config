@@ -3,12 +3,8 @@ vim.keymap.set('i', '<C-l>', '<esc><l><a>', { desc = 'edit shift right' })
 local function cmd(s)
   return '<cmd>' .. s .. '<CR>'
 end
-local function dsc(s)
-  return { desc = s }
-end
-local function ld(s)
-  return '<leader>' .. s
-end
+
+local vimfunc = require 'settings.vim_functionality'
 
 ---@enum toggleterm_mode
 local ttmode = { h = 'horizontal', v = 'vertical', f = 'float', t = 'tab' }
@@ -78,13 +74,14 @@ local maptables = {
   --      Which-key description for go mappings is just using command name
   assigns = {
     -- trouble don't work good
-    { '<leader>q', vim.diagnostic.setloclist, dsc 'Quickfix list' },
+    { '<leader>q', vim.diagnostic.setloclist, desc = 'Quickfix list' },
     { '<Esc>', '<cmd>nohlsearch<CR>' },
     { '<C-h>', '<C-w><C-h>', desc = 'Move focus to the left window' },
     { '<C-k>', '<C-w><C-k>', desc = 'Move focus to the upper window' },
     { '<C-l>', '<C-w><C-l>', desc = 'Move focus to the right window' },
     { '<C-j>', '<C-w><C-j>', desc = 'Move focus to the lower window' },
-    { '|', cmd 'lua MiniFiles.open()', desc = 'MiniFiles open' },
+    --NOTE: Replacing Neo-tree due to neo-tree lsp problems
+    { '\\', cmd 'lua MiniFiles.open()', desc = 'MiniFiles open' },
     --hoping this will open wk
     { '<M-\\>', desc = 'ToggleTerm Mode' },
     { '<M-\\>h', toggleterm_mode 'h', desc = 'ToggleTerm Mode horizontal' },
@@ -94,18 +91,8 @@ local maptables = {
     { '<M-h>', tabpage_prev, desc = 'previous tabpage' },
     { '<M-l>', tabpage_next, desc = 'next tabpage' },
     -- ── Custom Functions ────────────────────────────────────────────────
-    {
-      '<leader>vb',
-      function()
-        --local det = vim.fn.getbufinfo(vim.fn.bufnr())
-        local bnum = vim.fn.bufnr()
-        local bn = vim.fn.bufname(bnum)
-        local btype = vim.fn.getbufvar(bnum, '&buftype')
-        local b = 'BUFFER\nname: ' .. bn .. '\nnum: ' .. bnum .. '\ntype: ' .. btype
-        vim.print(b)
-      end,
-      desc = 'Vim: print current buffer detail',
-    },
+    { '<leader>vb', vimfunc.print_buf_detail, desc = 'Vim: print current buffer detail' },
+    { '<Tab>', vimfunc.switchToLastBuffer, desc = 'Vim: switch to last buffer' },
     {
       '<C-w>f',
       function()
@@ -136,9 +123,6 @@ local maptables = {
     { '<leader>ln', cmd 'GoRename', desc = 'Go Rename symbol' },
     { '<leader>lI', cmd 'GoImpl', desc = 'GoImpl' },
   },
-  lsp_learning = {
-    --{ '<A-l>h', vim.lsp.buf.hover(), dsc 'show hover info' }, this is already on 'K'
-  },
 }
 local Map = {
   assign = function()
@@ -161,28 +145,26 @@ function Map.plugins()
   Map.wk.add {
     mode = 'n',
     {
-      { ld 'ps', pr.load, desc = 'Load cwd session' },
-      { ld 'pS', pr.select, desc = 'Select session' },
+      { 'ps', pr.load, desc = 'Load cwd session' },
+      { '<leader>pS', pr.select, desc = 'Select session' },
       {
-        ld 'pl',
+        '<leader>pl',
         function()
           pr.load { last = true }
         end,
         desc = 'Load last session',
       },
-      { ld 'pd', pr.stop, desc = 'Disable session save' },
+      { '<leader>pd', pr.stop, desc = 'Disable session save' },
     },
   }
-  Map.wk.add({
-    { '<Leader>ui', '<cmd>IconPickerNormal<cr>', desc = 'Icon Picker 💪' },
-  }, { silent = true })
+  Map.wk.add({ { '<Leader>ui', '<cmd>IconPickerNormal<cr>', desc = 'Icon Picker 💪' } }, { silent = true })
   local mappingFunctions = {
     Map.gitplugins,
     Map.other_plugins,
     Map.leap,
     Map.commentbox,
-    Map.lsp,
-    Map.hover,
+    -- Map.lsp,
+    --Map.hover, --NOTE: Hover is disabled for now
     Map.neovide,
     Map.vim,
   }
@@ -191,14 +173,6 @@ function Map.plugins()
   end
 end
 
-function Map.lsp()
-  -- local lspsaga = require 'lspsaga'
-  local m = {
-    --{ '<leader>o', cmd 'Lspsaga outline', desc = '[o]utline Lspsaga' },
-    -- { '<leader>d', cmd 'Lspsaga diagnostic', desc = '[d]iagnostic Lspsaga' },
-  }
-  return m
-end
 function Map.vim()
   local m = {
     { '<A-r>', ':lua<CR>', mode = 'v', desc = 'run selected lua code' },
@@ -245,7 +219,7 @@ function Map.gitplugins()
       desc = 'Neogit in vsplit',
     },
     -- Need to add context or this will just open the full project diffview
-    { ld 'gd', require('diffview').open, desc = 'open diffview' },
+    { '<leader>gd', require('diffview').open, desc = 'open diffview' },
     -- Errors if not in diffview. Could be implementation problem
     -- try the plugin config keymap
     --[[ {
@@ -298,7 +272,7 @@ function Map.other_plugins()
     -- Precognition
     { '<leader>up', precog.toggle, desc = '[U]til: [p]recognition toggle' },
     -- Aerial
-    --{ ld 'ua', aerial.open, desc = '[U]til: [a]erial' },
+    --{ '<leader>ua', aerial.open, desc = '[U]til: [a]erial' },
     { '<leader>ua', '<cmd>AerialToggle!<CR>', desc = '[U]til: [a]erial' },
     -- Outline (in outline config in aerial.lua)
     -- Ccc
@@ -341,8 +315,8 @@ function Map.other_plugins()
     { '<leader>nl', '<cmd>NoNeckPainToggleLeftSide<cr>', desc = '(Toggle Left)' },
     { '<leader>nu', Map.nnp_resize(4), desc = '(Width+)' },
     { '<leader>nU', Map.nnp_resize(1), desc = '(Width+ precise)' },
-    { '<leader>nd', Map.nnp_resize(-4), desc = '(Width-)' },
-    { '<leader>nd', Map.nnp_resize(-1), desc = '(Width- precise)' },
+    { '<leader>nd', Map.nnp_resize(-2), desc = '(Width-)' },
+    { '<leader>nD', Map.nnp_resize(-4), desc = '(Width- precise)' },
 
     -- zen mode
     {
@@ -357,8 +331,8 @@ function Map.other_plugins()
       end,
       desc = '[u]til: [z]en mode',
     },
-    --DividerLine
-    { '<leader>ud', require('divider').toggle_outline, desc = 'Open Dividerline Sidebar' },
+    --DividerLine (removed)
+    -- { '<leader>ud', require('divider').toggle_outline, desc = 'Open Dividerline Sidebar' },
   }
   return m
 end

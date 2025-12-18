@@ -3,6 +3,7 @@ local M = {}
 M.plugins = {
   {
     'nvim-neo-tree/neo-tree.nvim',
+    cond = false,
     version = '*',
     dependencies = {
       'nvim-lua/plenary.nvim',
@@ -10,15 +11,15 @@ M.plugins = {
       'MunifTanjim/nui.nvim',
     },
     cmd = 'Neotree',
-    keys = {
-      {
-        '\\',
-        ':Neotree toggle=true<CR>',
-        --[[function() require('neo-tree.command').execute {'toggle'} end,--]]
-        desc = 'NeoTree toggle',
-        silent = true,
-      },
-    },
+    -- keys = {
+    --   {
+    --     '\\',
+    --     ':Neotree toggle=true<CR>',
+    --     --[[function() require('neo-tree.command').execute {'toggle'} end,--]]
+    --     desc = 'NeoTree toggle',
+    --     silent = true,
+    --   },
+    -- },
     opts = {
       filesystem = {
         hide_hidden = false,

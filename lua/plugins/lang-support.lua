@@ -1,30 +1,11 @@
 return {
   -- ────────────────────────────────[ Other ]──────────────────────────────
-  -- nushell. This is the only one, its for null-ls though. Try anyway?
-  { 'LhKipp/nvim-nu', enabled = false, build = ':TSInstall nu', opts = {} },
-  -- ───────────────────────────────[ Python ]──────────────────────────────
-  { -- open/convert jupyter notebooks to .py files with hydrogen (or other) style.
-    'GCBallesteros/jupytext.nvim',
-    enabled = false,
-    -- Depending on your nvim distro or config you may need to make the loading not lazy
-    -- lazy=false,
-  },
-  { -- helper for automated imports, mainly for pyright lsp
-    'stevanmilic/nvim-lspimport',
-    enabled = false,
-    -- suggests a mapping:
-    -- vim.keymap.set("n", "<leader>a", require("lspimport").import, { noremap = true })
-    -- find a way to make this an autocommand if end up using
-  },
   {
-    'benlubas/molten-nvim',
-    ---opts = {},
-    enabled = false,
-  },
-  { -- runs python code. I am guessing it prefers hydrogen format
+    -- runs python code. I am guessing it prefers hydrogen format
     -- the readme says may only be usable if using vimscript config files.
     'smzm/hydrovim',
     dependencies = { 'MunifTanjim/nui.nvim' },
+    enabled = false,
   },
   {
     'alexpasmantier/pymple.nvim',
@@ -58,19 +39,27 @@ return {
       'ray-x/guihua.lua',
       'neovim/nvim-lspconfig',
       'nvim-treesitter/nvim-treesitter',
-      'rcarriga/nvim-dap-ui',
-      'theHamsta/nvim-dap-virtual-text',
     },
-    config = function()
-      require('go').setup {
-        --lsp_cfg = true,
-        build_tags = '-tags=mage',
+    opts = function()
+      require('go').setup(opts)
+      local format_sync_grp = vim.api.nvim_create_augroup('GoFormat', {})
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        pattern = '*.go',
+        callback = function()
+          require('go.format').goimports()
+        end,
+        group = format_sync_grp,
+      })
+      return {
+        -- lsp_keymaps = false,
+        -- other options
       }
     end,
     event = { 'CmdlineEnter' },
     ft = { 'go', 'gomod' },
     build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
   },
+
   --TODO: Need to choose between goplements and gosigns? one is gutter.
   -- could probably use both. not sure if gosigns is going to be actually useful
 
@@ -82,7 +71,7 @@ return {
   },
   { -- visualize interface+struct+method implementation, and //go: comments. Very customizable
     'Yu-Leo/gosigns.nvim',
-    cond = true,
+    cond = false,
     ft = 'go',
     cmd = { 'GosignsEnable', 'GosignsDisable', 'GosignsToggle' },
     opts = {}, -- for default options. Refer to the configuration section for custom setup.

@@ -5,7 +5,7 @@ return {
     name = 'evergarden',
     priority = 1000,
     opts = { -- variants: 'winter'|'fall'|'spring'|'summer'
-      theme = { variant = 'fall', accent = 'red' }, -- cant b purple :)
+      theme = { variant = 'winter', accent = 'red' }, -- cant b purple :)
       editor = {
         transparent_background = false,
         sign = { color = 'none' },
@@ -14,6 +14,18 @@ return {
           invert_border = false,
         }, -- more config options on github
         completion = { color = 'surface0' },
+      },
+      integrations = {
+        blink_cmp = true,
+        indent_blankline = { enable = true },
+        gitsigns = true,
+        telescope = true,
+        which_key = true,
+        mini = {
+          files = true,
+          statusline = true,
+          surround = true,
+        },
       },
     },
   },

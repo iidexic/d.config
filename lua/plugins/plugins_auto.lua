@@ -1,6 +1,7 @@
 return {
   {
     'https://github.com/saifulapm/commasemi.nvim',
+    enabled = false,
   },
   { -- Autoformat (conform.nvim)
     'stevearc/conform.nvim',
@@ -63,9 +64,10 @@ return {
           },
         },
       },
-      'lukas-reineke/cmp-under-comparator', -- personal one, intended to make completions a bit better when underscores are involved
+      -- 'lukas-reineke/cmp-under-comparator', -- personal one, intended to make completions a bit better when underscores are involved
       'saadparwaiz1/cmp_luasnip',
-      'hrsh7th/cmp-nvim-lsp', -- adds other completion capabilities. next 2 lines are included with this
+      --WARNING: cmp-nvim-lsp, don't think its the issue though
+      -- 'hrsh7th/cmp-nvim-lsp', -- adds other completion capabilities. next 2 lines are included with this
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-nvim-lsp-signature-help',
       'Snikimonkd/cmp-go-pkgs', -- TODO: doublecheck on all these
@@ -117,8 +119,8 @@ return {
           { name = 'luasnip' },
           { name = 'path' },
           { name = 'gopls' },
-          { name = 'nvim_lsp_signature_help' },
-          { name = 'go_pkgs' },
+          -- { name = 'nvim_lsp_signature_help' },
+          -- { name = 'go_pkgs' },
         },
         matching = { disallow_symbol_nonprefix_matching = false }, --for go_pkgs, to use . and / in urls
         -- defaults: performance = { debounce = 60, throttle = 30, fetching_timeout = 500, filtering_context_budget = 3, confirm_resolve_timeout = 80, async_budget = 1, max_view_entries = 200, },

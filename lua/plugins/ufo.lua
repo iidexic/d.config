@@ -18,19 +18,7 @@ M.plugins = {
       -- for the time being this has worked; will update if run into problems
 
       -- ── Option 2: nvim lsp as provider ────────────────────────────────
-      -- Tell the server the capability of foldingRange. Neovim hasn't added foldingRange to default capabilities, users must add it manually
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities.textDocument.foldingRange = {
-        dynamicRegistration = true, -- false? I dunno. This was originally false
-        lineFoldingOnly = true,
-      }
-      local language_servers = vim.lsp.get_clients() -- or list servers {'gopls', 'clangd'}
-      for _, ls in ipairs(language_servers) do
-        require('lspconfig')[ls].setup {
-          capabilities = capabilities,
-        } -- you can add other fields for setting up lsp server in this table
-      end
-      --require('ufo').setup()
+      -- This setup has been moved to lspconfig/mason setup
       -- ── Treesitter as provider ──────────────────────────────────────────
       require('ufo').setup {
         provider_selector = function(bufnr, filetype, buftype)

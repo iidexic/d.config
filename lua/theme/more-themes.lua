@@ -30,7 +30,7 @@ return {
   { 'metalelf0/jellybeans-nvim' },
   { 'uhs-robert/oasis.nvim' },
   { 'sainnhe/edge' }, -- steal (this is non-lua)
-  --{ 'ray-x/starry.nvim', priority = 1000, opts = { disable = { background = false } } }, --  steal the good ones and remove
+  { 'ray-x/starry.nvim', priority = 1000, opts = { disable = { background = false } } }, --  steal the good ones and remove
   { 'titanzero/zephyrium' }, -- zephyr fork. I mean it works better but idk
   { 'thesimonho/kanagawa-paper.nvim', lazy = false, priority = 1000 },
   { 'yashguptaz/calvera-dark.nvim' },
@@ -55,7 +55,7 @@ return {
   { 'cpea2506/one_monokai.nvim' },
   { 'akinsho/horizon.nvim' }, -- add version = "*" if bad
   { 'pineapplegiant/spaceduck' },
-  -- { 'diegoulloao/neofusion.nvim', priority = 1000, opts = {} }, -- actually unique
+  { 'diegoulloao/neofusion.nvim', priority = 1000, opts = {} }, -- actually unique
   { 'tobi-wan-kenobi/zengarden', opts = { variant = 'orange' } }, -- like
   { 'Shatur/neovim-ayu' }, --opts = { mirage = false, terminal = true, overrides = {} } },
   { 'savq/melange-nvim' },

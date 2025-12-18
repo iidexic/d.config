@@ -1,50 +1,26 @@
 --# Helpers (no want write long)
 local auto = vim.api.nvim_create_autocmd
 local agnames = {}
-local make_augroup = function(name)
-  table.insert(agnames, name)
-  return vim.api.nvim_create_augroup(name, { clear = true })
-end
+local make_augroup = require('settings.vim_util').autogroup
+-- local make_augroup = function(name) table.insert(agnames, name); return vim.api.nvim_create_augroup(name, { clear = true }) end
 
--- Control which hover is being used
--- vim basic, lspsaga, or hover.nvim (as of now)
-local hovr = { num = 2, selected = 'saga' }
-hovr.next = function()
-  hovr.sethover(hovr.num + 1)
-end
-hovr.prev = function()
-  hovr.sethover(hovr.num - 1)
-end
-function hovr.setnum(i)
-  hovr.num = ((i - 1) % 3) + 1 --  +1 cuz lua index starts at 1
-end
-function hovr.update_selection()
-  local methodmap = { 'vim', 'saga', 'hover.nvim' }
-  hovr.selected = methodmap[hovr.num]
-end
+-- NOTE: lsp autocommands are in autocommands_lsp.lua
+-- NOTE: autocommands to control/change hover provider (and corresponding settings) have been removed
 
-local hoverselect = function()
-  if hovr.selected then
-    if hovr.selected == 'vim' then
-    elseif hovr.selected == 'saga' then
-    elseif hovr.selected == 'hover.nvim' then
-    end
-  end
-end
+local M = {}
+local fp = require 'util.filepath'
 
-local M = {
-  opts = {
-    hover = true, -- enable/disable hover popup
-  },
-}
-local function persistAuto() -- why is this separate
-  -- `PersistenceSavePre` before saving a session, `PersistenceSavePost` after saving a session
-  vim.api.nvim_create_autocmd('User', {
+-- make autocommand for persistence save to close neotree
+-- NOTE: neotree not currently in use
+local function persistAuto()
+  auto('User', {
     pattern = 'PersistenceSavePre',
-    desc = 'Avoid saving open neotree window',
-    group = make_augroup 'persistence-save',
+    desc = 'eliminate unwanted buffers before saving',
+    group = make_augroup 'pre-save-buffer-elimination',
     callback = function()
-      require('neo-tree.command').execute { action = 'close' }
+      require('no-neck-pain').disable()
+      require('outline').close()
+      require('aerial').close()
     end,
   })
 end
@@ -52,11 +28,7 @@ end
 --  ┌─────────────────────────[ MAKE AUTOCOMMANDS ]─────────────────────────┐
 local function autocmd()
   -- ── Autocommand-related mapping ───────────────────
-  -- toggle hover
-  --( NOT NEEDED: Use K (<S-k>))
-  --[[ vim.keymap.set('n', 'gh', function()
-    M.opts.hover = not M.opts.hover
-  end, { desc = 'toggle hover popup' }) ]]
+  -- NOTE: hover autocommands removed
   --  ── [0] quick startup auto ──────────────────────────────────────────────
   auto('VimEnter', {
     desc = 'run whaler on startup if not in file',
@@ -68,6 +40,7 @@ local function autocmd()
       end
     end,
   })
+
   --  ── [1] highlight on yank ───────────────────────────────────────────────
   auto('TextYankPost', { -- Try it with `yap` in normal mode
     desc = 'Highlight when yanking (copying) text', --See`:help vim.highlight.on_yank()`
@@ -76,7 +49,8 @@ local function autocmd()
       vim.highlight.on_yank()
     end,
   })
-  --  ── [2] resize splits on window resize ─────────────────────────────── TODO: check if this is the source of resizing left-only
+
+  --  ── [2] resize splits on window resize ───────────────────────────────────
   auto({ 'VimResized' }, {
     group = make_augroup 'resize-splits',
     callback = function()
@@ -85,76 +59,32 @@ local function autocmd()
       vim.cmd('tabnext ' .. current_tab)
     end,
   })
+
   -- ── [3] delete tmp shada on shada lockup ────────────────────────────────
   auto({ 'VimLeave' }, {
     group = make_augroup 'on-dirty-exit',
     callback = function()
-      if vim.v.dying and string.sub(vim.v.errmsg, 1, 4) == 'E138' then
-        local shdir = vim.fn.stdpath 'data' .. '\\shada'
-        local shadas = vim.fn.globpath(shdir, '*.tmp.*', false, true)
-        for _, v in pairs(shadas) do -- deletes all shada tmp files
-          vim.fn.delete(v)
+      if vim.v.dying then
+        if string.sub(vim.v.errmsg, 1, 4) == 'E138' then
+          local shdir = vim.fn.stdpath 'data' .. '\\shada'
+          local shadas = vim.fn.globpath(shdir, '*.tmp.*', false, true)
+          for _, v in pairs(shadas) do -- deletes all shada tmp files
+            vim.fn.delete(v)
+          end
+        else
+          -- write to log file
+          local logfile = vim.fn.stdpath 'data' .. '\\logs\\nvim-dirty-exit.log'
+
+          local log = io.open(logfile, 'a')
+          if log then
+            log:write(vim.v.errmsg .. '\n')
+            log:close()
+          end
         end
       end
     end,
   })
 
-  -- ── [4] make lsp autocommands on attach ───────────────────────────────── NOTE: time to hang it up; for now at least
-  -- auto('LspAttach', {
-  --   group = ag 'lsp-attached-setauto',
-  --   callback = function() --──────────────── LSP ACTIVE ENTERED ───
-  --     -- ───────────────────────── [4a] idle hover popup ───────────────────────
-  --     auto('CursorHold', {
-  --       group = ag 'lsp-hover-custom',
-  --       callback = function()
-  --         if M.opts.hover then -- best way to set this up?
-  --           require('hover').hover()
-  --           --[[ vim.lsp.buf.hover {
-  --             max_height = 40,
-  --             max_width = 160,
-  --             --offset_x = 4, -- offset defaults probably 0
-  --             --offset_y = 2,
-  --             --zindex = 50, -- default 50, is forward/back. keep here
-  --             anchor_bias = 'auto', --auto|above|below
-  --             relative = 'cursor', --cursor|mouse|editor
-  --             focus = false,
-  --             silent = true,
-  --             --not the biggest fan of border but damn does it make shit easier
-  --             -- "none", "single"(line), "double", "rounded", "solid"(block), "shadow"
-  --             border = 'none', -- shadow would be best; it has issues
-  --
-  --             --close_events = {''} --idk defaults,
-  --           } ]]
-  --         end
-  --       end,
-  --     })
-  --   end,
-  -- })
-  auto('User', {
-    group = make_augroup 'pre-persistence-save',
-    pattern = 'PersistenceSavePre',
-    callback = function()
-      -- local bufnames_delete = { '[OUTLINE_1]', '[OUTLINE_2]' }
-      -- -- close buffers I don't want to save
-      -- local bufs = vim.fn.getbufinfo()
-      -- for _, buf in ipairs(bufs) do
-      --   if vim.tbl_contains(bufnames_delete, buf.name) then
-      --     vim.api.nvim_buf_delete(buf.bufnr, { force = true })
-      --   end
-      -- end
-    end,
-  })
-  -- ── [5] clear lsp autocommands on detach ────────────────────────────────
-  -- auto('LspDetach', {
-  --   group = ag 'lsp-detached-setauto',
-  --   callback = function()
-  --     auto('CursorHold', {
-  --       group = ag 'lsp-hover-custom', -- should clear hover auto
-  --       callback = function() end,
-  --       -- no need to disable hover key really
-  --     })
-  --   end,
-  -- })
   -- ── [6] Adds close with q to specified windows ──────────────────────────
   auto('FileType', {
     group = make_augroup 'close_with_q',
@@ -220,7 +150,7 @@ local function autocmd()
       --* taking the opportunity to spruce things up -> badWinBar
       --TODO: implement unfocused buffer color dim/fade
       --[[ if normal==normNC then
-         
+
       end ]]
     end,
   })
@@ -255,27 +185,27 @@ local function autocmd()
     end,
   }) ]]
 
-  --TODO: add q to quit for scratch bufs
   --TODO: Recolor minibar when recording
   --- pattern = filename
   --- reg_recording() = current register in use
   -- auto ('RecordingEnter')
 
+  -- NOTE: Just Disabled this (nov 2025)
   -- ─────┤ Template: changes commands on switching to diff filtype ├─────
   -- Dirty method to pull filetype. whatever
-  vim.api.nvim_create_autocmd({ 'BufEnter' }, { -- , 'FileType'
-    group = make_augroup 'filetype_change',
-    --pattern = { '*.md' },
-    callback = function(event)
-      local pos = event.match:find '.md'
-      if pos and pos == event.match:len() - 2 then
-        vim.o.conceallevel = 1
-        --do the thing obsidian plugin needs or whatever
-        --vim.o.
-      else
-      end
-    end,
-  })
+  -- vim.api.nvim_create_autocmd({ 'BufEnter' }, { -- , 'FileType'
+  --   group = make_augroup 'filetype_change',
+  --   --pattern = { '*.md' },
+  --   callback = function(event)
+  --     local pos = event.match:find '.md'
+  --     if pos and pos == event.match:len() - 2 then
+  --       vim.o.conceallevel = 1
+  --       --do the thing obsidian plugin needs or whatever
+  --       --vim.o.
+  --     else
+  --     end
+  --   end,
+  -- })
 
   vim.api.nvim_create_autocmd({ 'BufEnter' }, { -- , 'FileType'
     group = make_augroup 'referencer_refresh',

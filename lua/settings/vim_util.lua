@@ -1,4 +1,26 @@
+local M = {}
+
+M.autogroups_made = {}
+-- TODO: Implement switching to buffer(s) last opened
+-- Find the best event to use
+
+--- Creates an autocommand group. clear = true by default.
+--- names of all groups created by this function are stored in `vim_utils.autogroups_made`
+---
+---@param name string Name of the group
+---@param override table|nil override config (currently only clear)
+---@return number Group id
+M.autogroup = function(name, override)
+  local clearval = true
+  if override and override.clear then
+    clearval = override.clear
+  end
+  table.insert(M.autogroups_made, name)
+  return vim.api.nvim_create_augroup(name, { clear = clearval })
+end
+
 --- clears a package from the loaded table, then re-requires it and returns it
+---
 ---@param packageName any
 local function rerequire(packageName)
   if package.loaded[packageName] then
@@ -18,11 +40,11 @@ local function reload_and_run(packageName, functionName)
 end
 
 local function renameAssist()
-  local bufsPee = vim.api.nvim_list_bufs()
+  local bufsPre = vim.api.nvim_list_bufs()
   local bufsWithChanges = {}
 
   local ltext = ''
-  for i, b in ipairs(bufsPee) do
+  for i, b in ipairs(bufsPre) do
     if vim.api.nvim_buf_is_loaded(b) and vim.api.nvim_get_option_value('modified', { buf = b }) then
       bufsWithChanges[vim.fn.bufname(b)] = b
     end
@@ -33,9 +55,6 @@ local function renameAssist()
   -- textDocument/prepareRename
   -- textDocument/rename
 end
-
-local function lazy_kill() end
-local M = {}
 
 M.map_vim_utils = function()
   require('which-key').add({

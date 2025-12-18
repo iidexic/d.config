@@ -11,23 +11,23 @@ local D = {
       'plugins.aerial',
       'plugins.bufferline',
       'plugins.diffview',
+      'plugins.blink',
       'plugins.dropbar',
       'plugins.filemanager',
+      'plugins.conform',
+      'plugins.iconpicker',
       'plugins.grapple',
-      'plugins.hover',
       'plugins.lang-support',
-      'plugins.layout',
-      --'plugins.lsp_lspsaga', -- DISABLED, does it clash with mason/lspconfig?
+      'plugins.lsp_lspsaga',
       'plugins.markdown',
       'plugins.mini',
       'plugins.obsidian',
       'plugins.outline',
       'plugins.persistence',
-      'plugins.plugins_auto',
       'plugins.plugins_debug',
       'plugins.plugins_git',
       'plugins.plugins_keys',
-      'plugins.plugins_lsp',
+      'plugins.lsp.mason',
       'plugins.plugins_tools',
       'plugins.plugins_visual',
       'plugins.plugins_workflow',
@@ -37,23 +37,33 @@ local D = {
       'plugins.treesitters',
       'plugins.trouble',
       'plugins.ufo',
+      'plugins.supermaven_ai',
     }
+
+    -- ── Previously Removed from Above: ────────────────────────────────────
+    --'plugins.hover',
+    --'plugins.layout', -- none
+    -- 'plugins.plugins_auto', --NOTE: trying to move to blink
+    -- 'plugins.plugins_lsp',
+    -- 'plugins.lsp.mason1',
+    -- 'plugins.lsp_setup_new',
+    -- ──────────────────────────────────────────────────────────────────────
+    --'trials.split', -- splits lines on delimiters
+    -- ──────────────────────────────────────────────────────────────────────
 
     plugload.loadfiles(files)
     --# Trial Plugins
     local trials = {
       --NEW:
       'trials.snacks', -- DISABLED
-      'trials.dividerline',
-      --'trials.split', -- splits lines on delimiters
-      'trials.nvim_dev',
-      --'trials.nvim-macros',
-      'trials.supermaven_ai',
+      'trials.macrothis',
       'trials.grug-far',
+      'trials.marks-nvim',
+      'trials.helpview',
 
+      --'trials.prettyhover', 'trials.spectre', 'trials.tiny_inline_diagnostic',
       --'trials.trailblazer', 'trials.origami', 'trials.glance', 'trials.hawtkeys',
       --'trials.helpview', 'trials.iron', 'trials.nvim_dev', 'trials.plugin_bundle',
-      --'trials.prettyhover', 'trials.spectre', 'trials.tiny_inline_diagnostic',
     }
 
     local devplugs = require 'plugins._devplugins'
@@ -89,7 +99,7 @@ local D = {
         root = vim.fn.stdpath 'data' .. '/lazy-rocks',
         server = 'https://nvim-neorocks.github.io/rocks-binaries/',
         -- use hererocks to install luarocks
-        hererocks = true, -- set to `nil` to use hererocks when luarocks is not found.
+        hererocks = false, -- set to `nil` to use hererocks when luarocks is not found.
       },
     })
     plugload.runsetup()

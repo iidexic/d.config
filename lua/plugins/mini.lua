@@ -1,12 +1,9 @@
 return {
   --==(ENABLED:)==--
-  --> |mini.ai| [ check if covered by another workflow plugin ]
-  --> |mini.files|
-  --> |mini.icons| (exclusively for mini.files)
-  --> |mini.surround| [ check if  covered by another workflow plugin ]
-  --> |mini.jump2d| [ may be replaced by leap+extensions ]
-  --> |mini.bufremove|
-  --> |mini.tabline|
+  --> mini.ai
+  --> mini.files
+  --> mini.icons (exclusively for mini.files)
+  --> mini.surround [ check if  covered by another workflow plugin ]
   --> |mini.statusline|
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
@@ -14,7 +11,10 @@ return {
       require('mini.ai').setup { n_lines = 500 }
       require('mini.align').setup()
       require('mini.files').setup {
-        options = {},
+        options = {
+          use_as_default_explorer = true, -- while this is the main explorer
+        },
+        mappings = {},
         windows = {
           max_number = math.huge, -- Maximum number of windows to show side by side
           preview = false, -- Whether to show preview of file/directory under cursor

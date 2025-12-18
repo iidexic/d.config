@@ -2,6 +2,10 @@
 local Cfg = {
   map = require 'settings.mapping',
   vimconfig = require 'settings.vimconfig',
+  vimutil = require 'settings.vim_util',
+  autocommands = require 'settings.autocommands',
+  commands = require 'settings.commands',
+  addfunctionality = require 'settings.vim_functionality',
 }
 
 ---@param name string name of theme to apply
@@ -29,8 +33,10 @@ function Cfg.postlazy(opts)
 
   -- TODO: update to new mappings file
   Cfg.map.assign()
-  require('settings.vim_util').map_vim_utils()
+  Cfg.vimutil.map_vim_utils()
   Cfg.map.plugins()
-  require('settings.autocommands').post_autocmd()
+  Cfg.autocommands.post_autocmd()
+  Cfg.commands.make_commands()
+  Cfg.addfunctionality.autocommands()
 end
 return Cfg

@@ -3,8 +3,8 @@ return {
     'shortcuts/no-neck-pain.nvim',
     config = true,
     opts = {
-      -- width
-      minSideBufferWidth = 06,
+      width = 120,
+      minSideBufferWidth = 4,
       buffers = {
         wo = { winfixwidth = true },
       },

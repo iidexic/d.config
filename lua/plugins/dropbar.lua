@@ -7,7 +7,7 @@ return {
   {
     'Bekaboo/dropbar.nvim',
     -- optional, but required for fuzzy finder support
-    enabled = false,
+    enabled = true,
     dependencies = {
       'nvim-telescope/telescope-fzf-native.nvim',
       'folke/which-key.nvim', -- to assign mappings in config func
