@@ -22,7 +22,7 @@ end
 --- clears a package from the loaded table, then re-requires it and returns it
 ---
 ---@param packageName any
-local function rerequire(packageName)
+function M.rerequire(packageName)
   if package.loaded[packageName] then
     package.loaded[packageName] = nil
     local pkg = require(packageName)
@@ -33,7 +33,7 @@ local function rerequire(packageName)
   return nil
 end
 local function reload_and_run(packageName, functionName)
-  local pkg = rerequire(packageName)
+  local pkg = M.rerequire(packageName)
   if pkg and pkg[functionName] then
     pkg[functionName]()
   end
@@ -75,6 +75,13 @@ M.map_vim_utils = function()
         reload_and_run('settings.mapping', 'assign')
       end,
       desc = '[R]eload [m]apping file',
+    },
+    {
+      '<leader>Rf',
+      function()
+        rerequire 'settings.vim_functionality'
+      end,
+      desc = '[R]eload vim_functionality',
     },
   }, { silent = true })
 end

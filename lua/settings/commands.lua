@@ -76,6 +76,9 @@ M.make_commands = function()
       end
     end, { nargs = 1, complete = require('settings.neovide_config').get_font_keys })
   end
+  -- NOTE: this maybe works. UNTESTED COME BACK TO CHECK IT
+  --- Reload config file command:
+  vim.api.nvim_create_user_command('Rerequire', require('settings.vim_util').rerequire, { nargs = 1 })
 end
 
 -- ── TEST AREA ───────────────────────────────────────────────────────

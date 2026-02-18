@@ -73,7 +73,8 @@ local maptables = {
   --      I don't think descriptions here go to which-key.
   --      Which-key description for go mappings is just using command name
   assigns = {
-    -- trouble don't work good
+    { '<leader>w', require('settings.vim_functionality').format_and_save, desc = 'Format and save file' },
+    -- trouble TODO: fix these binds
     { '<leader>q', vim.diagnostic.setloclist, desc = 'Quickfix list' },
     { '<Esc>', '<cmd>nohlsearch<CR>' },
     { '<C-h>', '<C-w><C-h>', desc = 'Move focus to the left window' },
@@ -100,6 +101,7 @@ local maptables = {
       end,
       desc = 'neovide scale ',
     },
+
     {
       '<C-w>F',
       function()
@@ -258,7 +260,7 @@ function Map.commentbox()
   return km
 end
 function Map.other_plugins()
-  local precog = require 'precognition'
+  -- local precog = require 'precognition'
   local grug = require 'grug-far'
 
   -- local dropbar_api = require 'dropbar.api'
@@ -269,8 +271,8 @@ function Map.other_plugins()
     -- Bufferline:
     { 'g<CR>', '<cmd>BufferLinePick<cr>', desc = 'Switch Buffer (Line)' },
     { 'g<BS>', '<cmd>BufferLinePickClose<cr>', desc = 'Close Buffer (Line)' },
-    -- Precognition
-    { '<leader>up', precog.toggle, desc = '[U]til: [p]recognition toggle' },
+    -- Precognition (REMOVED)
+    -- { '<leader>up', precog.toggle, desc = '[U]til: [p]recognition toggle' },
     -- Aerial
     --{ '<leader>ua', aerial.open, desc = '[U]til: [a]erial' },
     { '<leader>ua', '<cmd>AerialToggle!<CR>', desc = '[U]til: [a]erial' },

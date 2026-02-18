@@ -10,19 +10,19 @@ return {
     config = function()
       require('mini.ai').setup { n_lines = 500 }
       require('mini.align').setup()
-      require('mini.files').setup {
-        options = {
-          use_as_default_explorer = true, -- while this is the main explorer
-        },
-        mappings = {},
-        windows = {
-          max_number = math.huge, -- Maximum number of windows to show side by side
-          preview = false, -- Whether to show preview of file/directory under cursor
-          width_focus = 50, -- Width of focused window
-          width_nofocus = 15, -- Width of non-focused window
-          width_preview = 25, -- Width of preview window
-        },
-      }
+      -- require('mini.files').setup {
+      --   options = {
+      --     use_as_default_explorer = true, -- while this is the main explorer
+      --   },
+      --   mappings = {},
+      --   windows = {
+      --     max_number = math.huge, -- Maximum number of windows to show side by side
+      --     preview = false, -- Whether to show preview of file/directory under cursor
+      --     width_focus = 50, -- Width of focused window
+      --     width_nofocus = 15, -- Width of non-focused window
+      --     width_preview = 25, -- Width of preview window
+      --   },
+      -- }
       require('mini.icons').setup() -- for mini.files specifically
       -- not disabling, I need this shit. alternatives?
 

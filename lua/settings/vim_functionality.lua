@@ -85,4 +85,15 @@ M.print_buf_detail = function()
   vim.print(b)
 end
 
+local writebuf = function()
+  vim.schedule(function()
+    vim.cmd 'silent! write'
+  end)
+end
+
+M.format_and_save = function()
+  require('conform').format { async = false, lsp_format = 'fallback' }
+  writebuf()
+end
+
 return M

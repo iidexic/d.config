@@ -38,6 +38,7 @@ return {
         lua = { 'stylua' },
         go = { 'gofmt', 'gopls', 'goimports', 'gotests' },
         python = { 'ruff' },
+        gdscript = { 'gdformat' }, -- WARNING: Potential Error here, untested
         -- python = { "isort", "black", stop_after_first = true }, stop_after_first(optional) = load first available
       },
     },

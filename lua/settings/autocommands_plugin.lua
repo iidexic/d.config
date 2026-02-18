@@ -30,19 +30,19 @@ function M.print_tbl(tbl)
     end
   end
 end
-M.post_autocmd = function()
-  vim.api.nvim_create_autocmd('User', {
-    pattern = { 'MiniFilesExplorerOpen', 'MiniFilesBufferCreate' },
-    desc = 'add additional close mapping to minifiles',
-    group = autogroup('minigroup-make-map-on-open', { clear = true }),
-    callback = function(args)
-      vim.keymap.set('n', 'q', require('mini.files').close, { desc = 'close explorer', buffer = args.buf_id })
-      vim.keymap.set('n', '<CR>', function()
-        require('mini.files').go_in { close_on_file = true }
-      end, { desc = 'open file (go in plus)', buffer = args.buf_id })
-      -- end
-    end,
-  })
-end
+-- M.post_autocmd = function()
+--   vim.api.nvim_create_autocmd('User', {
+--     pattern = { 'MiniFilesExplorerOpen', 'MiniFilesBufferCreate' },
+--     desc = 'add additional close mapping to minifiles',
+--     group = autogroup('minigroup-make-map-on-open', { clear = true }),
+--     callback = function(args)
+--       vim.keymap.set('n', 'q', require('mini.files').close, { desc = 'close explorer', buffer = args.buf_id })
+--       vim.keymap.set('n', '<CR>', function()
+--         require('mini.files').go_in { close_on_file = true }
+--       end, { desc = 'open file (go in plus)', buffer = args.buf_id })
+--       -- end
+--     end,
+--   })
+-- end
 
 return M

@@ -54,6 +54,13 @@ return {
         -- ── c/cpp/zig ───────────────────────────────────────────────────────
         clangd = {},
         zls = {},
+        -- godotdev = {
+        --   editor_host = '127.0.0.1', -- Godot editor host
+        --   editor_port = 6005, -- Godot LSP port
+        --   debug_port = 6006, -- Godot debugger port
+        --   -- csharp = true, -- Enable C# Installation Support
+        --   autostart_editor_server = true, -- Enable auto start Nvim server
+        -- },
       }
 
       local ensure_installed = vim.tbl_keys(servers or {}) -- Ensure the servers and tools above are installed
@@ -61,6 +68,15 @@ return {
         ensure_installed = ensure_installed or {},
         automatic_installation = true,
         automatic_enable = false,
+      }
+
+      -- NOTE: Don't want godot setup to be sent to mason-lspconfig, just place it right before vim.lsp setup
+      servers.godotdev = {
+        editor_host = '127.0.0.1', -- Godot editor host
+        editor_port = 6005, -- Godot LSP port
+        debug_port = 6006, -- Godot debugger port
+        -- csharp = true, -- Enable C# Installation Support
+        autostart_editor_server = true, -- Enable auto start Nvim server
       }
 
       -- ── MASON V2 SETUP ────────────────────────────────────────────────────────

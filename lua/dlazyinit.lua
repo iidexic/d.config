@@ -13,15 +13,15 @@ local D = {
       'plugins.diffview',
       'plugins.blink',
       'plugins.dropbar',
-      'plugins.filemanager',
+      -- 'plugins.filemanager',
       'plugins.conform',
       'plugins.iconpicker',
       'plugins.grapple',
       'plugins.lang-support',
       'plugins.lsp_lspsaga',
-      'plugins.markdown',
+      -- 'plugins.markdown',
       'plugins.mini',
-      'plugins.obsidian',
+      -- 'plugins.obsidian',
       'plugins.outline',
       'plugins.persistence',
       'plugins.plugins_debug',
@@ -31,13 +31,14 @@ local D = {
       'plugins.plugins_tools',
       'plugins.plugins_visual',
       'plugins.plugins_workflow',
-      'plugins.precognition',
+      -- 'plugins.precognition',
       'plugins.qol',
       'plugins.telescopes',
       'plugins.treesitters',
       'plugins.trouble',
       'plugins.ufo',
       'plugins.supermaven_ai',
+      'plugins.godot',
     }
 
     -- ── Previously Removed from Above: ────────────────────────────────────
@@ -55,7 +56,7 @@ local D = {
     --# Trial Plugins
     local trials = {
       --NEW:
-      'trials.snacks', -- DISABLED
+      -- 'trials.snacks', -- DISABLED
       'trials.macrothis',
       'trials.grug-far',
       'trials.marks-nvim',
