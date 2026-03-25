@@ -66,9 +66,7 @@ local function tabpage_goto(n)
 end
 local maptables = {
   -- Trying whichkey-style above
-  vismode = {
-    --{ 'v', '<C-l>', vim.cmd },
-  },
+  vismode = {},
   --NOTE: Thinking all mappings should be after lazy init?
   --      I don't think descriptions here go to which-key.
   --      Which-key description for go mappings is just using command name
@@ -82,7 +80,13 @@ local maptables = {
     { '<C-l>', '<C-w><C-l>', desc = 'Move focus to the right window' },
     { '<C-j>', '<C-w><C-j>', desc = 'Move focus to the lower window' },
     --NOTE: Replacing Neo-tree due to neo-tree lsp problems
-    { '\\', cmd 'lua MiniFiles.open()', desc = 'MiniFiles open' },
+    --NOTE: Replacing minifiles cuz it makes it too easy to just completely erase shit
+    --NOTE: NvimTree is annoying I just want my neotree setup but in a way that doesn't fuck up lsp
+    --NOTE Now I am going to Neo-tree and hoping it fucking works
+    -- { '\\', cmd 'lua MiniFiles.open()', desc = 'MiniFiles open' },
+    -- { '\\', cmd 'NvimTreeToggle', desc = 'NvimTree Toggle' },
+    -- { '\\', cmd 'Fyler kind=float', desc = 'Fyler' },
+    { '\\', cmd 'Neotree toggle=true', desc = 'Neo-Tree Toggle' },
     --hoping this will open wk
     { '<M-\\>', desc = 'ToggleTerm Mode' },
     { '<M-\\>h', toggleterm_mode 'h', desc = 'ToggleTerm Mode horizontal' },
@@ -281,7 +285,6 @@ function Map.other_plugins()
     { '<leader>uc', cmd 'CccPick', desc = '[U]til: [c]cc colorpicker' },
     { '<leader>uh', cmd 'CccHighlighterToggle', desc = '[U]til: ccc color [h]ighlight' },
     -- Trevj. this uh splits lists etc into lines? That's what it seems like at least
-    { '<A-j>', require('trevj').format_at_cursor, desc = 'breakout list to lines' },
 
     -- Molten. Run Jupyter notebooks
     { '<leader>M', desc = 'Molten (Jupyter)' },

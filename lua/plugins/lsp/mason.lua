@@ -22,9 +22,6 @@ return {
     config = function()
       require('settings.autocommands_lsp').make_autocommands()
       require('settings.vimconfig').lsp_diagnostic()
-      -- local capabilities = vim.lsp.protocol.make_client_capabilities()
-      -- NOTE: Try 'keep' if shit is still broken
-      -- capabilities = vim.tbl_deep_extend('keep', {}, capabilities, require('cmp_nvim_lsp').default_capabilities())
 
       local servers = {
         -- ── go ──────────────────────────────────────────────────────────────
@@ -54,13 +51,7 @@ return {
         -- ── c/cpp/zig ───────────────────────────────────────────────────────
         clangd = {},
         zls = {},
-        -- godotdev = {
-        --   editor_host = '127.0.0.1', -- Godot editor host
-        --   editor_port = 6005, -- Godot LSP port
-        --   debug_port = 6006, -- Godot debugger port
-        --   -- csharp = true, -- Enable C# Installation Support
-        --   autostart_editor_server = true, -- Enable auto start Nvim server
-        -- },
+        powershell_es = {},
       }
 
       local ensure_installed = vim.tbl_keys(servers or {}) -- Ensure the servers and tools above are installed

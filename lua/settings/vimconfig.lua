@@ -1,5 +1,7 @@
 local O = {
   first = function()
+    --# This ones for nvim-tree. Disable netrw
+
     --# Base config
     vim.g.mapleader = ' ' -- must happen before plugins are loaded
     vim.g.maplocalleader = ' '

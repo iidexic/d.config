@@ -12,22 +12,18 @@ return {
       cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
     end,
   },
-  { -- in-and-out: shift-enter to jump surrounding chars (tabout)
-    'ysmb-wtsg/in-and-out.nvim',
-    keys = {
-      {
-        '<S-CR>', --'<C-CR>'
-        function()
-          require('in-and-out').in_and_out()
-        end,
-        mode = 'i',
-      },
-    },
-  },
-  {
-    'AckslD/nvim-trevJ.lua',
-    opts = {},
-  },
+  -- { -- in-and-out: shift-enter to jump surrounding chars (tabout)
+  --   'ysmb-wtsg/in-and-out.nvim',
+  --   keys = {
+  --     {
+  --       '<S-CR>', --'<C-CR>'
+  --       function()
+  --         require('in-and-out').in_and_out()
+  --       end,
+  --       mode = 'i',
+  --     },
+  --   },
+  -- },
   {
     '2kabhishek/markit.nvim',
     config = true, --load_config 'tools.marks', -- never seen this before. setting to true for now

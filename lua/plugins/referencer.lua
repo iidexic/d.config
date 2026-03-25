@@ -54,20 +54,10 @@ M.plugins = {
     opts = {
       enable = true,
       format = '     %d refs',
-      pattern = { '*.go', '*.lua' },
+      pattern = {'*.go', '*.lua'},
+
     },
     config = true,
-  },
-  {
-    'Dan7h3x/signup.nvim',
-    branch = 'main',
-    opts = {
-      -- Your configuration options here
-    },
-    config = function(_, opts)
-      require('signup').setup(opts)
-    end,
-    cond = false,
   },
   { -- delete buffer
     'famiu/bufdelete.nvim',

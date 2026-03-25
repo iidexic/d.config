@@ -154,58 +154,8 @@ local function autocmd()
       end ]]
     end,
   })
-
-  -- ── Rename Autosave Autocommand ─────────────────────────────────────
-  --[[ vim.api.nvim_create_autocmd({ 'LspNotify' }, {
-    group = make_augroup 'pre-rename-autosave',
-    callback = function(args)
-      --local bufnr = args.buf
-      --local client_id = args.data.client_id
-      local method = args.data.method
-      --local params = args.data.params
-
-      -- do something with the notification
-      if method == 'textDocument/prepareRename' then
-        local bufsPre = vim.api.nvim_list_bufs()
-        local bufsPreMod = {}
-        for i, b in ipairs(bufsPre) do
-          if vim.api.nvim_buf_is_loaded(b) and vim.api.nvim_get_option_value('modified', { buf = b }) then
-            bufsPreMod[vim.fn.bufname(b)] = b
-          end
-        end
-        vim.api.nvim_create_autocmd('LspNotify', {
-          group = make_augroup 'post-rename-autosave',
-          callback = function(args)
-            if args.data.method == 'textDocument/rename' then
-              --TODO: Auto-save and close all modified buffers not in original bufsPre list
-            end
-          end,
-        })
-      end
-    end,
-  }) ]]
-
   --TODO: Recolor minibar when recording
-  --- pattern = filename
-  --- reg_recording() = current register in use
-  -- auto ('RecordingEnter')
-
-  -- NOTE: Just Disabled this (nov 2025)
-  -- ─────┤ Template: changes commands on switching to diff filtype ├─────
-  -- Dirty method to pull filetype. whatever
-  -- vim.api.nvim_create_autocmd({ 'BufEnter' }, { -- , 'FileType'
-  --   group = make_augroup 'filetype_change',
-  --   --pattern = { '*.md' },
-  --   callback = function(event)
-  --     local pos = event.match:find '.md'
-  --     if pos and pos == event.match:len() - 2 then
-  --       vim.o.conceallevel = 1
-  --       --do the thing obsidian plugin needs or whatever
-  --       --vim.o.
-  --     else
-  --     end
-  --   end,
-  -- })
+  --- pattern = filename|reg_recording() = current register in use|auto ('RecordingEnter')
 
   vim.api.nvim_create_autocmd({ 'BufEnter' }, { -- , 'FileType'
     group = make_augroup 'referencer_refresh',

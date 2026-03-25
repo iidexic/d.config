@@ -1,3 +1,6 @@
+--# ── neg1. excise netrw ────────────────────────────────────────────
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 --# ── 0. load main config manager module ────────────────────────────
 local configure = require 'settings.apply'
 
