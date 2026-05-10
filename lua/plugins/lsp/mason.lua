@@ -52,6 +52,7 @@ return {
         clangd = {},
         zls = {},
         powershell_es = {},
+        buf_ls = {},
       }
 
       local ensure_installed = vim.tbl_keys(servers or {}) -- Ensure the servers and tools above are installed
