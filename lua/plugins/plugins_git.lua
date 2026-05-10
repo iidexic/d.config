@@ -4,7 +4,6 @@ M.plugins = {
     'chrisgrieser/nvim-tinygit',
     dependencies = 'nvim-telescope/telescope.nvim',
     opts = {},
-    enabled = false, -- requires nvim 0.12
   },
   { -- giving it another go
     'NeogitOrg/neogit',

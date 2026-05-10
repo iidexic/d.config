@@ -202,20 +202,20 @@ function Map.neovide()
 end
 
 function Map.gitplugins()
-  -- local tinygit = require 'tinygit'
+  local tinygit = require 'tinygit'
   local neogit = require 'neogit'
   return {
-    -- { '<leader>ga', tinygit.interactiveStaging, desc = 'git add' },
-    -- { '<leader>gc', tinygit.smartCommit, desc = 'git commit' },
-    -- { '<leader>gp', tinygit.push, desc = 'git push' },
-    -- {
-    --   '<leader>gI',
-    --   function()
-    --     tinygit.issuesAndPrs { type = 'all', state = 'all' }
-    --   end,
-    --   desc = 'search Github issues + Pull Requests',
-    -- },
-    -- { '<leader>gh', tinygit.fileHistory, desc = 'search file history' },
+    { '<leader>ga', tinygit.interactiveStaging, desc = 'git add' },
+    { '<leader>gc', tinygit.smartCommit, desc = 'git commit' },
+    { '<leader>gp', tinygit.push, desc = 'git push' },
+    {
+      '<leader>gI',
+      function()
+        tinygit.issuesAndPrs { type = 'all', state = 'all' }
+      end,
+      desc = 'search Github issues + Pull Requests',
+    },
+    { '<leader>gh', tinygit.fileHistory, desc = 'search file history' },
     { '<leader>gn', neogit.open, desc = 'Neogit' },
     {
       '<leader>gm',
