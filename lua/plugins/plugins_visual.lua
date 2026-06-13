@@ -36,7 +36,7 @@ return {
     cmd = 'Commentless',
     keys = {
       { -- just add this to keymaps
-        '<leader>\\',
+        '<leader>C',
         function()
           require('commentless').toggle()
         end,

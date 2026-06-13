@@ -50,8 +50,14 @@ return {
         marksman = {},
         -- ── c/cpp/zig ───────────────────────────────────────────────────────
         clangd = {},
-        zls = {},
+        -- zls = {},
         powershell_es = {},
+        buf_ls = {},
+        -- ── THE REST WOO ────────────────────────────────────────────────────
+        vtsls = {},
+        dartls = {},
+        tailwindcss = {},
+        svelte = {},
       }
 
       local ensure_installed = vim.tbl_keys(servers or {}) -- Ensure the servers and tools above are installed

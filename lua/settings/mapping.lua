@@ -86,6 +86,7 @@ local maptables = {
     -- { '\\', cmd 'lua MiniFiles.open()', desc = 'MiniFiles open' },
     -- { '\\', cmd 'NvimTreeToggle', desc = 'NvimTree Toggle' },
     -- { '\\', cmd 'Fyler kind=float', desc = 'Fyler' },
+     {'|', cmd 'ClaudeCode', desc = 'Open ClaudeCode Terminal' },
     { '\\', cmd 'Neotree toggle=true', desc = 'Neo-Tree Toggle' },
     --hoping this will open wk
     { '<M-\\>', desc = 'ToggleTerm Mode' },

@@ -8,6 +8,7 @@ local D = {
 
     --# Main Plugins
     local files = {
+      'plugins.ai', -- claude
       'plugins.aerial',
       'plugins.bufferline',
       'plugins.diffview',
