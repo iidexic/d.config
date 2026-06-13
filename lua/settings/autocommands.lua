@@ -31,12 +31,12 @@ local function autocmd()
   -- NOTE: hover autocommands removed
   --  ── [0] quick startup auto ──────────────────────────────────────────────
   auto('VimEnter', {
-    desc = 'run whaler on startup if not in file',
+    desc = 'run zoxide on startup if not in file',
     group = make_augroup 'startup-greet',
     callback = function()
       --require('persistence').select()
       if vim.bo.filetype == '' then
-        require('telescope').extensions.whaler.whaler()
+        require('telescope').extensions.zoxide.list()
       end
     end,
   })

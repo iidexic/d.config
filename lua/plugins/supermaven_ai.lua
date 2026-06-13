@@ -1,6 +1,7 @@
 return {
   {
     'supermaven-inc/supermaven-nvim',
+    cond = false, -- disabled testing other options
     opts = {
       keymaps = {
         accept_suggestion = '<S-Tab>',
