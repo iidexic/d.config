@@ -15,7 +15,7 @@ local function initleap(leapOn, flitOn, spookOn, teleOn)
   M.plugins = {
 
     { --Plugin to quickly jump anywhere in buffer/on screen
-      'ggandor/leap.nvim',
+      url = 'https://codeberg.org/andyg/leap.nvim',
       dependencies = {
         'tpope/vim-repeat',
       },

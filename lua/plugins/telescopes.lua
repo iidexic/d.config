@@ -29,7 +29,6 @@ return {
         end,
       },
       { 'nvim-lua/plenary.nvim' },
-      { 'salorak/whaler.nvim' },
       { 'cbochs/grapple.nvim' },
       { 'jvgrootveld/telescope-zoxide' },
       {
@@ -67,24 +66,6 @@ return {
             require('telescope.themes').get_dropdown {},
             kind = { require 'icon-picker' },
           },
-          whaler = {
-            auto_file_explorer = false,
-            directories = {
-              'c:\\dev',
-              'd:\\coding',
-              { path = 'd:\\coding\\github', alias = 'projects (github)' },
-              { path = 'c:\\dev\\zig', alias = 'zig' },
-              { path = 'c:\\dev\\luaprojects', alias = 'lua projects' },
-              'c:\\dev\\python',
-              { path = 'c:\\dev\\.config', alias = '.config - backups' },
-            },
-            oneoff_directories = {
-              { path = 'c:\\dev\\zig\\raylib-zig\\interlacer', alias = 'zig-rl interlacer' },
-              { path = '~\\appdata\\local\\nvim', alias = 'nvim' },
-              { path = '~\\appdata\\roaming\\neovide', alias = 'neovide config' },
-              { path = 'd:\\coding\\github\\go-ca-experiments', alias = 'go ca' },
-            },
-          },
         },
       }
 
@@ -92,7 +73,6 @@ return {
       pcall(telescope.load_extension, 'fzf') -- enable telescope extensions if they are installed
       pcall(telescope.load_extension, 'ui-select')
       pcall(telescope.load_extension, 'grapple')
-      pcall(telescope.load_extension, 'whaler')
       pcall(telescope.load_extension, 'zoxide')
       pcall(telescope.load_extension, 'telescope-helpgrep')
       pcall(telescope.load_extension, 'luasnip')
@@ -116,7 +96,6 @@ return {
       vim.keymap.set('n', '<leader>st', builtin.treesitter, { desc = '[S]earch [t]reesitter' })
       vim.keymap.set('n', '<leader>sz', telescope.extensions.zoxide.list, { desc = '[S]earch [z]oxide list' })
       vim.keymap.set('n', '<leader>sm', telescope.extensions.grapple.tags, { desc = '[S]earch [M]arks->grapple' })
-      vim.keymap.set('n', '<leader>sw', telescope.extensions.whaler.whaler, { desc = '[S]earch [w]haler paths' })
       vim.keymap.set('n', '<leader>sH', telescope.extensions.helpgrep.helpgrep, { desc = '[S]earch [H]elp with grep' })
       vim.keymap.set('n', '<leader>sl', telescope.extensions.luasnip.luasnip, { desc = '[S]earch [l]uasnip snippets' })
       vim.keymap.set('n', '<leader>sc', builtin.colorscheme, { desc = '[S]earch [C]olorschemes' })
