@@ -6,7 +6,6 @@ local configure = require 'settings.apply'
 
 --# ── 1. Pre-lazy config setup  ─────────────────────────────────────
 
-configure.theme 'evergarden'
 configure.prelazy()
 
 --# ── 2. Lazy init + all plugin setup  ──────────────────────────────
@@ -15,6 +14,7 @@ require('dlazyinit').LazyPluginSetup()
 
 --# ── 3. Post-lazy config setup  ────────────────────────────────────
 
+configure.theme 'evergarden-winter'
 configure.postlazy()
 
 --===============================================================================
