@@ -1,10 +1,5 @@
 local M = {}
 M.plugins = {
-  { -- nice quick git actions
-    'chrisgrieser/nvim-tinygit',
-    dependencies = 'nvim-telescope/telescope.nvim',
-    opts = {},
-  },
   { -- giving it another go
     'NeogitOrg/neogit',
     dependencies = {
