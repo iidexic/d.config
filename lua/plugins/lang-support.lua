@@ -1,4 +1,14 @@
 return {
+  -- ───────────────────────────────[Flutter/Dart]──────────────────────────────────────
+  {
+    'nvim-flutter/flutter-tools.nvim',
+    lazy = false,
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'stevearc/dressing.nvim', -- optional for vim.ui.select
+    },
+    config = true,
+  },
   -- ────────────────────────────────[ Other ]──────────────────────────────
   {
     -- runs python code. I am guessing it prefers hydrogen format

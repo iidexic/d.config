@@ -55,7 +55,7 @@ return {
         buf_ls = {},
         -- ── THE REST WOO ────────────────────────────────────────────────────
         vtsls = {},
-        dartls = {},
+        dart_ls = {},
         tailwindcss = {},
         svelte = {},
       }
