@@ -255,7 +255,7 @@ end
 function Map.other_plugins()
   -- local precog = require 'precognition'
   local grug = require 'grug-far'
-
+  local aerial = require 'aerial'
   -- local dropbar_api = require 'dropbar.api'
   -- vim.keymap.set('n', '<Leader>;', dropbar_api.pick, { desc = 'Pick symbols in winbar' })
   -- vim.keymap.set('n', '[;', dropbar_api.goto_context_start, { desc = 'Go to start of current context' })
@@ -268,7 +268,7 @@ function Map.other_plugins()
     -- { '<leader>up', precog.toggle, desc = '[U]til: [p]recognition toggle' },
     -- Aerial
     --{ '<leader>ua', aerial.open, desc = '[U]til: [a]erial' },
-    { '<leader>ua', '<cmd>AerialToggle!<CR>', desc = '[U]til: [a]erial' },
+    { '<leader>ua', aerial.toggle, desc = '[U]til: [a]erial' },
     -- Outline (in outline config in aerial.lua)
     -- Ccc
     { '<leader>uc', cmd 'CccPick', desc = '[U]til: [c]cc colorpicker' },
