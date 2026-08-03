@@ -14,7 +14,7 @@ require('dlazyinit').LazyPluginSetup()
 
 --# ── 3. Post-lazy config setup  ────────────────────────────────────
 
-configure.theme 'evergarden-winter'
+configure.theme 'evergarden'
 configure.postlazy()
 
 --===============================================================================

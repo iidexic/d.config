@@ -45,7 +45,6 @@ return {
             },
           },
         },
-        stylua = {},
         -- ── markdown ────────────────────────────────────────────────────────
         marksman = {},
         -- ── Python ──────────────────────────────────────────────────────────
@@ -57,14 +56,14 @@ return {
         buf_ls = {},
         -- ── THE REST WOO ────────────────────────────────────────────────────
         vtsls = {},
-        dart_ls = {},
+        -- dartls is set up by flutter-tools.nvim — do not duplicate here
         tailwindcss = {},
         svelte = {},
       }
 
-      local ensure_installed = vim.tbl_keys(servers or {}) -- Ensure the servers and tools above are installed
+      local ensure_installed = vim.tbl_keys(servers)
       require('mason-lspconfig').setup {
-        ensure_installed = ensure_installed or {},
+        ensure_installed = ensure_installed,
         automatic_installation = true,
         automatic_enable = false,
       }

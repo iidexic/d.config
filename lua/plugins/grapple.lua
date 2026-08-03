@@ -49,10 +49,11 @@ M.plugins = {
       { ';s', '<cmd>Grapple select index=6<cr>' },
       { ';d', '<cmd>Grapple select index=7<cr>' },
       { ';f', '<cmd>Grapple select index=8<cr>' },
-      config = function()
-        vim.keymap.set('n', ';q', M.grapple_open_index(1), { desc = 'Grapple open index 1' })
-      end,
     },
+    config = function(_, opts)
+      require('grapple').setup(opts)
+      vim.keymap.set('n', ';q', M.grapple_open_index(1), { desc = 'Grapple open index 1' })
+    end,
   },
 }
 
@@ -129,27 +130,6 @@ function M.makeGrappleMappings()
   return grap_map
 end
 function M.setup()
-  -- removing
-  --[[ local grap = require 'grapple'
-  local gmap = {
-    { ';q', '<cmd>Grapple select index=1<cr>', desc = M.gtagfn(1) },
-    { ';w', '<cmd>Grapple select index=2<cr>', desc = M.gtagfn(2) },
-    { ';e', '<cmd>Grapple select index=3<cr>', desc = M.gtagfn(3) },
-    { ';r', '<cmd>Grapple select index=4<cr>', desc = M.gtagfn(4) },
-    { ';t', '<cmd>Grapple select index=5<cr>', desc = M.gtagfn(5) },
-    { ';a', '<cmd>Grapple select index=7<cr>', desc = M.gtagfn(6) },
-    { ';s', '<cmd>Grapple select index=8<cr>', desc = M.gtagfn(7) },
-    { ';d', '<cmd>Grapple select index=9<cr>', desc = M.gtagfn(8) },
-    { ';f', '<cmd>Grapple select index=10<cr>', desc = M.gtagfn(9) },
-    { ';g', '<cmd>Grapple select index=11<cr>', desc = M.gtagfn(10) },
-    { ';z', '<cmd>Grapple select index=12<cr>', desc = M.gtagfn(11) },
-    { ';x', '<cmd>Grapple select index=13<cr>', desc = M.gtagfn(12) },
-    { ';c', '<cmd>Grapple select index=14<cr>', desc = M.gtagfn(13) },
-    { ';v', '<cmd>Grapple select index=15<cr>', desc = M.gtagfn(14) },
-    { ';b', '<cmd>Grapple select index=16<cr>', desc = M.gtagfn(15) },
-    { ';;', grap.open_tags, desc = 'open tags' },
-  } ]]
-  require('which-key').add(M.makeGrappleMappings()) -- gmap
+  require('which-key').add(M.makeGrappleMappings())
 end
-M.g = Grap
 return M

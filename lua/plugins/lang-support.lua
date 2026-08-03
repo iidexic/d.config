@@ -2,12 +2,40 @@ return {
   -- ───────────────────────────────[Flutter/Dart]──────────────────────────────────────
   {
     'nvim-flutter/flutter-tools.nvim',
-    lazy = false,
+    ft = { 'dart' },
     dependencies = {
       'nvim-lua/plenary.nvim',
       'stevearc/dressing.nvim', -- optional for vim.ui.select
     },
-    config = true,
+    opts = {
+      -- widget_guides + outline auto_open are both off, so we don't need the
+      -- server pushing flutterOutline/outline notifications on every keystroke.
+      lsp = {
+        color = { enabled = false }, -- avoid the deprecated document-color path on 0.12+
+        settings = {
+          -- flutter-tools nests this under `dart` before sending to dartls
+          showTodos = false,
+          completeFunctionCalls = true,
+          renameFilesWithClasses = 'prompt',
+          updateImportsOnRename = true,
+          -- Skip generated/build output when analyzing — huge win in projects
+          -- that use freezed / json_serializable / build_runner.
+          analysisExcludedFolders = {
+            '.dart_tool',
+            '.fvm',
+            'build',
+            '.pub-cache',
+          },
+        },
+        init_options = {
+          onlyAnalyzeProjectsWithOpenFiles = true,
+          suggestFromUnimportedLibraries = true,
+          closingLabels = true,
+          outline = false,        -- flutter-tools outline pane isn't auto-opened
+          flutterOutline = false, -- widget_guides is disabled, so this is dead data
+        },
+      },
+    },
   },
   -- ────────────────────────────────[ Other ]──────────────────────────────
   {
@@ -50,24 +78,23 @@ return {
       'neovim/nvim-lspconfig',
       'nvim-treesitter/nvim-treesitter',
     },
-    opts = function()
+    opts = {
+      -- lsp_keymaps = false,
+    },
+    config = function(_, opts)
       require('go').setup(opts)
-      local format_sync_grp = vim.api.nvim_create_augroup('GoFormat', {})
       vim.api.nvim_create_autocmd('BufWritePre', {
         pattern = '*.go',
+        group = vim.api.nvim_create_augroup('GoFormat', { clear = true }),
         callback = function()
           require('go.format').goimports()
         end,
-        group = format_sync_grp,
       })
-      return {
-        -- lsp_keymaps = false,
-        -- other options
-      }
     end,
     event = { 'CmdlineEnter' },
     ft = { 'go', 'gomod' },
-    build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
+    -- NOTE: removed sync build hook (:lua require("go.install").update_all_sync()).
+    -- It blocked nvim on Lazy update. Run :GoInstallBinaries manually instead.
   },
 
   --TODO: Need to choose between goplements and gosigns? one is gutter.

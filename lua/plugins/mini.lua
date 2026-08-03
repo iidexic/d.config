@@ -44,7 +44,7 @@ return {
       local statusline = require 'mini.statusline' -- Simple and easy statusline.
       statusline.setup {
         content = {
-          function()
+          active = function()
             local mode, mode_hl = MiniStatusline.section_mode { trunc_width = 120 }
             local git = MiniStatusline.section_git { trunc_width = 40 }
             local diff = MiniStatusline.section_diff { trunc_width = 75 }
@@ -68,7 +68,7 @@ return {
           inactive = nil,
         },
         use_icons = vim.g.have_nerd_font,
-      } -- set use_icons to true if you have a Nerd Font
+      }
       -- default behavior.
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_location = function() -- configure statusline sections by overriding their default behavior

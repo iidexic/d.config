@@ -1,4 +1,3 @@
-vim = vim
 local M = {}
 
 local fonts = {

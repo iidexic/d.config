@@ -1,5 +1,4 @@
 -- mapping helper functions
-vim.keymap.set('i', '<C-l>', '<esc><l><a>', { desc = 'edit shift right' })
 local function cmd(s)
   return '<cmd>' .. s .. '<CR>'
 end
@@ -152,7 +151,7 @@ function Map.plugins()
   Map.wk.add {
     mode = 'n',
     {
-      { 'ps', pr.load, desc = 'Load cwd session' },
+      { '<leader>ps', pr.load, desc = 'Load cwd session' },
       { '<leader>pS', pr.select, desc = 'Select session' },
       {
         '<leader>pl',
@@ -183,9 +182,7 @@ end
 function Map.vim()
   local m = {
     { '<A-r>', ':lua<CR>', mode = 'v', desc = 'run selected lua code' },
-    { 'gl', vim.lsp.buf.incoming_calls(), desc = 'show incoming calls to symbol under cursor' },
-    -- removed. trouble quickfix is iffy
-    --{ '<leader>q', require('trouble').open { mode = '' } },
+    { 'gl', vim.lsp.buf.incoming_calls, desc = 'show incoming calls to symbol under cursor' },
   }
   return m
 end

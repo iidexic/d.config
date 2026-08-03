@@ -18,9 +18,9 @@ local function persistAuto()
     desc = 'eliminate unwanted buffers before saving',
     group = make_augroup 'pre-save-buffer-elimination',
     callback = function()
-      require('no-neck-pain').disable()
-      require('outline').close()
-      require('aerial').close()
+      pcall(function() require('no-neck-pain').disable() end)
+      pcall(function() require('outline').close() end)
+      pcall(function() require('aerial').close() end)
     end,
   })
 end
@@ -34,9 +34,12 @@ local function autocmd()
     desc = 'run zoxide on startup if not in file',
     group = make_augroup 'startup-greet',
     callback = function()
-      --require('persistence').select()
-      if vim.bo.filetype == '' then
-        require('telescope').extensions.zoxide.list()
+      if vim.bo.filetype ~= '' then
+        return
+      end
+      local ok_t, telescope = pcall(require, 'telescope')
+      if ok_t and telescope.extensions and telescope.extensions.zoxide then
+        telescope.extensions.zoxide.list()
       end
     end,
   })
@@ -60,27 +63,29 @@ local function autocmd()
     end,
   })
 
-  -- ── [3] delete tmp shada on shada lockup ────────────────────────────────
-  auto({ 'VimLeave' }, {
+  -- ── [3] log errors / clean shada tmp files on exit ──────────────────────
+  -- NOTE: vim.v.dying is only set for fatal-signal exits, not normal-exit
+  -- errors like E138, so we gate on v:errmsg instead.
+  auto('VimLeavePre', {
     group = make_augroup 'on-dirty-exit',
     callback = function()
-      if vim.v.dying then
-        if string.sub(vim.v.errmsg, 1, 4) == 'E138' then
-          local shdir = vim.fn.stdpath 'data' .. '\\shada'
-          local shadas = vim.fn.globpath(shdir, '*.tmp.*', false, true)
-          for _, v in pairs(shadas) do -- deletes all shada tmp files
-            vim.fn.delete(v)
-          end
-        else
-          -- write to log file
-          local logfile = vim.fn.stdpath 'data' .. '\\logs\\nvim-dirty-exit.log'
-
-          local log = io.open(logfile, 'a')
-          if log then
-            log:write(vim.v.errmsg .. '\n')
-            log:close()
-          end
+      local err = vim.v.errmsg
+      if err == nil or err == '' then
+        return
+      end
+      if err:sub(1, 4) == 'E138' then
+        local shdir = vim.fn.stdpath 'data' .. '\\shada'
+        for _, v in pairs(vim.fn.globpath(shdir, '*.tmp.*', false, true)) do
+          vim.fn.delete(v)
         end
+        return
+      end
+      local logdir = vim.fn.stdpath 'data' .. '\\logs'
+      vim.fn.mkdir(logdir, 'p')
+      local log = io.open(logdir .. '\\nvim-dirty-exit.log', 'a')
+      if log then
+        log:write(os.date '%Y-%m-%d %H:%M:%S ' .. err .. '\n')
+        log:close()
       end
     end,
   })
@@ -104,9 +109,8 @@ local function autocmd()
       'spectre_panel',
       'startuptime',
       'tsplayground',
-      '*\\*_luapad.lua',
+      'luapad',
       'diffview',
-      'gitsigns://',
     },
     callback = function(event)
       vim.bo[event.buf].buflisted = false
@@ -157,12 +161,12 @@ local function autocmd()
   --TODO: Recolor minibar when recording
   --- pattern = filename|reg_recording() = current register in use|auto ('RecordingEnter')
 
-  vim.api.nvim_create_autocmd({ 'BufEnter' }, { -- , 'FileType'
+  vim.api.nvim_create_autocmd({ 'BufEnter' }, {
     group = make_augroup 'referencer_refresh',
     pattern = { '*.go' },
-    callback = function(event)
-      local ref = require 'referencer'
-      if ref.enable then
+    callback = function()
+      local ok, ref = pcall(require, 'referencer')
+      if ok and ref.enable then
         ref.update()
       end
     end,

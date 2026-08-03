@@ -66,7 +66,7 @@ function P.loadfiles(filetable)
       if mod.plugins then
         -- add
         P.add(mod.plugins)
-      elseif type(mod[1]) == table then
+      elseif type(mod[1]) == 'table' then
         P.add(mod)
       end
       if mod.setup and type(mod.setup) == 'function' then

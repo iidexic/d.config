@@ -25,10 +25,14 @@ local function initleap(leapOn, flitOn, spookOn, teleOn)
     { -- Leap extension, buffs f/F/t/T finds
       'ggandor/flit.nvim',
       dependencies = {
-        'ggandor/leap.nvim',
+        { url = 'https://codeberg.org/andyg/leap.nvim' },
       },
       cond = flitOn,
-      config = true,
+      -- flit is unmaintained and still hardcodes `case_sensitive = true`,
+      -- which the current codeberg leap warns about on every f/F/t/T press.
+      -- flit merges via tbl_deep_extend('keep', kwargs.opts, defaults),
+      -- so user opts win and any non-true value silences the warning.
+      opts = { opts = { case_sensitive = false } },
     },
 
     --  ┌                 ┐
@@ -43,7 +47,7 @@ local function initleap(leapOn, flitOn, spookOn, teleOn)
     },
     {
       'rasulomaroff/telepath.nvim',
-      dependencies = 'ggandor/leap.nvim',
+      dependencies = { { url = 'https://codeberg.org/andyg/leap.nvim' } },
       -- there's no sense in using lazy loading since telepath won't load the main module
       -- until you actually use mappings
       lazy = false,

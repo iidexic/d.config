@@ -79,7 +79,7 @@ M.map_vim_utils = function()
     {
       '<leader>Rf',
       function()
-        rerequire 'settings.vim_functionality'
+        M.rerequire 'settings.vim_functionality'
       end,
       desc = '[R]eload vim_functionality',
     },

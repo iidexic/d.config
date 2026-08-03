@@ -11,7 +11,7 @@ return {
   dependencies = {
     'rcarriga/nvim-dap-ui', -- Creates a beautiful debugger UI
     'nvim-neotest/nvim-nio', -- Required dependency for nvim-dap-ui
-    'williamboman/mason.nvim', -- Installs the debug adapters for you
+    'mason-org/mason.nvim', -- Installs the debug adapters for you
     'jay-babu/mason-nvim-dap.nvim',
     { 'theHamsta/nvim-dap-virtual-text', config = true },
     -- Add your own debuggers below

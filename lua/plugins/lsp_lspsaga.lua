@@ -10,7 +10,7 @@ M.plugins = {
       ui = {
         code_action = 'ﯦ',
       },
-      LightBulb = {
+      lightbulb = {
         virtual_text = false,
       },
 

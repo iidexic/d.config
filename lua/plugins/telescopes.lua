@@ -9,7 +9,7 @@ return {
   -- ╰─────────────────────────────────────────────────────────╯
   {
     'nvim-telescope/telescope.nvim',
-    event = 'vimenter',
+    event = 'VimEnter',
     dependencies = {
       { 'nvim-telescope/telescope-ui-select.nvim' },
       {
@@ -17,9 +17,7 @@ return {
         enabled = vim.g.have_nerd_font,
         config = function()
           require('nvim-web-devicons').set_icon_by_filetype {
-
-            ['.go'] = {
-
+            go = {
               icon = '󰟓 ',
               color = '#3ca7df',
               --cterm_color = '65',

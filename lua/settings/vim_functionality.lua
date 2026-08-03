@@ -34,11 +34,6 @@ local function path_clean(path)
   return clean
 end
 
-local p = vim.fn.expand '%:p'
-vim.print(p .. '\n  to  \n' .. path_clean(p))
-
-local function has_path_segment(path, segment) end
-
 -- TODO: Finish function to identify buffers to be removed
 M.is_buffer_non_user = function(bufnr)
   local bufname = vim.fn.bufname(bufnr)

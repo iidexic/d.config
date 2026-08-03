@@ -27,7 +27,10 @@ return {
         'json',
         'toml',
         'comment',
+        'dart',
       },
+      highlight = { enable = true },
+      indent = { enable = true },
     },
   },
   -- { -- Newer treesitter, probably requires 0.12

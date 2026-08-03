@@ -17,7 +17,7 @@ local D = {
       'plugins.filemanager',
       'plugins.conform',
       'plugins.iconpicker',
-      'plugins.grapple',
+      -- 'plugins.grapple',
       'plugins.lang-support',
       'plugins.lsp_lspsaga',
       -- 'plugins.markdown',
@@ -101,8 +101,9 @@ local D = {
         enabled = true,
         root = vim.fn.stdpath 'data' .. '/lazy-rocks',
         server = 'https://nvim-neorocks.github.io/rocks-binaries/',
-        -- use hererocks to install luarocks
-        hererocks = false, -- set to `nil` to use hererocks when luarocks is not found.
+        -- nil = lazy.nvim will fall back to hererocks if system luarocks is missing.
+        -- On Windows, system luarocks usually isn't present.
+        hererocks = nil,
       },
     })
     plugload.runsetup()

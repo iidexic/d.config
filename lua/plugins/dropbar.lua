@@ -6,12 +6,10 @@ DROPBAR NOTE: Basically ready to go. Pulling to try and cut plugin quantity.
 return {
   {
     'Bekaboo/dropbar.nvim',
-    -- optional, but required for fuzzy finder support
     enabled = true,
     dependencies = {
       'nvim-telescope/telescope-fzf-native.nvim',
       'folke/which-key.nvim', -- to assign mappings in config func
-      build = 'make',
     },
     config = function()
       local dropbar_api = require 'dropbar.api'
