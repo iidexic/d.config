@@ -7,7 +7,8 @@ M.plugins = {
     opts = {
       open_mapping = [[<C-\>]],
       persist_size = true,
-      shell = 'nu',
+      -- nushell if it's on PATH (windows box), otherwise fall back to 'shell'
+      shell = vim.fn.executable 'nu' == 1 and 'nu' or vim.o.shell,
       direction = 'float',
       size = function(term)
         if term.direction == 'horizontal' then

@@ -46,10 +46,10 @@ local function autocmd()
 
   --  ── [1] highlight on yank ───────────────────────────────────────────────
   auto('TextYankPost', { -- Try it with `yap` in normal mode
-    desc = 'Highlight when yanking (copying) text', --See`:help vim.highlight.on_yank()`
+    desc = 'Highlight when yanking (copying) text', --See`:help vim.hl.on_yank()`
     group = make_augroup 'highlight-yank',
     callback = function()
-      vim.highlight.on_yank()
+      vim.hl.on_yank()
     end,
   })
 
@@ -74,15 +74,15 @@ local function autocmd()
         return
       end
       if err:sub(1, 4) == 'E138' then
-        local shdir = vim.fn.stdpath 'data' .. '\\shada'
+        local shdir = vim.fs.joinpath(vim.fn.stdpath 'data', 'shada')
         for _, v in pairs(vim.fn.globpath(shdir, '*.tmp.*', false, true)) do
           vim.fn.delete(v)
         end
         return
       end
-      local logdir = vim.fn.stdpath 'data' .. '\\logs'
+      local logdir = vim.fs.joinpath(vim.fn.stdpath 'data', 'logs')
       vim.fn.mkdir(logdir, 'p')
-      local log = io.open(logdir .. '\\nvim-dirty-exit.log', 'a')
+      local log = io.open(vim.fs.joinpath(logdir, 'nvim-dirty-exit.log'), 'a')
       if log then
         log:write(os.date '%Y-%m-%d %H:%M:%S ' .. err .. '\n')
         log:close()
@@ -174,10 +174,10 @@ local function autocmd()
 end
 
 --- Change options for specific autocommands
+--- TODO: unimplemented. The previous body was `vim.tbl_deep_extend 'force'`,
+--- which throws (missing args) if this is ever called.
 ---@param options any
-function M.setoptions(options)
-  vim.tbl_deep_extend 'force'
-end
+function M.setoptions(options) end
 
 --- Make all autocommands
 function M.post_autocmd()

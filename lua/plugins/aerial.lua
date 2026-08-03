@@ -1,7 +1,7 @@
 local M = {
   {
     'stevearc/aerial.nvim',
-    branch = 'nvim-0.11', -- main branch requires nvim 0.12; switch when you upgrade
+    -- was pinned to the nvim-0.11 compat branch; on 0.12 we track master
     opts = {
       layout = { width = 0.2 },
       -- layout = { },

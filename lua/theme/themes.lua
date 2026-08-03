@@ -1,5 +1,27 @@
 return {
   -- ── Cool Themes ─────────────────────────────────────────────────────
+  {
+    'iidexic/material.nvim',
+    branch = 'overhaul',
+    opts = {
+      plugins = {
+        'neo-tree',
+        'neogit',
+        'which-key',
+        'lspsaga',
+        'trouble',
+        'gitsigns',
+        'dap',
+        'indent-blankline',
+        'nvim-cmp',
+        'fidget',
+        'mini',
+        'telescope',
+        'nvim-web-devicons',
+      },
+    },
+  },
+
   { -- The best, main theme
     'everviolet/nvim',
     name = 'evergarden',

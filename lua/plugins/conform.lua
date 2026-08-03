@@ -32,8 +32,10 @@ return {
 
       formatters_by_ft = {
         lua = { 'stylua' },
-        go = { 'gofmt', 'gopls', 'goimports', 'gotests' },
-        godot = { 'gdformat'},
+        -- 'gopls' and 'gotests' are not conform formatters (see
+        -- conform/formatters/) — they were silently failing every format.
+        go = { 'goimports', 'gofmt' },
+        -- 'godot' is not a filetype; gdscript covers .gd files
         gdscript = { 'gdformat' },
         python = { 'black' },
         -- python = { "isort", "black", stop_after_first = true }, stop_after_first(optional) = load first available
