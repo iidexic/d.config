@@ -101,7 +101,7 @@ local maptables = {
     {
       '<C-w>f',
       function()
-        vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.04
+        vim.g.neovide_scale_factor = (vim.g.neovide_scale_factor or 1.0) - 0.04
       end,
       desc = 'neovide scale ',
     },
@@ -109,7 +109,7 @@ local maptables = {
     {
       '<C-w>F',
       function()
-        vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.04
+        vim.g.neovide_scale_factor = (vim.g.neovide_scale_factor or 1.0) + 0.04
       end,
       desc = 'neovide scale ',
     },
@@ -285,16 +285,18 @@ function Map.other_plugins()
     { '<leader>et', '<cmd>ReferencerToggle<cr>', desc = 'Referencer Toggle' },
     { '<leader>eu', '<cmd>ReferencerUpdate<cr>', desc = 'Referencer Update' },
 
-    -- nvim-macros
-    { '<leader>mw', ':MacroSave<cr>', desc = 'Save Macro' },
-    { '<leader>my', ':MacroYank<cr>', desc = 'Yank Macro (register)' },
-    { '<leader>ms', ':MacroSelect<cr>', desc = 'Select Saved Macro' },
+    -- nvim-macros: NOT INSTALLED, these commands do not exist.
+    -- Macros are handled by macrothis.nvim (trials/macrothis.lua) on <leader>kk*
+    -- { '<leader>mw', ':MacroSave<cr>', desc = 'Save Macro' },
+    -- { '<leader>my', ':MacroYank<cr>', desc = 'Yank Macro (register)' },
+    -- { '<leader>ms', ':MacroSelect<cr>', desc = 'Select Saved Macro' },
 
     -- Grug-Far
     { 'gF', grug.open, desc = 'GrugFar Replace' },
     { 'gW', '<cmd>GrugFarWithin<cr>', desc = 'GrugFar Replace Within Range' },
-    -- Render-Markdown
-    { 'gm', cmd 'RenderMarkdown toggle', desc = 'Render Markdown' },
+    -- Render-Markdown: 'plugins.markdown' is commented out in dlazyinit, so
+    -- :RenderMarkdown does not exist. Re-enable that module to use this.
+    -- { 'gm', cmd 'RenderMarkdown toggle', desc = 'Render Markdown' },
     -- todo-comments:
     { '<leader>2', desc = 'Todo-Comments' },
     { '<leader>2d', '<cmd>TodoTelescope<cr>', desc = 'Search Todo Comments' },

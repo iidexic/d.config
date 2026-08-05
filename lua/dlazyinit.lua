@@ -17,12 +17,9 @@ local D = {
       'plugins.filemanager',
       'plugins.conform',
       'plugins.iconpicker',
-      -- 'plugins.grapple',
       'plugins.lang-support',
       'plugins.lsp_lspsaga',
-      -- 'plugins.markdown',
       'plugins.mini',
-      -- 'plugins.obsidian',
       'plugins.outline',
       'plugins.persistence',
       'plugins.plugins_debug',
@@ -33,17 +30,20 @@ local D = {
       'plugins.plugins_visual',
       'plugins.plugins_workflow',
       'plugins.python',
-      -- 'plugins.precognition',
       'plugins.qol',
       'plugins.telescopes',
       'plugins.treesitters',
       'plugins.trouble',
       'plugins.ufo',
-      'plugins.supermaven_ai',
       'plugins.godot',
     }
 
     -- ── Previously Removed from Above: ────────────────────────────────────
+      -- 'plugins.grapple',
+      -- 'plugins.markdown',
+      -- 'plugins.obsidian',
+      -- 'plugins.precognition',
+      -- 'plugins.supermaven_ai',
     --'plugins.hover',
     --'plugins.layout', -- none
     -- 'plugins.plugins_auto', --NOTE: trying to move to blink
@@ -94,15 +94,16 @@ local D = {
 
     --# Lazy setup
     require('lazy').setup(plugload.allplugins, {
-      ui = { icons = vim.g.have_nerd_font and {} or require('plugins//storage').lazyicons },
+      ui = { icons = vim.g.have_nerd_font and {} or require('plugins._backup_icons').lazyicons },
       change_detection = { enabled = true, notify = true },
 
       rocks = {
         enabled = true,
         root = vim.fn.stdpath 'data' .. '/lazy-rocks',
         server = 'https://nvim-neorocks.github.io/rocks-binaries/',
-        -- nil = lazy.nvim will fall back to hererocks if system luarocks is missing.
-        -- On Windows, system luarocks usually isn't present.
+        -- nil = lazy.nvim will fall back to hererocks if system luarocks is
+        -- missing. That's the case on windows; on linux a system luarocks
+        -- (if installed) is used directly.
         hererocks = nil,
       },
     })

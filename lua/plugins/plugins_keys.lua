@@ -42,7 +42,7 @@ M.plugins = {
 
       icons = {
         mappings = vim.g.have_nerd_font, -- if nerd font use default map. which-key uses nf by default
-        keys = vim.g.have_nerd_font and {} or require('plugins//storage').keys,
+        keys = vim.g.have_nerd_font and {} or require('plugins._backup_icons').keys,
       },
       spec = { -- Document existing key chords:
         { '<leader>?', group = '[which-key]' },

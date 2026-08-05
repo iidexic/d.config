@@ -6,9 +6,20 @@ local len = function(t)
   end
   return c
 end
+--- Loose sanity check that a table looks like a lazy.nvim plugin spec.
+--- A spec is addressable by a short "owner/repo" name, an explicit `url`, or a
+--- local `dir`. The old check was `type(plugin[1])=='string' and
+--- plugin[1]:find('../..')` -- that pattern is just "5+ chars", and it silently
+--- DROPPED url-only specs (the top-level leap.nvim spec in trials/leap_plus).
 ---@param plugin table single-plugin, not nested
 local function dirtycheckplug(plugin)
-  return type(plugin[1]) == 'string' and string.find(plugin[1], '../..')
+  if type(plugin) ~= 'table' then
+    return false
+  end
+  if type(plugin[1]) == 'string' and plugin[1]:find '/' then
+    return true
+  end
+  return type(plugin.url) == 'string' or type(plugin.dir) == 'string'
 end
 
 ---@class P plugin list builder
@@ -62,27 +73,26 @@ function P.loadfiles(filetable)
   for _, f in ipairs(filetable) do
     local mod = require(f)
     P.n.reqs = P.n.reqs + 1 --++
-    if mod then
+    if not mod then
+      P.n.ers = P.n.ers + 1 --++
+    else
+      -- NOTE: each branch must run at most once. A second `if type(mod[1]) ==
+      -- 'table'` block used to follow this one, which inserted every file that
+      -- returns a bare plugin list twice (43 of 173 specs).
       if mod.plugins then
-        -- add
         P.add(mod.plugins)
       elseif type(mod[1]) == 'table' then
         P.add(mod)
+      elseif type(mod[1]) == 'string' then
+        -- module is itself a single plugin spec
+        P.add { mod }
+      else
+        P.n.ers = P.n.ers + 1 --++
       end
       if mod.setup and type(mod.setup) == 'function' then
         P.n.setups = P.n.setups + 1 --++
         table.insert(P.setups, mod.setup)
       end
-    end
-    if mod and type(mod[1]) == 'table' then
-      P.add(mod)
-
-      -- Just in case, make an attempt
-      -- Probably just delete this
-    elseif mod and type(mod[1]) == 'string' then
-      P.add { mod }
-    else
-      P.n.ers = P.n.ers + 1 --++
     end
   end
 end

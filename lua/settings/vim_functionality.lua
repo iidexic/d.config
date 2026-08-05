@@ -11,6 +11,22 @@ local current_win = nil
 local lastbuffer = { any = nil }
 M.on_buf_leave = function() end
 
+local function path_clean(path)
+  return (path:gsub('\\', '/'))
+end
+
+--- OS temp dir, normalized to forward slashes and lowercased for comparison.
+--- Windows: C:/Users/<you>/Appdata/Local/Temp -- Linux/mac: /tmp
+local tempdir = path_clean(vim.fn.fnamemodify(vim.fn.tempname(), ':h:h')):lower()
+
+--- true if `path` lives under the OS temp directory
+local function is_temp_path(path)
+  if type(path) ~= 'string' or path == '' then
+    return false
+  end
+  return path_clean(path):lower():sub(1, #tempdir) == tempdir
+end
+
 M.autocommands = function()
   local autocmd = vim.api.nvim_create_autocmd
   local autogroup = require('settings.vim_util').autogroup
@@ -20,7 +36,7 @@ M.autocommands = function()
     callback = function(event)
       -- Event has: - event(name) - match (full/path) - buf (bufnr) - file (full\path)
       -- Check if in cwd  (vim.uv.cwd()) if need stricter
-      if event.match:find 'Appdata/Local/Temp' == nil then
+      if not is_temp_path(event.match) then
         local win = vim.fn.win_getid()
         lastbuffer[win] = event.buf
         lastbuffer.any = event.buf
@@ -29,17 +45,13 @@ M.autocommands = function()
   })
 end
 
-local function path_clean(path)
-  local clean = path:gsub('\\', '/')
-  return clean
-end
-
 -- TODO: Finish function to identify buffers to be removed
+-- (currently computes the three predicates but returns nothing)
 M.is_buffer_non_user = function(bufnr)
   local bufname = vim.fn.bufname(bufnr)
   local is_noname = type(bufname) == 'string' and bufname:len() == 0
-  local is_in_temp = path_clean(bufname):find 'Appdata/Local/Temp' ~= nil
-  local is_in_cwd = bufname:find(vim.fn.getcwd()) ~= nil
+  local is_in_temp = is_temp_path(bufname)
+  local is_in_cwd = bufname:find(vim.fn.getcwd(), 1, true) ~= nil
 end
 
 local function switchBufIfValid(buf, currentbuf)

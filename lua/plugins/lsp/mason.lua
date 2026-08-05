@@ -54,12 +54,18 @@ return {
         -- zls = {},
         powershell_es = {},
         buf_ls = {},
-        -- ── THE REST WOO ────────────────────────────────────────────────────
-        vtsls = {},
-        -- dartls is set up by flutter-tools.nvim — do not duplicate here
-        tailwindcss = {},
-        svelte = {},
       }
+
+      -- These are all installed through npm. Without node/npm on PATH mason
+      -- retries (and fails) every single startup, so only ask for them if the
+      -- machine can actually build them.
+      if vim.fn.executable 'npm' == 1 then
+        -- ── THE REST WOO ──────────────────────────────────────────────────
+        servers.vtsls = {}
+        -- dartls is set up by flutter-tools.nvim — do not duplicate here
+        servers.tailwindcss = {}
+        servers.svelte = {}
+      end
 
       local ensure_installed = vim.tbl_keys(servers)
       require('mason-lspconfig').setup {
@@ -68,14 +74,12 @@ return {
         automatic_enable = false,
       }
 
-      -- NOTE: Don't want godot setup to be sent to mason-lspconfig, just place it right before vim.lsp setup
-      servers.godotdev = {
-        editor_host = '127.0.0.1', -- Godot editor host
-        editor_port = 6005, -- Godot LSP port
-        debug_port = 6006, -- Godot debugger port
-        -- csharp = true, -- Enable C# Installation Support
-        autostart_editor_server = true, -- Enable auto start Nvim server
-      }
+      -- NOTE: godotdev is NOT an lsp config -- godotdev.nvim ships no
+      -- lsp/godotdev.lua, it wires up its own client from lua/godotdev/lsp.lua.
+      -- Registering it here produced
+      --   invalid "godotdev" config: cmd: expected ... got nil
+      -- in the lsp log on every buffer open. Its options now live in
+      -- plugins/godot.lua where the plugin actually reads them.
 
       -- ── MASON V2 SETUP ────────────────────────────────────────────────────────
       --  NOTE: Before or after?

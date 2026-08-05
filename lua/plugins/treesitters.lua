@@ -1,6 +1,9 @@
 return {
 
-  { -- Version to ensure Nvim 0.11 compatibility
+  { -- legacy `master` branch: still works on 0.12, but is frozen upstream.
+    -- The `main` branch is the actively developed one and has a different API
+    -- (no `main = 'nvim-treesitter.configs'`, no `highlight`/`indent` opts) —
+    -- see the commented-out spec below before switching.
     'nvim-treesitter/nvim-treesitter',
     branch = 'master',
     lazy = false,

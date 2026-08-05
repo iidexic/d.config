@@ -34,10 +34,13 @@ return {
         module = 'telescope._extensions.luasnip', -- if you wish to lazy-load
       },
       {
-        'nvim-telescope/telescope-fzf-native.nvim', -- Don't currently have working build system
-        --build = 'make', -- only run on update/install
-        build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release',
-        cond = false, --function() return vim.fn.executable 'make' == 1 end,
+        'nvim-telescope/telescope-fzf-native.nvim',
+        build = 'make', -- only run on update/install
+        -- cmake variant, for machines without make:
+        -- build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release',
+        cond = function()
+          return vim.fn.executable 'make' == 1 and vim.fn.executable 'cc' == 1
+        end,
       },
       { -- have not found a use for this
         'dedic/agrolens.nvim',
@@ -92,10 +95,23 @@ return {
       vim.keymap.set('n', '<leader>sq', builtin.quickfix, { desc = '[S]earch [Q]uickfix' })
       vim.keymap.set('n', '<leader>sD', builtin.lsp_definitions, { desc = '[S]earch lsp [D]efinitions' })
       vim.keymap.set('n', '<leader>st', builtin.treesitter, { desc = '[S]earch [t]reesitter' })
-      vim.keymap.set('n', '<leader>sz', telescope.extensions.zoxide.list, { desc = '[S]earch [z]oxide list' })
-      vim.keymap.set('n', '<leader>sm', telescope.extensions.grapple.tags, { desc = '[S]earch [M]arks->grapple' })
-      vim.keymap.set('n', '<leader>sH', telescope.extensions.helpgrep.helpgrep, { desc = '[S]earch [H]elp with grep' })
-      vim.keymap.set('n', '<leader>sl', telescope.extensions.luasnip.luasnip, { desc = '[S]earch [l]uasnip snippets' })
+      -- Resolve extension pickers when the key is pressed, not during setup.
+      -- Indexing telescope.extensions here meant one failed extension threw
+      -- inside config() and took the whole telescope setup down with it.
+      local function ext(name, picker)
+        return function()
+          local e = telescope.extensions[name]
+          if not (e and e[picker]) then
+            vim.notify('telescope extension not loaded: ' .. name, vim.log.levels.WARN)
+            return
+          end
+          e[picker]()
+        end
+      end
+      vim.keymap.set('n', '<leader>sz', ext('zoxide', 'list'), { desc = '[S]earch [z]oxide list' })
+      vim.keymap.set('n', '<leader>sm', ext('grapple', 'tags'), { desc = '[S]earch [M]arks->grapple' })
+      vim.keymap.set('n', '<leader>sH', ext('helpgrep', 'helpgrep'), { desc = '[S]earch [H]elp with grep' })
+      vim.keymap.set('n', '<leader>sl', ext('luasnip', 'luasnip'), { desc = '[S]earch [l]uasnip snippets' })
       vim.keymap.set('n', '<leader>sc', builtin.colorscheme, { desc = '[S]earch [C]olorschemes' })
       vim.keymap.set('n', '<leader>sb', builtin.git_bcommits, { desc = '[S]earch [B]uffer Commit History' })
       vim.keymap.set('n', '<leader>sR', builtin.reloader, { desc = '[S]earch [R]eloader' })
@@ -120,8 +136,15 @@ return {
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
 
+      -- Obsidian vault location differs per machine; set vim.g.dvault to
+      -- override. Windows default was ~/OneDrive/Apps/remotely-save/DVAULT/
       vim.keymap.set('n', '<leader>so', function() -- telescope search Obsidian notes
-        builtin.find_files { cwd = '~/OneDrive/Apps/remotely-save/DVAULT/' }
+        local vault = vim.fn.expand(vim.g.dvault or '~/OneDrive/Apps/remotely-save/DVAULT/')
+        if vim.fn.isdirectory(vault) == 0 then
+          vim.notify('Obsidian vault not found: ' .. vault .. '\nset vim.g.dvault', vim.log.levels.WARN)
+          return
+        end
+        builtin.find_files { cwd = vault }
       end, { desc = '[S]earch [O]bsidian notes' })
     end,
   },

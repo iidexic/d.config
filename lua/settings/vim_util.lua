@@ -23,13 +23,23 @@ end
 ---
 ---@param packageName any
 function M.rerequire(packageName)
+  -- Accept the opts table nvim_create_user_command hands its callback, so
+  -- `:Rerequire settings.mapping` works as well as a direct lua call.
+  if type(packageName) == 'table' then
+    packageName = packageName.args
+  end
+  if type(packageName) ~= 'string' or packageName == '' then
+    vim.notify('DWARNING: RELOAD FAILED\n no package name given', vim.log.levels.WARN)
+    return nil
+  end
   if package.loaded[packageName] then
     package.loaded[packageName] = nil
     local pkg = require(packageName)
     vim.print('reloaded: ', packageName)
     return pkg
   end
-  print('DWARNING: RELOAD FAILED\n PACKAGE `' .. package.loaded .. '` WAS NOT LOADED')
+  -- was concatenating the `package.loaded` table itself, which throws
+  vim.notify('DWARNING: RELOAD FAILED\n PACKAGE `' .. packageName .. '` WAS NOT LOADED', vim.log.levels.WARN)
   return nil
 end
 local function reload_and_run(packageName, functionName)

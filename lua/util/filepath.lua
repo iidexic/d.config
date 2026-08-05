@@ -20,7 +20,8 @@ end
 function M.has_subpath(path, sub)
   local cpath = M.clean(path)
   local csub = M.clean(sub)
-  if cpath:find(csub) then
+  -- plain find: paths contain '.', '-' and '(' which are lua pattern magic
+  if cpath:find(csub, 1, true) then
     return true
   end
   return false
