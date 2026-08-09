@@ -79,7 +79,7 @@ M.plugins = {
       },
     },
   },
-  { 'helpme', dir = 'c:/dev/luaprojects/helpme/', dev = true },
+  -- { 'helpme', dir = 'c:/dev/luaprojects/helpme/', dev = true },
   { -- Scratch: Create general/language-specific scratch buffers
     'iidexic/scratch.nvim',
     dir = fp.scratch,
