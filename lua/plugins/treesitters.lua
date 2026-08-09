@@ -1,13 +1,13 @@
 return {
 
-  { -- legacy `master` branch: still works on 0.12, but is frozen upstream.
+  { -- legacy `master` branch: frozen upstream, and NOT fully 0.12-clean —
+    -- see the compat shim in `config` below.
     -- The `main` branch is the actively developed one and has a different API
     -- (no `main = 'nvim-treesitter.configs'`, no `highlight`/`indent` opts) —
     -- see the commented-out spec below before switching.
     'nvim-treesitter/nvim-treesitter',
     branch = 'master',
     lazy = false,
-    main = 'nvim-treesitter.configs', -- disable if errors
     build = ':TSUpdate',
     opts = {
       ensure_installed = {
@@ -35,6 +35,48 @@ return {
       highlight = { enable = true },
       indent = { enable = true },
     },
+    config = function(_, opts)
+      -- 0.12 compat shim. `add_predicate`/`add_directive` no longer honour the
+      -- `all` option — they read only `force`. master registers every handler
+      -- with `{ force = true, all = false }` (query_predicates.lua:19), so its
+      -- handlers now receive `table<integer, TSNode[]>` where they index
+      -- `match[id]` as a single TSNode. Any markdown fenced block with a
+      -- language tag hits this through `#set-lang-from-info-string!`:
+      --   treesitter.lua:197: attempt to call method 'range' (a nil value)
+      -- (blink.cmp's path-source doc preview wraps files in ```<ext> fences,
+      -- which is how it shows up while completing paths.)
+      -- Re-register master's handlers through a wrapper that unwraps the lists.
+      -- Delete this whole block when moving to the `main` branch — it registers
+      -- only `kind-eq?`/`any-kind-eq?`, both already list-aware.
+      local tsq = require 'vim.treesitter.query'
+      local add_predicate, add_directive = tsq.add_predicate, tsq.add_directive
+
+      local function unwrap(handler)
+        return function(match, ...)
+          local first = {}
+          for id, nodes in pairs(match) do
+            first[id] = type(nodes) == 'table' and nodes[1] or nodes
+          end
+          return handler(first, ...)
+        end
+      end
+
+      local function patched(add)
+        return function(name, handler, o)
+          if type(o) == 'table' and o.all == false then
+            handler = unwrap(handler)
+          end
+          return add(name, handler, o)
+        end
+      end
+
+      tsq.add_predicate, tsq.add_directive = patched(add_predicate), patched(add_directive)
+      package.loaded['nvim-treesitter.query_predicates'] = nil
+      require 'nvim-treesitter.query_predicates'
+      tsq.add_predicate, tsq.add_directive = add_predicate, add_directive
+
+      require('nvim-treesitter.configs').setup(opts)
+    end,
   },
   -- { -- Newer treesitter, probably requires 0.12
   --   'nvim-treesitter/nvim-treesitter',

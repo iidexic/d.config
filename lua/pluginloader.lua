@@ -26,7 +26,6 @@ end
 ---@field allplugins table                # table of all plugins to load
 ---@field add function(table)             # add a table of plugins to P.allplugins
 ---@field loadfiles function(table)       # given table of module/file names, load all plugins in return table of each file
----@field getconditionals function(table) # load conditional plugins, enabling only those named in enableplugins table
 ---@field populate function(table)        # pulls plugin data from module/table directly
 ---@field setups function[]         populated with custom setup functions as plugins are pulled in
 local P = { allplugins = {}, pnames = {}, setups = {} }
@@ -55,10 +54,14 @@ function P.add(plugins)
     if dirtycheckplug(plug) then
       table.insert(P.allplugins, plug)
       P.n.ins = P.n.ins + 1 --++
-      if plug.cond and plug.cond == false then
+      -- NOTE: the guard used to be `plug.cond and plug.cond == false`, which can
+      -- never be true -- a false `cond` short-circuits the first term. Both
+      -- counters silently read 0. Compare against false directly. (`cond` may
+      -- also be a function; only a literal false counts as soft-disabled here.)
+      if plug.cond == false then
         P.n.sdis = P.n.sdis + 1
       end
-      if plug.enabled and plug.enabled == false then
+      if plug.enabled == false then
         P.n.hdis = P.n.hdis + 1
       end
     else
@@ -188,14 +191,6 @@ function P.N()
       end
     end,
   })
-end
-
----@param enableplugins table list of plugin in conditional table to enable
-function P.getconditionals(enableplugins)
-  local cond = require 'conditional.loadconditional'
-  cond.set(enableplugins)
-  local cplugs = cond.getplugins()
-  P.add(cplugs)
 end
 
 return P
