@@ -1,56 +1,39 @@
 local M = {}
 
+--- Mono nerd fonts installed on this machine (verified with `fc-list :spacing=100`).
+--- Keep these in sync with what fontconfig actually reports; a missing family
+--- silently falls back and the width tweaks stop making sense.
 local fonts = {
-  iosvmata = 'Iosvmata:h14.6:w-0.8',
-  pragmasevka = 'Pragmasevka nerd font:h14.6:w-0.2',
-  zedmono = 'zedmono nerd font:h13.0:w-0.0', -- [L]
-  iosevkacomfyd = 'iosevkacomfyd nerd font:h14.6:w-0.8',
-  iosevkamt = 'iosevkaMT nerd font:h14.0:w-0.4',
-  nova = 'nova nerd font:h13.0:w-1.2',
-  brass = 'brassmonocode nerd font:h15.8:w-1.2', -- [L]
-  monoid = 'monoidtight nerd font:h11.6:w0.2', -- [L]
-  monkey = 'monkey nerd font:h18.4:w0.6',
-  inputmono = 'inputmonocompressed nerd font:h14.6:w-0.8',
-  jetbrains = 'JetBrainsMono Nerd Font:h12.4:w-0.6', -- [L]
-  zenbonesbrainy = 'zenbonesbrainy nerd font:h13.0:w-0.3',
-  zenbonesproto = 'zenbonesproto nerd font:h13.0:w-0.3',
-  ankacoder = 'ankacoder nerd font:h15.0:w-0.2',
-  envycoder = 'envycodeR Nerd Font:h14:w-0.4', -- :#e-subpixelantialias
-  dpsdbeyond = 'dpsdbeyond nerd font:h15:w-0.6',
-  -- BUG: M1 not working
-  m1 = 'M+1code nerd font:h13.3:w0.0',
-  monoone = 'monoOne nerd font:h13.6:w-1.0',
-  shuretechmono = 'shuretechmono Nerd Font:h14.5:w-1.2',
-  -- BUG: nk57 not working
-  nk57 = 'nk57dmono nerd font:h14.5:w-0.3',
-  lekton = 'lekton nerd font:h16.4:w-1.8',
-  recmonoduotone = 'recmonoduotone nerd font:h13.6:w-1.2', -- [L] (also casual ligatures)
-  fn0t = 'fn0t nerd font:h21:w-0.0',
-  nkduy = 'nkduymono nerd font:h12.3:w-0.8', -- [L]
-  agave = 'agave nerd font:h15:w-1.4',
-  martianmono = 'martianmonoct nerd font:h13.4:w-1.0', -- [L]
-  maple = 'maple mono nf:h13:w-0.4', -- [L]
-  kodemono = 'kodemonodnf:h15.0:w-0.5', -- [L]
-  skyhookmono = 'skyhookmono dnf:h15.6:w-1.0',
-  sudo = 'sudo nerd font:h16.0:w-0.6', -- [L]
-  crystald = 'crystald nerd font:h15.6:w-0.8',
-  monofokisquish = 'monofokisquish nerd font:h15.4:w-0.6',
-  barecast = 'barecast dnf:h13.0:w-2.0',
-  gothamono = 'gothamonov0.2 nerd font:h13.6:w-0.0',
-  terminess = 'Terminess Nerd Font:h15.0:w-1.2',
-  spleen = 'Spleen32x64 nerd font:h15.0:w-1.0',
-  greybeard = 'greybeard22 nerd font:h16.4:w-1.0',
-  spacemono = 'spacemono dnf:h13:w-1.6',
-  monaspice = 'monaspicekr Nerd Font:h13.3:w-2.0',
-  victormono = 'victormono nerd font:h13:w-0',
-  eirian = 'eirian nerd font:h16.4:w-0.0',
-  profont = 'profontwindows nerd font:h15.4:w-0.4',
-  envycodeb = 'envycodeb10pt nerd font:h14.0:w-1.0:#e-subpixelantialias',
-  departure = 'DepartureMono nerd font:h13:w-1.0',
-  binchotan = 'BinchotanSharpD Nerd Font:h15:w-1.4',
-  bigblueterm = 'bigbluetermplus nerd font:h13:w-1.4',
-  proggyclean = 'ProggyClean nerd font:h18:w-0.0',
-  overpass = 'overpassmtnf:h13:w-1.4',
+  envycoder = 'EnvyCodeR Nerd Font Mono:h14:w0', -- :#e-subpixelantialias
+  fantasque = 'FantasqueSansM Nerd Font Mono:h14.0:w-0.6', -- [L]
+  hack = 'Hack Nerd Font Mono:h13.0:w-1.0',
+  inputmono = 'InputMono Nerd Font:h13.4:w-0.8',
+  inputcompressed = 'InputMonoCompressed Nerd Font:h14.6:w-0.6',
+  -- inputcondensed = 'InputMonoCondensed Nerd Font:h14.0:w-0.8',
+  inputnarrow = 'InputMonoNarrow Nerd Font:h13.8:w-0.6',
+  iosevka = 'Iosevka Nerd Font Mono:h14.0:w0',
+  iosevkaterm = 'IosevkaTerm Nerd Font Mono:h13.0:w-0.0',
+  jetbrains = 'JetBrainsMono Nerd Font Mono:h12.4:w-0.4', -- [L]
+  -- jetbrainsnl = 'JetBrainsMonoNL Nerd Font Mono:h12.4:w-0.6',
+  m1code = 'M+1Code Nerd Font Mono:h13.3:w-0.0',
+  mcodelat50 = 'M+CodeLat50 Nerd Font Mono:h13.4:w-0.2',
+  -- mcodelat60 = 'M+CodeLat60 Nerd Font Mono:h13.4:w-0.2',
+  -- meslol = 'MesloLGL Nerd Font Mono:h13.0:w-0.4',
+  -- meslom = 'MesloLGM Nerd Font Mono:h13.0:w-0.4',
+  meslos = 'MesloLGS Nerd Font Mono:h13.0:w-0.4',
+  -- DZ = dotted zero variants
+  -- meslolz = 'MesloLGLDZ Nerd Font Mono:h13.0:w-0.4',
+  -- meslomz = 'MesloLGMDZ Nerd Font Mono:h13.0:w-0.4',
+  -- meslosz = 'MesloLGSDZ Nerd Font Mono:h13.0:w-0.4',
+  monoid = 'Monoid Nerd Font Mono:h12.0:w-0.2', -- [L]
+  profontx = 'ProFont IIx Nerd Font Mono:h15.4:w-0.4',
+  profont = 'ProFontWindows Nerd Font Mono:h15.4:w-0.4',
+  sourcecode = 'SauceCodePro Nerd Font Mono:h14.0:w-1.0',
+  shuretech = 'ShureTechMono Nerd Font Mono:h14.0:w-0.8',
+  spacemono = 'SpaceMono Nerd Font Mono:h13:w-0.6',
+  terminess = 'Terminess Nerd Font Mono:h14.8:w-0.8',
+  victormono = 'VictorMono Nerd Font Mono:h13.0:w-0.0', -- [L]
+  zedmono = 'ZedMono Nerd Font Mono:h13.0:w-0.0', -- [L]
 }
 M.set_font = function(font)
   local selected = fonts[font]
@@ -79,139 +62,6 @@ end
 --  options:hX/wX, b,i bold/italic, #e-[font_alias_option] #h-[full|normal|slight|none] (HINTING)
 --  // ||\\ --> <-- =<< <= ~= |-> == ===
 -- vim.o.guifont = ' nerd font:h13:w-0'
--- ── NEW FONTS ───────────────────────────────────────────────────────
-function M.set_every_font_for_no_reason()
-  vim.o.guifont = 'sono nerd font:h14.0:w-2.4'
-  vim.o.guifont = 'Block mono nerd font:h12.0:w-1.0'
-  vim.o.guifont = 'demmomono400 nerd font:h18.0:w-3.8'
-  vim.o.guifont = 'featuremono nerd font:h15.0:w-0.6' -- [L]
-  vim.o.guifont = 'skyhookmono dnf:h15.6:w-1.0'
-  vim.o.guifont = 'sudo nerd font:h16.0:w-0.6' -- [L]
-  vim.o.guifont = 'crystald nerd font:h15.6:w-0.8'
-  vim.o.guifont = 'monofokisquish nerd font:h15.4:w-0.6'
-  -- ──────────────────────────────────────────────────────────────────────
-
-  --  Iosevkas
-  vim.o.guifont = 'Iosvmata:h14.6:w-1.0'
-  vim.o.guifont = 'Pragmasevka nerd font:h14.6:w-0.3'
-  vim.o.guifont = 'zedmono nerd font:h13.0:w-0.0' -- [L]
-  vim.o.guifont = 'iosevkacomfyd nerd font:h14.6:w-1.0'
-  vim.o.guifont = 'iosevkaMT nerd font:h14.0:w-0.6'
-  vim.o.guifont = 'nova nerd font:h13.0:w-1.4'
-
-  -- Iosevkalikes
-  vim.o.guifont = 'inputmonocompressed nerd font:h14.6:w-1.0'
-  vim.o.guifont = 'JetBrainsMono Nerd Font:h12.4:w-0.8' -- [L]
-  vim.o.guifont = 'zenbonesbrainy nerd font:h13.0:w-0.4' -- [L]
-  vim.o.guifont = 'zenbonesproto nerd font:h13.0:w-0.6' -- [L]
-
-  -- Besties
-  vim.o.guifont = 'brassmonocode nerd font:h15.8:w-1.4' -- [L]
-  vim.o.guifont = 'monoidtight nerd font:h11.6:w0.4' -- [L]
-  vim.o.guifont = 'ankacoder nerd font:h15.0:w-0.4'
-  vim.o.guifont = 'BinchotanSharpD Nerd Font:h15:w-1.4'
-  vim.o.guifont = 'envycodeR Nerd Font:h14:w-0.6:#e-subpixelantialias'
-  vim.o.guifont = 'dpsdbeyond nerd font:h15:w-1.0'
-  vim.o.guifont = 'M+1code nerd font:h13.3:w-0'
-  vim.o.guifont = 'monoOne nerd font:h13.6:w-1.0'
-  vim.o.guifont = 'shuretechmono Nerd Font:h14.5:w-1.2'
-  vim.o.guifont = 'monkey nerd font:h18.4:w0.8'
-  vim.o.guifont = 'nk57dmono nerd font:h14.5:w-0.3'
-
-  -- second-besties
-  vim.o.guifont = 'lekton nerd font:h16.4:w-1.8'
-  vim.o.guifont = 'recmonoduotone nerd font:h13.6:w-1.4' -- [L] (also casual ligatures)
-  vim.o.guifont = 'fn0t nerd font:h21:w-0.2'
-  vim.o.guifont = 'nkduymono nerd font:h12.3:w-0.8' -- [L]
-  vim.o.guifont = 'agave nerd font:h15:w-1.4'
-  vim.o.guifont = 'martianmonoct nerd font:h13.4:w-1.0' -- [L]
-  vim.o.guifont = 'maple mono nf:h13:w-0.4' -- [L]
-  vim.o.guifont = 'DaddyTimeMono nerd font:h12.7:w-1.0'
-
-  -- chunkyboys
-  vim.o.guifont = 'kodemonodnf:h15.0:w-0.5' -- [L]
-  vim.o.guifont = 'barecast nerd font:h14.0:w-2.0'
-  vim.o.guifont = 'gothamonov0.2 nerd font:h13.6:w-0.0'
-  vim.o.guifont = 'Terminess Nerd Font:h15.0:w-1.2'
-  vim.o.guifont = 'Spleen32x64 nerd font:h15.0:w-1.0'
-  vim.o.guifont = 'greybeard22 nerd font:h16.4:w-1.0'
-
-  vim.o.guifont = 'kodemono nerd font:h12.5:w-1.0' -- [L]
-  vim.o.guifont = 'skyhookmono nerd font:h14:w-1.0'
-  -- wideboys
-  vim.o.guifont = 'Anonymous pro:h16.4:w-0.6'
-  vim.o.guifont = 'hack nerd font:h14:w-1'
-  vim.o.guifont = 'hurmit Nerd Font:h12.0:w-1.0'
-  vim.o.guifont = 'geistmono nerd font:h14:w-0.8'
-  vim.o.guifont = 'recmonolinear nerd font:h13.6:w-1.0' -- [L]
-  vim.o.guifont = '0xproto v2 ligaturised nf:h13.4:w-1.0'
-  vim.o.guifont = 'overpassmtnf:h14.4:w-1.0'
-  vim.o.guifont = 'antikormono nerd font:h12.6:w-1.8'
-  vim.o.guifont = 'commitmono nerd font:h15:w-1.8'
-
-  -- fineboys
-  vim.o.guifont = 'ttinterphasespromonotrl nerd font:h13:w-1.6'
-  vim.o.guifont = 'apl385unicode nerd font:h14.2:w-2.4'
-  vim.o.guifont = 'luculent nerd font:h13:w-0.8'
-  vim.o.guifont = 'agyxmono nerd font:h13.0:w-1.0'
-  vim.o.guifont = 'lilex nerd font:h12.6:w-1.2'
-  vim.o.guifont = 'blexmono nerd font:h12.6:w-1.4'
-  vim.o.guifont = 'd2codingligature Nerd Font:h14:w-1.0' -- [L]
-  vim.o.guifont = 'cousine nerd font:h14.4:w-2'
-  vim.o.guifont = 'fragmentmono nerd font:h13:w-1.0'
-
-  -- custom newest september
-  vim.o.guifont = 'Lotion nerd font:h11.6:w-0.2'
-  vim.o.guifont = 'nfcode nerd font:h12:w-0.6' -- fix the m and w in fontforge
-
-  -- custom ok
-  vim.o.guifont = 'ramono nerd font:h13:w-1.4'
-
-  -- custom, meh
-  vim.o.guifont = 'indicatemono Nerd Font:h14:w-0.6'
-  vim.o.guifont = 'iosevkamayukaioriginal nerd font:h14:w-0.2'
-  vim.o.guifont = 'ltbinaryneue nerd font:h13.6:w-1.0'
-  vim.o.guifont = 'telegramarenderosn nerd font:h11:w-1.0'
-  vim.o.guifont = 'fairfaxhaxhd nerd font:h16:w-1.4'
-  vim.o.guifont = 'flexiibmvgatrue nerd font:h16:w-0.0'
-  vim.o.guifont = 'nk57monospacecdrg nerd font:h13.6:w-0.3'
-  vim.o.guifont = 'leaguemono nerd font:h14:w-0.2'
-  --
-  -- Tier 2
-  vim.o.guifont = 'spacemono Nerd Font:h13.8:w-1.6' -- change line height
-  vim.o.guifont = 'monaspicekr Nerd Font:h13.3:w-2.0'
-  vim.o.guifont = 'victormono nerd font:h13:w-0'
-  vim.o.guifont = 'profontwindows nerd font:h15.4:w-0.4'
-  vim.o.guifont = 'M+Codelat50 nerd font propo:h14:w-0:#e-subpixelantialias'
-  vim.o.guifont = '3270 nerd font:h16.3:w-0.0'
-  vim.o.guifont = 'audiolinkmono nerd font:h14.8:w-1'
-  vim.o.guifont = 'adwaitamono Nerd Font:h13:w-1.0'
-
-  -- pixel fonts
-  vim.o.guifont = 'envycodeb10pt nerd font:h14.0:w-1.0:#e-subpixelantialias'
-  vim.o.guifont = 'monocraft_Nerd_Font:h13:w-0.8'
-  vim.o.guifont = 'GohuFont 14 nerd font:h14:w-1.4'
-  vim.o.guifont = 'GohuFont 11 nerd font:h14:w-0.4'
-  vim.o.guifont = 'DepartureMono nerd font:h13:w-1.0'
-  vim.o.guifont = 'bigbluetermplus nerd font:h13:w-1.4'
-  vim.o.guifont = 'bigblueterm437 nerd font:h13:w-1.4'
-  vim.o.guifont = 'ProggyClean nerd font:h18:w-0.0'
-
-  -- Other/Extra
-  vim.o.guifont = 'Iosevka nerd font:h13:w-0.0'
-  vim.o.guifont = 'inconsolataGo nerd font:h15:w-0.2'
-  vim.o.guifont = 'meslolgs nf:h13:w-0.4'
-  vim.o.guifont = 'monaspicene Nerd Font:h13:w-1.2'
-  vim.o.guifont = 'mononoki nerd font:h14:w-1.2'
-  vim.o.guifont = 'eirian nerd font:h16:w-0.2'
-  vim.o.guifont = 'atkynsonmono nerd font:h14:w-2.0'
-  vim.o.guifont = 'saucecodepro Nerd Font:h14:w-1.4'
-  vim.o.guifont = 'monoid nerd font:h12.0:w-1.2' -- [L]
-  -- vim.o.guifont = 'overpass Nerd Font:h13:w-1.4' -- use mntf
-  vim.o.guifont = 'crystal nerd font:h13:w-1.0'
-  vim.o.guifont = 'martianmonocond nerd font:h13.4:w-1.0'
-end
-
 -- ── Transparency ────────────────────────────────────────────────────
 -- vim.g.neovide_opacity = 0.0
 -- vim.g.transparency = 0.8

@@ -8,6 +8,7 @@ local M = {
   },
 }
 
--- autocommand to avoid saving neotree is in settings.pluginfunctions
+-- The PersistenceSavePre hook that closes side panels before saving lives in
+-- settings.autocommands (persistAuto).
 
 return M

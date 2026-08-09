@@ -10,15 +10,22 @@ local make_augroup = require('settings.vim_util').autogroup
 local M = {}
 local fp = require 'util.filepath'
 
--- make autocommand for persistence save to close neotree
--- NOTE: neotree not currently in use
+-- Close side panels before persistence writes a session, so they don't get
+-- restored as empty/broken splits on the next load.
 local function persistAuto()
   auto('User', {
     pattern = 'PersistenceSavePre',
     desc = 'eliminate unwanted buffers before saving',
     group = make_augroup 'pre-save-buffer-elimination',
     callback = function()
-      pcall(function() require('no-neck-pain').disable() end)
+      -- NNP's disable() is debounced (vim.schedule'd), so a pcall here would only
+      -- wrap the scheduling — an error inside main.disable escapes it. Calling it
+      -- while disabled throws (state.tabs[active_tab] is nil), so mirror the guard
+      -- the plugin's own public API uses. Reading the global instead of requiring
+      -- also avoids force-loading NNP on every save when it was never used.
+      if _G.NoNeckPain ~= nil and _G.NoNeckPain.state ~= nil and _G.NoNeckPain.state.enabled then
+        require('no-neck-pain').disable()
+      end
       pcall(function() require('outline').close() end)
       pcall(function() require('aerial').close() end)
     end,

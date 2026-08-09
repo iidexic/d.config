@@ -1,3 +1,12 @@
+-- The SDK is a plain git clone at ~/flutter, so it's only on PATH via config.fish.
+-- GUI-launched nvim (neovide, .desktop entries) doesn't inherit that, so point
+-- flutter-tools straight at the binary when it's where we expect it. nil = fall
+-- back to the normal PATH lookup, which keeps this file portable to other machines.
+local flutter_bin = vim.fs.normalize '~/flutter/bin/flutter'
+if not vim.uv.fs_stat(flutter_bin) then
+  flutter_bin = nil
+end
+
 return {
   -- ───────────────────────────────[Flutter/Dart]──────────────────────────────────────
   {
@@ -8,6 +17,7 @@ return {
       'stevearc/dressing.nvim', -- optional for vim.ui.select
     },
     opts = {
+      flutter_path = flutter_bin,
       -- widget_guides + outline auto_open are both off, so we don't need the
       -- server pushing flutterOutline/outline notifications on every keystroke.
       lsp = {
