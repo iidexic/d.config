@@ -39,7 +39,6 @@ local D = {
     }
 
     -- ── Previously Removed from Above: ────────────────────────────────────
-      -- 'plugins.grapple',
       -- 'plugins.markdown',
       -- 'plugins.obsidian',
       -- 'plugins.precognition',

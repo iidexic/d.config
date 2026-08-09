@@ -59,17 +59,6 @@ M.plugins = {
     },
     config = true,
   },
-  {
-    'Dan7h3x/signup.nvim',
-    branch = 'main',
-    opts = {
-      -- Your configuration options here
-    },
-    config = function(_, opts)
-      require('signup').setup(opts)
-    end,
-    cond = false,
-  },
   { -- delete buffer
     'famiu/bufdelete.nvim',
     keys = {

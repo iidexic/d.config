@@ -169,8 +169,7 @@ function Map.plugins()
     Map.other_plugins,
     Map.leap,
     Map.commentbox,
-    -- Map.lsp,
-    --Map.hover, --NOTE: Hover is disabled for now
+    Map.telescope,
     Map.neovide,
     Map.vim,
   }
@@ -348,71 +347,77 @@ function Map.nnp_resize(size)
     end
   end
 end
--- ╭──────────────╮
--- │ not used yet │
--- ╰──────────────╯
--- function Map.CustomEqualWindowSize()
---   -- fix any windows needed:
---   ---> no-neck-pain
---   -- make equal:
---   vim.o.equalalways = true
---   vim.o.equalalways = false
--- end
-
-function Map.hover()
-  -- Setup keymaps
-  vim.o.mousemoveevent = true
+function Map.telescope()
+  local telescope = require 'telescope'
+  local builtin = require 'telescope.builtin'
+  local themes = require 'telescope.themes'
+  local function ext(name, picker)
+    return function()
+      local e = telescope.extensions[name]
+      if not (e and e[picker]) then
+        vim.notify('telescope extension not loaded: ' .. name, vim.log.levels.WARN)
+        return
+      end
+      e[picker]()
+    end
+  end
   return {
-    mode = 'n',
-    { 'K', require('hover').open, desc = 'hover.nvim' },
-    { 'gK', require('hover').select, desc = 'hover.nvim (select)' },
+    { '<leader><leader>', builtin.buffers, desc = '[ ] Find existing buffers' },
+    { '<leader>sh', builtin.help_tags, desc = '[S]earch [H]elp' },
+    { '<leader>sk', builtin.keymaps, desc = '[S]earch [K]eymaps' },
+    { '<leader>sf', builtin.find_files, desc = '[S]earch [F]iles' },
+    { '<leader>ss', builtin.builtin, desc = '[S]earch [S]elect Telescope' },
+    { '<leader>sw', builtin.grep_string, desc = '[S]earch current [W]ord' },
+    { '<leader>sg', builtin.live_grep, desc = '[S]earch by [G]rep' },
+    { '<leader>sd', builtin.diagnostics, desc = '[S]earch [D]iagnostics' },
+    { '<leader>sr', builtin.resume, desc = 'last [S]earch [R]esume' },
+    { '<leader>s.', builtin.oldfiles, desc = '[S]earch Recent Files' },
+    { '<leader>sT', builtin.tags, desc = '[S]earch [T]ags' },
+    { '<leader>sq', builtin.quickfix, desc = '[S]earch [Q]uickfix' },
+    { '<leader>sD', builtin.lsp_definitions, desc = '[S]earch lsp [D]efinitions' },
+    { '<leader>st', builtin.treesitter, desc = '[S]earch [t]reesitter' },
+    { '<leader>sz', ext('zoxide', 'list'), desc = '[S]earch [z]oxide list' },
+    { '<leader>sH', ext('helpgrep', 'helpgrep'), desc = '[S]earch [H]elp with grep' },
+    { '<leader>sl', ext('luasnip', 'luasnip'), desc = '[S]earch [l]uasnip snippets' },
+    { '<leader>sc', builtin.colorscheme, desc = '[S]earch [C]olorschemes' },
+    { '<leader>sb', builtin.git_bcommits, desc = '[S]earch [B]uffer Commit History' },
+    { '<leader>sR', builtin.reloader, desc = '[S]earch [R]eloader' },
+    { 'gI', builtin.lsp_implementations, desc = 'LSP:[G]oto [I]mplementation(s)' },
+    { '<leader>uu', '<cmd>Telescope unicode_picker<CR>', desc = 'Unicode Picker' },
     {
-      '<C-p>',
+      '<leader>/',
       function()
-        require('hover').switch 'previous'
+        builtin.current_buffer_fuzzy_find(themes.get_dropdown { winblend = 10, previewer = false })
       end,
-      desc = 'hover.nvim (previous source)',
+      desc = '[/] Fuzzily search in current buffer',
     },
     {
-      '<C-n>',
+      '<leader>s/',
       function()
-        require('hover').switch 'next'
+        builtin.live_grep { grep_open_files = true, prompt_title = 'Live Grep in Open Files' }
       end,
-      desc = 'hover.nvim (previous source)',
+      desc = '[S]earch [/] in Open Files',
     },
-    { '<MouseMove>', require('hover').mouse, desc = 'hover.nvim (mouse)' },
+    {
+      '<leader>sn',
+      function()
+        builtin.find_files { cwd = vim.fn.stdpath 'config' }
+      end,
+      desc = '[S]earch [N]eovim files',
+    },
+    {
+      '<leader>so',
+      function()
+        local vault = vim.fn.expand(vim.g.dvault or '~/OneDrive/Apps/remotely-save/DVAULT/')
+        if vim.fn.isdirectory(vault) == 0 then
+          vim.notify('Obsidian vault not found: ' .. vault .. '\nset vim.g.dvault', vim.log.levels.WARN)
+          return
+        end
+        builtin.find_files { cwd = vault }
+      end,
+      desc = '[S]earch [O]bsidian notes',
+    },
   }
-  --[[ vim.keymap.set('n', 'K', require('hover').hover, { desc = 'hover.nvim' }) -- replace default hover
-  vim.keymap.set('n', 'gK', require('hover').hover_select, { desc = 'hover.nvim (select)' }) -- new?
-  vim.keymap.set('n', '<C-p>', function()
-    require('hover').hover_switch 'previous'
-  end, { desc = 'hover.nvim (previous source)' })
-  vim.keymap.set('n', '<C-n>', function()
-    require('hover').hover_switch 'next'
-  end, { desc = 'hover.nvim (next source)' })
-  vim.keymap.set('n', '<MouseMove>', require('hover').hover_mouse, { desc = 'hover.nvim (mouse)' })
-]]
-  -- Mouse support - eh why not
 end
---[[ function Map.obs()
-  -- n key currently not occupied, so these are fine.
-  local mappings = {
-    { '<leader>nn', '<cmd>ObsNvimFollowLink<cr>', desc = 'Obs Follow Link' },
-    { '<leader>nr', '<cmd>ObsNvimRandomNote<cr>', desc = 'Obs open [r]andom Note' },
-    { '<leader>nN', '<cmd>ObsNvimNewNote<cr>', desc = 'Obs [N]ew note' },
-    { '<leader>ny', '<cmd>ObsNvimCopyObsidianLinkToNote<cr>', desc = 'Obs [y]ank link to obsidian note' },
-    { '<leader>no', '<cmd>ObsNvimOpenInObsidian<cr>', desc = 'Obs [o]pen in Obsidian' },
-    --{ '<leader>nd', '<cmd>ObsNvimDailyNote<cr>' ,desc = 'Obs [D]aily Note'},
-    { '<leader>nw', '<cmd>ObsNvimWeeklyNote<cr>', desc = 'Obs [w]eekly Note' },
-    { '<leader>nrn', '<cmd>ObsNvimRename<cr>', desc = 'Obs [r]e[n]ame' },
-    { '<leader>nT', '<cmd>ObsNvimTemplate<cr>', desc = 'Obs [T]emplate' },
-    { '<leader>nM', '<cmd>ObsNvimMove<cr>', desc = 'Obs [M]ove' },
-    { '<leader>nb', '<cmd>ObsNvimBacklinks<cr>', desc = 'Obs [b]acklinks' },
-    { '<leader>nfj', '<cmd>ObsNvimFindInJournal<cr>', desc = 'Obs [f]ind in [j]ournal' },
-    { '<leader>nff', '<cmd>ObsNvimFindNote<cr>', desc = 'Obs [f]ind [n]ote' },
-    { '<leader>nfg', '<cmd>ObsNvimFindInNotes<cr>', desc = 'Obs [f]ind in notes' },
-  }
-  Map.wk.add(mappings)
-end
- ]]
+
 return Map

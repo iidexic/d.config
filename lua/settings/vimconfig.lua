@@ -38,11 +38,6 @@ local O = {
     vim.opt.expandtab = true
     vim.opt.breakindent = true -- Enable break indent (basically wraps visually I think??)
 
-    --* Setting these twice (now, and postlazy), EVERGARDEN broken, trying to figure out
-    vim.o.equalalways = false
-    vim.o.splitkeep = 'screen' -- 'topline' is the least messy on moves. but doesn't keep cursor pos
-    -- Neither does screen
-
     --* mainly for/from nvim-UFO
     vim.o.foldcolumn = '0' -- '0' is not bad
     vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
