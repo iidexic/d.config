@@ -271,13 +271,21 @@ function Map.other_plugins()
     { '<leader>uh', cmd 'CccHighlighterToggle', desc = '[U]til: ccc color [h]ighlight' },
     -- Trevj. this uh splits lists etc into lines? That's what it seems like at least
 
-    -- Molten. Run Jupyter notebooks
+    -- Molten. Interactive python cells (`# %%` delimited)
     { '<leader>M', desc = 'Molten (Jupyter)' },
-    { '<leader>Mi', ':MoltenInit<CR>', desc = 'Initialize the plugin' },
-    { '<leader>Me', ':MoltenEvaluateOperator<CR>', desc = 'run operator selection' },
-    { '<localleader>Ml', ':MoltenEvaluateLine<CR>', desc = 'evaluate line' },
-    { '<leader>Mr', ':MoltenReevaluateCell<CR>', desc = 're-evaluate cell' },
-    { '<leader>Ms', ':<C-u>MoltenEvaluateVisual<CR>gv', desc = 'evaluate visual selection' },
+    { '<leader>Mi', ':MoltenSmartInit<CR>', desc = 'Init kernel (auto-detect .venv)' },
+    { '<leader>MI', ':MoltenInit<CR>', desc = 'Init kernel (pick manually)' },
+    { '<leader>Mc', ':MoltenEvaluateCell<CR>', desc = 'Evaluate current cell' },
+    { '<leader>Mr', ':MoltenReevaluateCell<CR>', desc = 'Re-evaluate cell' },
+    { '<leader>Ml', ':MoltenEvaluateLine<CR>', desc = 'Evaluate line' },
+    { '<leader>Me', ':MoltenEvaluateOperator<CR>', desc = 'Evaluate operator motion' },
+    { '<leader>Ms', ':<C-u>MoltenEvaluateVisual<CR>gv', mode = 'x', desc = 'Evaluate selection' },
+    { '<leader>Mo', ':noautocmd MoltenEnterOutput<CR>', desc = 'Enter output window' },
+    { '<leader>Mh', ':MoltenHideOutput<CR>', desc = 'Hide output' },
+    { '<leader>Md', ':MoltenDelete<CR>', desc = 'Delete cell output' },
+    { '<leader>MR', ':MoltenRestart!<CR>', desc = 'Restart kernel' },
+    { ']c', ':MoltenNextCell<CR>', desc = 'Next `# %%` cell' },
+    { '[c', ':MoltenPrevCell<CR>', desc = 'Prev `# %%` cell' },
 
     -- Referencer.
     { '<leader>e', desc = 'Referencer Toggle' },
