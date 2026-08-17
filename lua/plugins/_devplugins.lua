@@ -47,20 +47,20 @@ M.plugins = {
     dev = ifFile 'miss',
     opts = { key_miss = '<leader>um' },
   },
+  -- {
+  --   'iidexic/dur.nvom',
+  --   dir = fp.dur,
+  --   dev = ifFile 'dur',
+  --   keys = function(self, keys)
+  --     local map = {}
+  --     return map
+  --   end,
+  --   opts = {},
+  -- },
   {
-    'iidexic/dur.nvom',
-    dir = fp.dur,
-    dev = ifFile 'dur',
-    keys = function(self, keys)
-      local map = {}
-      return map
-    end,
-    opts = {},
-  },
-  {
-    'iidexic/material.nvim',
-    dir = 'c:/dev/luaprojects/material.nvim/',
-    dev = ifFile 'material',
+    'iidexic/d.nvim',
+    dir = 'c:/dev/luaprojects/d.nvim/',
+    dev = true,
     opts = {
       plugins = {
         'neo-tree',

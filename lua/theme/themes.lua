@@ -1,28 +1,9 @@
 return {
-  -- ── Cool Themes ─────────────────────────────────────────────────────
+  --          ╭─────────────────────────────────────────────────────────╮
+  --          │                       Best Themes                       │
+  --          ╰─────────────────────────────────────────────────────────╯
+  --  ══ ══════════════════════════════════════════════════════════════════════ ══
   {
-    'iidexic/material.nvim',
-    branch = 'overhaul',
-    opts = {
-      plugins = {
-        'neo-tree',
-        'neogit',
-        'which-key',
-        'lspsaga',
-        'trouble',
-        'gitsigns',
-        'dap',
-        'indent-blankline',
-        'nvim-cmp',
-        'fidget',
-        'mini',
-        'telescope',
-        'nvim-web-devicons',
-      },
-    },
-  },
-
-  { -- The best, main theme
     'everviolet/nvim',
     name = 'evergarden',
     priority = 1000,
@@ -51,15 +32,10 @@ return {
       },
     },
   },
-  ----| Teal/blue-green |----
-  -- { 'raphamorim/lucario' }, -- it's so bright
-  -- { 'Tsuzat/NeoSolarized.nvim', opts = { transparent = false }, priority = 1000 },
   { 'vv9k/bogster' }, --+ best theme
-  { 'mhartington/oceanic-next' }, --+ good all-round blue toward green theme
-  { 'jsit/toast.vim' }, --+  blue toward green theme.
-  --{ 'PHSix/nvim-hybrid', priority = 1000, lazy = false }, no alt bg
   { 'nvimdev/oceanic-material' }, --+ great
-
+  { 'rebelot/kanagawa.nvim' }, -- has blue ish flat wave theme, darker jungley dragon theme
+  { 'cryptomilk/nightcity.nvim' }, --+good color cohesion, washed-out grub with some blues. weird string highlighting
   ----|Blue/Deep|----
   {
     'bluz71/vim-nightfly-colors',
@@ -71,11 +47,41 @@ return {
       vim.g.nightflyWinSeparator = 2
       require('nightfly').custom_colors { bg = '#081824' } -- default bg '#011627'
     end,
-  }, --- blue, with some orange-yellows, darker, it's nice
+  },
+  { 'fynnfluegge/monet.nvim' }, --+ monet, maron
+  { 'ribru17/bamboo.nvim' }, --~nice greenish slightly warm, good color cohesion
+  { 'franbach/miramare' }, --++ kinda ristrotto
 
-  ----| Flatter |----
-  { 'fynnfluegge/monet.nvim' }, --+ good theme blue toward purp, good cohesion
-  { 'tyrannicaltoucan/vim-quantum' }, --+ lighter dark theme, tends slightly blue toward green, it's good
+  { 'yazeed1s/oh-lucy.nvim', name = 'oh-lucy' }, -- darkblue-steel bg, white, light-pink, cool yellow, touch of aqua/teal
+  { 'AlexvZyl/nordic.nvim', name = 'nordic', lazy = false, priority = 1000 },
+  { 'xero/miasma.nvim', lazy = false, priority = 1000 },
+  { 'tiagovla/tokyodark.nvim', opts = {} },
+  { 'savq/melange-nvim' },
+  { 'arturgoms/moonbow.nvim' }, -- improve + add to Material d
+  { 'nyngwang/nvimgelion' }, -- prob lowest on keep forsure list
+  { 'craftzdog/solarized-osaka.nvim', lazy = false, priority = 1000, opts = { transparent = false } }, -- best solarized
+  { 'numToStr/Sakura.nvim' }, -- its rose pine but darker/vibranter
+  { '2giosangmitom/nightfall.nvim', lazy = false, priority = 1000, opts = {} }, -- Has Maron? Or does monet have it
+  { 'Skardyy/makurai-nvim', priority = 1000 },
+  {
+    'loctvl842/monokai-pro.nvim',
+    opts = {
+      override = function()
+        return { -- seriously I had to do this shit to make the cursor usable
+          Cursor = { bg = '#baaa8a', fg = '#3a301a', sp = '#8a1c2c', bold = true },
+        }
+      end,
+    },
+  },
+  {
+    'ficcdaf/ashen.nvim',
+    -- tag = '*', uncomment if issues
+    lazy = false,
+    priority = 1000,
+    opts = {
+      style_presets = { bold_functions = true },
+    },
+  },
   {
     'Everblush/nvim',
     name = 'everblush',
@@ -87,17 +93,17 @@ return {
         contrast = true,
       },
     },
-  }, --+ NVIM VERSION NOW! darker more neutral evergarden (kind of). only issue is red tab marks
-  -- { 'sainnhe/everforest', name = 'everforest', priority = 1000, enabled = false }, -- theme; mid-dark, green
+  },
+  { 'ptdewey/monalisa-nvim', priority = 1000 },
+  --  ══ ══════════════════════════════════════════════════════════════════════ ══
+  ----| Teal/blue-green |----
+  { 'mhartington/oceanic-next' }, --+ good all-round blue toward green theme
+
+  ----| Flatter |----
+  { 'tyrannicaltoucan/vim-quantum' }, --+ lighter dark theme, tends slightly blue toward green, it's good
 
   -- ── Near Neutrals ───────────────────────────────────────────────────
-  { 'rebelot/kanagawa.nvim' }, -- has blue ish flat wave theme, darker jungley dragon theme
-  { 'cryptomilk/nightcity.nvim' }, --+good color cohesion, washed-out grub with some blues. weird string highlighting
-  --{ 'HoNamDuong/hybrid.nvim', priority = 1000, opts = { transparent = false, inverse = false } }, --=it's fine. neutral pushing warm. have two of these for some reason
-  -- { 'rafalbromirski/vim-aurora' }, --+ Darker Neutral, colorful. has some black bgs
-  -- { 'EdenEast/Revolution.vim' }, --+ great. Definitely slightly green/yellow
-  -- { 'flrnd/plastic.vim' }, -- neutral with muted blue/orange/green
-  { 'sam4llis/nvim-tundra' }, -- certainly blue, but feels more neutral with all the reds
+  { 'sam4llis/nvim-tundra' }, -- almost 100% keep
   {
     'EdenEast/nightfox.nvim',
     names = { 'nightfox', 'nordfox', 'terafox', 'carbonfox', 'duskfox', 'dawnfox', 'dayfox' },
@@ -105,45 +111,56 @@ return {
   },
 
   -- ── Warm Themes ─────────────────────────────────────────────────────
-  ----|Jungle|----
-  { 'ribru17/bamboo.nvim' }, --~nice greenish slightly warm, good color cohesion
-
-  ----|Rose|----
-  { 'franbach/miramare' }, --++ kinda ristrotto
 
   ----|Brown|----
   { 'Donearm/Ubaryd', cond = true }, --+ light brown
-  -- { 'nvimdev/zephyr-nvim', priority = 1000 }, --+ neutral to warm
 
-  { 'relastle/bluewery.vim' },
   { 'darkvoid-theme/darkvoid.nvim' }, -- good mono theme with green operators
-  -- { 'yuttie/hydrangea-vim' }, -- eh. strings are highlighted blue for some reason
-  { 'yazeed1s/oh-lucy.nvim', name = 'oh-lucy' }, -- darkblue-steel bg, white, light-pink, cool yellow, touch of aqua/teal
-  -- { 'jacoborus/tender.vim' }, -- borderless. interesting, slight warm w/blue
 
-  { --> Great, nordic with some reds added, works well
-    'AlexvZyl/nordic.nvim',
-    name = 'nordic',
-    lazy = false,
-    priority = 1000,
-  },
   {
-    'xero/miasma.nvim', -- deep jungley
-    lazy = false,
-    priority = 1000,
-  },
-  { 'tiagovla/tokyodark.nvim', opts = {} }, -- I think going to replace tokyonight
-  { -- I guess its fine? meh
-    'folke/tokyonight.nvim', --  a classic
+    'folke/tokyonight.nvim',
     priority = 1000,
   },
 }
 -- ── Maybe Try Again ─────────────────────────────────────────────────
--- { 'Yagua/nebulous.nvim', enabled = true, priority = 1000, opts = { variant = 'nova' } }, -- dont work without some config shit.
 
 -- ╭─────────────────────────────────────────────────────────╮
 -- │                    REMOVED/DISABLED                     │
 -- ╰─────────────────────────────────────────────────────────╯
+-- ── newest: ─────────────────────────────────────────────────────────
+-- { 'jsit/toast.vim' }, -- uglier than last time I checked
+-- { 'dgox16/oldworld.nvim', priority = 1000, lazy = false, opts = { variant = 'cooler' } },
+-- { 'relastle/bluewery.vim' }, -- its good, just not likely to ever use it
+-- { 'titanzero/zephyrium' }, -- zephyr fork. I mean it works better but idk
+-- { 'yashguptaz/calvera-dark.nvim' },
+-- { 'scottmckendry/cyberdream.nvim', opts = { transparent = false } },
+-- { 'cpea2506/one_monokai.nvim' },
+-- { 'drewxs/ash.nvim', priority = 1000 },
+-- { 'rktjmp/lush.nvim' }, -- screw it adding lush
+  -- { 'tobi-wan-kenobi/zengarden', opts = { variant = 'orange' } }, -- NEEDS LUSH
+-- { 'JLighter/aura.nvim' }, -- lush
+  -- { 'uloco/bluloco.nvim', lazy = false, priority = 1000, dependencies = { 'rktjmp/lush.nvim' } }, -- LUSH
+-- { 'akinsho/horizon.nvim' }, -- add version = "*" if bad
+-- { '-1xstepit/flow.nvim', lazy = false, priority = 1000, opts = { theme = { transparent = false } }, },
+-- ── cleanup: ─────────────────────────────────────────────────────────
+--{ 'PHSix/nvim-hybrid', priority = 1000, lazy = false }, no alt bg
+-- { 'bakageddy/alduin.nvim', priority = 1000 }, -- another good brown
+-- { 'nvimdev/zephyr-nvim', priority = 1000 }, --+ neutral to warm
+-- { 'yuttie/hydrangea-vim' }, -- eh. strings are highlighted blue for some reason
+-- { 'jacoborus/tender.vim' }, -- borderless. interesting, slight warm w/blue
+-- { 'rafalbromirski/vim-aurora' }, --+ Darker Neutral, colorful. has some black bgs
+-- { 'sainnhe/everforest', name = 'everforest', priority = 1000, enabled = false }, -- theme; mid-dark, green
+-- { 'EdenEast/Revolution.vim' }, --+ great. Definitely slightly green/yellow
+-- From More-Themes
+-- { 'roobert/palette.nvim', lazy = false, priority = 1000 },
+-- { 'justinsgithub/oh-my-monokai.nvim', opts = { transparent_background = false, terminal_colors = true, devicons = true } },
+-- { 'ricardoraposo/nightwolf.nvim', lazy = false, priority = 1000, opts = {}, },
+-- { 'pwntester/nautilus.nvim' }, -- might need setup, might need transparent = false
+-- { 'nxvu699134/vn-night.nvim' }, -- super high saturation
+-- { 'qaptoR-nvim/chocolatier.nvim' },
+-- { 'eddyekofo94/gruvbox-flat.nvim' }, -- idk
+-- ── old list: ───────────────────────────────────────────────────────
+-- { 'Yagua/nebulous.nvim', enabled = true, priority = 1000, opts = { variant = 'nova' } }, -- dont work without some config shit.
 --{ 'datsfilipe/min-theme.nvim' }, -- I just don't like it
 --{ 'https://gitlab.com/aaec/workingg1rl' }, -- not work, stole colors for material
 --{ 'neko-night/nvim', lazy = false, priority = 1000, opts = {} }, -- big pack

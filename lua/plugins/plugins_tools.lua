@@ -9,7 +9,7 @@ M.plugins = {
       persist_size = true,
       -- nushell if it's on PATH (windows box), otherwise fall back to 'shell'
       shell = vim.fn.executable 'nu' == 1 and 'nu' or vim.o.shell,
-      direction = 'float',
+      direction = 'vertical',
       size = function(term)
         if term.direction == 'horizontal' then
           return vim.o.lines * 0.2

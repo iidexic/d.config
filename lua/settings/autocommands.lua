@@ -136,7 +136,7 @@ local function autocmd()
   })
 
   -- ── [7] Improve Colorscheme when loaded ─────────────────────────────────
-  vim.api.nvim_create_autocmd('Colorscheme', {
+  vim.api.nvim_create_autocmd('ColorScheme', {
     group = make_augroup 'theme-change-apply',
     callback = function()
       -- when a theme has black bg winbar, the table is always the same
