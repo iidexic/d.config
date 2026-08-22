@@ -27,6 +27,13 @@ M.make_autocommands = function()
       map('gW', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Open Workspace Symbols')
       map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
 
+      -- Diagnostic float + severity-filtered nav (nvim 0.11 has ]d/[d natively)
+      map('<leader>e', vim.diagnostic.open_float, 'Diagnostic float')
+      map(']e', function() vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.ERROR } end, 'Next error')
+      map('[e', function() vim.diagnostic.jump { count = -1, severity = vim.diagnostic.severity.ERROR } end, 'Prev error')
+      map(']w', function() vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.WARN } end, 'Next warning')
+      map('[w', function() vim.diagnostic.jump { count = -1, severity = vim.diagnostic.severity.WARN } end, 'Prev warning')
+
       -- The following two autocommands are used to highlight references of hovered word
       local client = vim.lsp.get_client_by_id(event.data.client_id)
       if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then

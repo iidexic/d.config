@@ -1,7 +1,14 @@
 return {
   {
     'folke/trouble.nvim',
-    opts = { warn_no_results = false }, -- for default options, refer to the configuration section for custom setup.
+    opts = {
+      warn_no_results = false,
+      win = { size = { width = 60, height = 12 } }, -- default for bottom/right; per-mode overrides below
+      modes = {
+        symbols = { win = { position = 'right', size = { width = 60 } } },
+        lsp = { win = { position = 'right', size = { width = 70 } } },
+      },
+    },
     cmd = 'Trouble',
     keys = { -- Made all of these silent. I can guess that nothing was found if a window doesn't appear
       {

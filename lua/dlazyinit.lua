@@ -18,7 +18,6 @@ local D = {
       'plugins.conform',
       'plugins.iconpicker',
       'plugins.lang-support',
-      'plugins.lsp_lspsaga',
       'plugins.mini',
       'plugins.outline',
       'plugins.persistence',
@@ -43,6 +42,7 @@ local D = {
       -- 'plugins.obsidian',
       -- 'plugins.precognition',
       -- 'plugins.supermaven_ai',
+      -- 'plugins.lsp_lspsaga', -- removed: nvim 0.11 native LSP UI + blink signature help covers it
     --'plugins.hover',
     --'plugins.layout', -- none
     -- 'plugins.plugins_auto', --NOTE: trying to move to blink
