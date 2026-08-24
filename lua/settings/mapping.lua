@@ -97,7 +97,7 @@ local maptables = {
     { '<M-l>', tabpage_next, desc = 'next tabpage' },
     -- ── Custom Functions ────────────────────────────────────────────────
     { '<leader>vb', vimfunc.print_buf_detail, desc = 'Vim: print current buffer detail' },
-    { '<Tab>', vimfunc.switchToLastBuffer, desc = 'Vim: switch to last buffer' },
+    -- { '<Tab>', vimfunc.switchToLastBuffer, desc = 'Vim: switch to last buffer' }, # just press <C-6> jeez
     {
       '<C-w>f',
       function()

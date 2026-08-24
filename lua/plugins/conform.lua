@@ -39,6 +39,14 @@ return {
         gdscript = { 'gdformat' },
         python = { 'black' },
         -- python = { "isort", "black", stop_after_first = true }, stop_after_first(optional) = load first available
+        sql = { 'sql_formatter' },
+      },
+      formatters = {
+        -- default sql-formatter dialect is generic; force PostgreSQL for
+        -- Supabase migrations (adds RETURNING, ILIKE, etc.).
+        sql_formatter = {
+          prepend_args = { '--language', 'postgresql' },
+        },
       },
     },
   },

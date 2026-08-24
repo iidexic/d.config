@@ -180,12 +180,6 @@ local function autocmd()
   })
 end
 
---- Change options for specific autocommands
---- TODO: unimplemented. The previous body was `vim.tbl_deep_extend 'force'`,
---- which throws (missing args) if this is ever called.
----@param options any
-function M.setoptions(options) end
-
 --- Make all autocommands
 function M.post_autocmd()
   persistAuto()

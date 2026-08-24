@@ -31,11 +31,31 @@ return {
         'toml',
         'comment',
         'dart',
+        'sql',
       },
       highlight = { enable = true },
       indent = { enable = true },
     },
     config = function(_, opts)
+      -- Override the `sql` parser to track the upstream `main` branch.
+      -- nvim-treesitter master pins tree-sitter-sql to a `gh-pages` revision
+      -- (b9d1095) that predates the `create_policy` node. aerial.nvim's SQL
+      -- query references that node, so opening any Supabase/PG file that would
+      -- normally match produces:
+      --   query.lua:374: Query error at 37:2. Invalid Node Type "create_policy"
+      -- Run `:TSUpdate sql` after this change to rebuild.
+      local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
+      parser_config.sql = {
+        install_info = {
+          url = 'https://github.com/derekstride/tree-sitter-sql',
+          files = { 'src/parser.c', 'src/scanner.c' },
+          branch = 'main',
+          generate_requires_npm = false,
+          requires_generate_from_grammar = false,
+        },
+        filetype = 'sql',
+      }
+
       -- 0.12 compat shim. `add_predicate`/`add_directive` no longer honour the
       -- `all` option — they read only `force`. master registers every handler
       -- with `{ force = true, all = false }` (query_predicates.lua:19), so its

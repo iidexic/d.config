@@ -54,6 +54,22 @@ return {
         -- zls = {},
         powershell_es = {},
         buf_ls = {},
+        -- ── sql / postgres (Supabase) ───────────────────────────────────────
+        -- postgres-language-server (aka postgrestools) — static PG-aware LSP.
+        -- Upstream defaults `workspace_required = true` and only accept a
+        -- `postgres-language-server.jsonc` root marker; that means it never
+        -- attaches on a Supabase repo unless you drop a config file. Relax
+        -- the markers to git / supabase project roots so it attaches on
+        -- migration files, and drop the workspace requirement.
+        postgres_lsp = {
+          root_markers = {
+            'postgres-language-server.jsonc',
+            'postgrestools.jsonc',
+            'supabase/config.toml',
+            '.git',
+          },
+          workspace_required = false,
+        },
       }
 
       -- These are all installed through npm. Without node/npm on PATH mason

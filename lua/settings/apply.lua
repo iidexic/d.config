@@ -37,6 +37,6 @@ function Cfg.postlazy(opts)
   Cfg.map.plugins()
   Cfg.autocommands.post_autocmd()
   Cfg.commands.make_commands()
-  Cfg.addfunctionality.autocommands()
+  -- Cfg.addfunctionality.autocommands() -- was for tab buffer switch
 end
 return Cfg
