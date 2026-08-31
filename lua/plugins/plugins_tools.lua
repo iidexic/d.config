@@ -55,7 +55,11 @@ M.plugins = {
     opts = {
       enable = true,
       format = '     %d refs',
-      pattern = { '*.go', '*.lua' },
+      -- Auto-enable on any LspAttach; plugin already gates internally on
+      -- documentSymbol support, so buffers without a capable server no-op.
+      -- Narrow via `lsp_servers = { ... }` if a specific server misbehaves.
+      pattern = { '*' },
+      lsp_servers = {},
     },
     config = true,
   },

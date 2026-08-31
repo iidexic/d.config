@@ -107,6 +107,7 @@
   "starry.nvim": { "branch": "master", "commit": "67031d569823d99bfefc424170b746611a499be5" },
   "sunburn.nvim": { "branch": "main", "commit": "c6047a9d9ef8589f3143bcf0d6834ed7be5cdfaf" },
   "telepath.nvim": { "branch": "master", "commit": "2879da05463db7bdc8824b13cccd8e8920c62a55" },
+  "telescope-fzf-native.nvim": { "branch": "main", "commit": "b25b749b9db64d375d782094e2b9dce53ad53a40" },
   "telescope-helpgrep.nvim": { "branch": "main", "commit": "f600baab96d36b91cdd4b0beb63414a01e1b9403" },
   "telescope-luasnip.nvim": { "branch": "master", "commit": "07a2a2936a7557404c782dba021ac0a03165b343" },
   "telescope-ui-select.nvim": { "branch": "master", "commit": "6e51d7da30bd139a6950adf2a47fda6df9fa06d2" },
